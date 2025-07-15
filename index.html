@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <title>Booking calendar</title>
+
+    </head>
+    <body style="margin: 20px;">
+
+    <!--Header-->
+    <header class="header">
+        <ul class="list">
+            <li>
+                <h1>Booking Calendar</h1>
+            </li>
+            <li class="date">
+                <button href="style.css">Selection Date</button>
+            </li>
+            <li class="right">
+                <button href="style.css">Update</button>
+            </li>
+            <li class="right">
+                <!-- Manage button -->
+                <button id="manageButton" data-dropdown-toggle="manageSearch" data-dropdown-placement="bottom" style="cursor: pointer;" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">Manage<svg class="w-2.5 h-2.5 ms-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
+                </svg>
+                </button>
+
+                <!-- Manage menu -->
+                <div id="manageSearch" class="z-10 hidden bg-white rounded-lg shadow-sm w-60 dark:bg-gray-700" style="cursor: pointer;">
+                    <div class="p-3">
+                    <label for="input-group-search" class="sr-only">Search</label>
+                    <div class="relative">
+                        <div class="absolute inset-y-0 rtl:inset-r-0 start-0 flex items-center ps-3 pointer-events-none">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
+                        </svg>
+                        </div>
+                    </div>
+                </div>
+                <ul id="manage-list" class="h-48 px-3 pb-3 overflow-y-auto text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownSearchButton">
+                </ul>
+                </div>
+            </li>
+            <li class="right">
+                <!-- Add button -->
+                <button id="addButton" data-dropdown-toggle="addSearch" data-dropdown-placement="bottom" style="cursor: pointer;" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">Add<svg class="w-2.5 h-2.5 ms-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
+                </svg>
+                </button>
+
+                <!-- Add menu -->
+                <div id="addSearch" class="z-10 hidden bg-white rounded-lg shadow-sm w-60 dark:bg-gray-700" style="cursor: pointer;">
+                    <div class="p-3">
+                    <label for="input-group-search" class="sr-only">Search</label>
+                    <div class="relative">
+                        <div class="absolute inset-y-0 rtl:inset-r-0 start-0 flex items-center ps-3 pointer-events-none">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
+                        </svg>
+                        </div>
+                    </div>
+                </div>
+                <ul id="add-list" class="h-48 px-3 pb-3 overflow-y-auto text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownSearchButton">
+                </ul>
+            </li>
+            <li class="right">
+                <!-- Color theme button -->
+                <button id="colorThemeButton" data-dropdown-toggle="colorThemeSearch" data-dropdown-placement="bottom" style="cursor: pointer;" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">Color Theme<svg class="w-2.5 h-2.5 ms-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
+                </svg>
+                </button>
+
+                <!-- Color theme menu -->
+                <div id="colorThemeSearch" class="z-10 hidden bg-white rounded-lg shadow-sm w-60 dark:bg-gray-700" style="cursor: pointer;">
+                    <div class="p-3">
+                    <label for="input-group-search" class="sr-only">Search</label>
+                    <div class="relative">
+                        <div class="absolute inset-y-0 rtl:inset-r-0 start-0 flex items-center ps-3 pointer-events-none">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
+                        </svg>
+                        </div>
+                    </div>
+                </div>
+                <ul id="guest-list" class="h-48 px-3 pb-3 overflow-y-auto text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownSearchButton">
+                </ul>
+            </li>
+        </ul>
+    </header>
+
+    <div class="main">
+        <div class="left_part">
+            <!--Select date menu-->
+            <form class="max-w-[8rem]">
+                <label for="time" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Select date:</label>
+                <div class="relative">
+                    <input type="date" id="time" style="cursor: pointer;" class="bg-gray-50 border leading-none border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" min="2025-01-01" max="2025-12-31" value="2025-06-19" required />
+                </div>
+            </form>
+            <!--Filter Menu-->
+            <div>
+                <div class="filter">
+                    <p>Filter by:</p>
+                    <button>+</button>
+                    <button>All selected</button>
+                </div>
+                <div>
+                    <!-- Services button -->
+                    <button id="servicesButton" data-dropdown-toggle="servicesSearch" data-dropdown-placement="bottom" style="cursor: pointer;" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">Services<svg class="w-2.5 h-2.5 ms-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
+                    </svg>
+                    </button>
+
+                    <!-- Services menu -->
+                    <div id="servicesSearch" class="z-10 hidden bg-white rounded-lg shadow-sm w-60 dark:bg-gray-700" style="cursor: pointer;">
+                        <div class="p-3">
+                            <label for="input-group-search" class="sr-only">Search</label>
+                            <div class="relative">
+                                <div class="absolute inset-y-0 rtl:inset-r-0 start-0 flex items-center ps-3 pointer-events-none">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
+                                </svg>
+                                </div>
+                            </div>
+                        </div>
+                        <ul id="services-list" class="h-48 px-3 pb-3 overflow-y-auto text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownSearchButton">
+                        </ul>
+                    </div>
+                </div>
+                <div>
+                    <!-- Staff button -->
+                    <button id="staffButton" data-dropdown-toggle="staffSearch" data-dropdown-placement="bottom" style="cursor: pointer;" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">Staff<svg class="w-2.5 h-2.5 ms-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
+                    </svg>
+                    </button>
+
+                    <!-- Staff menu -->
+                    <div id="staffSearch" class="z-10 hidden bg-white rounded-lg shadow-sm w-60 dark:bg-gray-700" style="cursor: pointer;">
+                        <div class="p-3">
+                        <label for="input-group-search" class="sr-only">Search</label>
+                            <div class="relative">
+                                <div class="absolute inset-y-0 rtl:inset-r-0 start-0 flex items-center ps-3 pointer-events-none">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
+                                </svg>
+                                </div>
+                            </div>
+                        </div>
+                        <ul id="staff-list" class="h-48 px-3 pb-3 overflow-y-auto text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownSearchButton">
+                        </ul>
+                    </div>
+                </div>
+                <div>
+                    <!-- Location button -->
+                    <button id="locationButton" data-dropdown-toggle="locationSearch" data-dropdown-placement="bottom" style="cursor: pointer;" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">Location<svg class="w-2.5 h-2.5 ms-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
+                    </svg>
+                    </button>
+
+                    <!-- Location menu -->
+                    <div id="locationSearch" class="z-10 hidden bg-white rounded-lg shadow-sm w-60 dark:bg-gray-700" style="cursor: pointer;">
+                        <div class="p-3">
+                            <label for="input-group-search" class="sr-only">Search</label>
+                            <div class="relative">
+                                <div class="absolute inset-y-0 rtl:inset-r-0 start-0 flex items-center ps-3 pointer-events-none">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
+                                </svg>
+                                </div>
+                            </div>
+                        </div>
+                        <ul id="location-list" class="h-48 px-3 pb-3 overflow-y-auto text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownSearchButton">
+                        </ul>
+                    </div>
+                </div>
+                <div>
+                    <!-- Session Avialibility button -->
+                    <button id="sessionAvialibilityButton" data-dropdown-toggle="sessionAvialibilitySearch" data-dropdown-placement="bottom" style="cursor: pointer;" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">Session Avialibility<svg class="w-2.5 h-2.5 ms-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
+                    </svg>
+                    </button>
+
+                    <!-- Session Avialibility menu -->
+                    <div id="sessionAvialibilitySearch" class="z-10 hidden bg-white rounded-lg shadow-sm w-60 dark:bg-gray-700" style="cursor: pointer;">
+                        <div class="p-3">
+                            <label for="input-group-search" class="sr-only">Search</label>
+                            <div class="relative">
+                                <div class="absolute inset-y-0 rtl:inset-r-0 start-0 flex items-center ps-3 pointer-events-none">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
+                                </svg>
+                                </div>
+                            </div>
+                        </div>
+                        <ul id="sessionAvialibility-list" class="h-48 px-3 pb-3 overflow-y-auto text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownSearchButton">
+                        </ul>
+                    </div>
+                </div>
+                <div>
+                    <!-- Other Events button -->
+                    <button id="otherEventsButton" data-dropdown-toggle="otherEventsSearch" data-dropdown-placement="bottom" style="cursor: pointer;" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">Other Events<svg class="w-2.5 h-2.5 ms-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
+                    </svg>
+                    </button>
+
+                    <!-- Other Events menu -->
+                    <div id="otherEventsSearch" class="z-10 hidden bg-white rounded-lg shadow-sm w-60 dark:bg-gray-700" style="cursor: pointer;">
+                        <div class="p-3">
+                            <label for="input-group-search" class="sr-only">Search</label>
+                            <div class="relative">
+                                <div class="absolute inset-y-0 rtl:inset-r-0 start-0 flex items-center ps-3 pointer-events-none">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
+                                </svg>
+                                </div>
+                            </div>
+                        </div>
+                        <ul id="otherEvents-list" class="h-48 px-3 pb-3 overflow-y-auto text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownSearchButton">
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    
+        <div class="middle_part">
+            <!--Header of the table-->
+            <div class="header_of_table">
+                <button>Count of the Day</button>
+                <button>right</button>
+                <button>left</button>
+                <p>Count of scheduels of this week</p>
+                <button>Icon</button>
+                <div>
+                    <!-- Weekly view button -->
+                    <button id="weeklyViewButton" data-dropdown-toggle="weeklyViewSearch" data-dropdown-placement="bottom" style="cursor: pointer;" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">Weekly view<svg class="w-2.5 h-2.5 ms-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
+                    </svg>
+                    </button>
+
+                    <!-- Weekly view menu -->
+                    <div id="weeklyViewSearch" class="z-10 hidden bg-white rounded-lg shadow-sm w-60 dark:bg-gray-700" style="cursor: pointer;">
+                        <div class="p-3">
+                            <label for="input-group-search" class="sr-only">Search</label>
+                            <div class="relative">
+                                <div class="absolute inset-y-0 rtl:inset-r-0 start-0 flex items-center ps-3 pointer-events-none">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
+                                </svg>
+                                </div>
+                            </div>
+                        </div>
+                        <ul id="weeklyView-list" class="h-48 px-3 pb-3 overflow-y-auto text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownSearchButton">
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!--Calendar Table-->
+            <div class="calendar_table">
+                <table id="calendar-table">
+                    <thead>
+                        <tr>
+                            <th>
+                                <span class="flex items-center">
+                                    ID
+                                    <svg class="w-4 h-4 ms-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m8 15 4 4 4-4m0-6-4-4-4 4"/>
+                                    </svg>
+                                </span>
+                            </th>
+                            <th>
+                                <span class="flex items-center">
+                                    Date
+                                    <svg class="w-4 h-4 ms-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m8 15 4 4 4-4m0-6-4-4-4 4"/>
+                                    </svg>
+                                </span>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="font-medium text-gray-900 whitespace-nowrap dark:text-white">Flowbite</td>
+                            <td>49</td>
+                        </tr>
+                        <tr>
+                            <td class="font-medium text-gray-900 whitespace-nowrap dark:text-white">React</td>
+                            <td>24</td>
+                        </tr>
+                        <tr>
+                            <td class="font-medium text-gray-900 whitespace-nowrap dark:text-white">Flowbite</td>
+                            <td>49</td>
+                        </tr>
+                        <tr>
+                            <td class="font-medium text-gray-900 whitespace-nowrap dark:text-white">React</td>
+                            <td>24</td>
+                        </tr>
+                        <tr>
+                            <td class="font-medium text-gray-900 whitespace-nowrap dark:text-white">Flowbite</td>
+                            <td>49</td>
+                        </tr>
+                        <tr>
+                            <td class="font-medium text-gray-900 whitespace-nowrap dark:text-white">React</td>
+                            <td>24</td>
+                        </tr>
+                        <tr>
+                            <td class="font-medium text-gray-900 whitespace-nowrap dark:text-white">Flowbite</td>
+                            <td>49</td>
+                        </tr>
+                        <tr>
+                            <td class="font-medium text-gray-900 whitespace-nowrap dark:text-white">React</td>
+                            <td>24</td>
+                        </tr>
+                        <tr>
+                            <td class="font-medium text-gray-900 whitespace-nowrap dark:text-white">Flowbite</td>
+                            <td>49</td>
+                        </tr>
+                        <tr>
+                            <td class="font-medium text-gray-900 whitespace-nowrap dark:text-white">React</td>
+                            <td>24</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div> 
+        
+        <div class="right_part">
+            <button>list</button>
+            <button>diagramm</button>
+        </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/simple-datatables@9.0.3"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.js"></script>
+    <script src="main.js"></script>
+
+</body>
+</html>

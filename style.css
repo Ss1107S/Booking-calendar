@@ -1,0 +1,54 @@
+body{
+    margin: 0;
+    font-family: sans-serif;
+}
+button{
+    cursor: pointer;
+    border-radius: 8px;
+    border: 3px solid rgb(164, 164, 250);
+    padding: 0px 8px;
+}
+header{
+    padding: 10px 10px;
+    height: 50px;
+    display: flex;
+    text-align: center;
+}   
+.list li{
+    display: inline-block;
+    margin: 0;
+    vertical-align: middle;
+    margin-left: 10px;
+}
+header .list {
+    height: 50px;
+}
+header .right{
+   float: right;
+}
+.main{
+    display: flex;
+}
+.filter{
+    display: flex;
+}
+.middle_part{
+    display: flex;
+}
+.header_of_table{
+    display: flex;
+}
+.calendar_table{
+    display: flex;
+} 
+.view{
+    display: flex;
+}
+#calendar-table,
+#guests-table th,
+#guests-table td {
+    border: 1px solid #ccc;
+    border-collapse: collapse;
+    padding: 8px;
+}
+       
