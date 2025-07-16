@@ -173,14 +173,14 @@
                     </div>
                 </div>
                 <div>
-                    <!-- Session Avialibility button -->
-                    <button id="sessionAvialibilityButton" data-dropdown-toggle="sessionAvialibilitySearch" data-dropdown-placement="bottom" style="cursor: pointer;" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">Session Avialibility<svg class="w-2.5 h-2.5 ms-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                    <!-- Session Availability button -->
+                    <button id="sessionAvailabilityButton" data-dropdown-toggle="sessionAvailabilitySearch" data-dropdown-placement="bottom" style="cursor: pointer;" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">Session Availability<svg class="w-2.5 h-2.5 ms-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
                     </svg>
                     </button>
 
-                    <!-- Session Avialibility menu -->
-                    <div id="sessionAvialibilitySearch" class="z-10 hidden bg-white rounded-lg shadow-sm w-60 dark:bg-gray-700" style="cursor: pointer;">
+                    <!-- Session Availability menu -->
+                    <div id="sessionAvailabilitySearch" class="z-10 hidden bg-white rounded-lg shadow-sm w-60 dark:bg-gray-700" style="cursor: pointer;">
                         <div class="p-3">
                             <label for="input-group-search" class="sr-only">Search</label>
                             <div class="relative">
@@ -190,7 +190,7 @@
                                 </div>
                             </div>
                         </div>
-                        <ul id="sessionAvialibility-list" class="h-48 px-3 pb-3 overflow-y-auto text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownSearchButton">
+                        <ul id="sessionAvailability-list" class="h-48 px-3 pb-3 overflow-y-auto text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownSearchButton">
                         </ul>
                     </div>
                 </div>
@@ -253,70 +253,64 @@
 
             <!--Calendar Table-->
             <div class="calendar_table">
-                <table id="calendar-table">
-                    <thead>
-                        <tr>
-                            <th>
-                                <span class="flex items-center">
-                                    ID
-                                    <svg class="w-4 h-4 ms-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
-                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m8 15 4 4 4-4m0-6-4-4-4 4"/>
-                                    </svg>
-                                </span>
-                            </th>
-                            <th>
-                                <span class="flex items-center">
-                                    Date
-                                    <svg class="w-4 h-4 ms-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
-                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m8 15 4 4 4-4m0-6-4-4-4 4"/>
-                                    </svg>
-                                </span>
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td class="font-medium text-gray-900 whitespace-nowrap dark:text-white">Flowbite</td>
-                            <td>49</td>
-                        </tr>
-                        <tr>
-                            <td class="font-medium text-gray-900 whitespace-nowrap dark:text-white">React</td>
-                            <td>24</td>
-                        </tr>
-                        <tr>
-                            <td class="font-medium text-gray-900 whitespace-nowrap dark:text-white">Flowbite</td>
-                            <td>49</td>
-                        </tr>
-                        <tr>
-                            <td class="font-medium text-gray-900 whitespace-nowrap dark:text-white">React</td>
-                            <td>24</td>
-                        </tr>
-                        <tr>
-                            <td class="font-medium text-gray-900 whitespace-nowrap dark:text-white">Flowbite</td>
-                            <td>49</td>
-                        </tr>
-                        <tr>
-                            <td class="font-medium text-gray-900 whitespace-nowrap dark:text-white">React</td>
-                            <td>24</td>
-                        </tr>
-                        <tr>
-                            <td class="font-medium text-gray-900 whitespace-nowrap dark:text-white">Flowbite</td>
-                            <td>49</td>
-                        </tr>
-                        <tr>
-                            <td class="font-medium text-gray-900 whitespace-nowrap dark:text-white">React</td>
-                            <td>24</td>
-                        </tr>
-                        <tr>
-                            <td class="font-medium text-gray-900 whitespace-nowrap dark:text-white">Flowbite</td>
-                            <td>49</td>
-                        </tr>
-                        <tr>
-                            <td class="font-medium text-gray-900 whitespace-nowrap dark:text-white">React</td>
-                            <td>24</td>
-                        </tr>
-                    </tbody>
-                </table>
+                <div>
+                    <div></div>
+                </div>
+                <div class="time">
+                    <div>
+                        <div>9 AM</div>
+                        <div class="empty"></div>
+                    </div>
+                    <div>
+                        <div>10 AM</div>
+                        <div class="empty"></div>
+                    </div>
+                    <div>
+                        <div>11 AM</div>
+                        <div class="empty"></div>
+                    </div>
+                    <div>
+                        <div>12 AM</div>
+                        <div class="empty"></div>
+                    </div>
+                    <div>
+                        <div>1 PM</div>
+                        <div class="empty"></div>
+                    </div>
+                    <div>
+                        <div>2 PM</div>
+                        <div class="empty"></div>
+                    </div>
+                    <div>
+                        <div>3 PM</div>
+                        <div class="empty"></div>
+                    </div>
+                    <div>
+                        <div>4 PM</div>
+                        <div class="empty"></div>
+                    </div>
+                    <div>
+                        <div>5 PM</div>
+                        <div class="empty"></div>
+                    </div>
+                    <div>
+                        <div>6 PM</div>
+                        <div class="empty"></div>
+                    </div>
+                    <div>
+                        <div>7 PM</div>
+                        <div class="empty"></div>
+                    </div>
+                    <div>
+                        <div>8 PM</div>
+                        <div class="empty"></div>
+                    </div>
+                    <div>
+                        <div>9 PM</div>
+                        <div class="empty"></div>
+                    </div>
+                </div>
+                
             </div>
         </div> 
         

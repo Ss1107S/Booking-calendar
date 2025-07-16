@@ -44,9 +44,7 @@ header .right{
 .view{
     display: flex;
 }
-#calendar-table,
-#guests-table th,
-#guests-table td {
+.time > div {
     border: 1px solid #ccc;
     border-collapse: collapse;
     padding: 8px;
