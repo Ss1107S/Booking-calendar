@@ -13,81 +13,88 @@
 
     <!--Header-->
     <header class="header">
-        <ul class="list">
-            <li>
-                <h1>Booking Calendar</h1>
-            </li>
-            <li class="date">
-                <button href="style.css">Selection Date</button>
-            </li>
-            <li class="right">
-                <button href="style.css">Update</button>
-            </li>
-            <li class="right">
-                <!-- Manage button -->
-                <button id="manageButton" data-dropdown-toggle="manageSearch" data-dropdown-placement="bottom" style="cursor: pointer;" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">Manage<svg class="w-2.5 h-2.5 ms-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
-                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
-                </svg>
-                </button>
+        <div class="left">
+            <ul class="list">
+                <li>
+                    <h1>Booking Calendar</h1>
+                </li>
+                <li>
+                    <button href="style.css">Selection Date</button>
+                </li>
+                
+            </ul>    
+        </div>
+        <div class="right">
+            <ul class="list">
+                <li>
+                    <button href="style.css">Update</button>
+                </li>
+                <li class="right">
+                    <!-- Manage button -->
+                    <button id="manageButton" data-dropdown-toggle="manageSearch" data-dropdown-placement="bottom" style="cursor: pointer;" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">Manage<svg class="w-2.5 h-2.5 ms-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
+                    </svg>
+                    </button>
 
-                <!-- Manage menu -->
-                <div id="manageSearch" class="z-10 hidden bg-white rounded-lg shadow-sm w-60 dark:bg-gray-700" style="cursor: pointer;">
-                    <div class="p-3">
-                    <label for="input-group-search" class="sr-only">Search</label>
-                    <div class="relative">
-                        <div class="absolute inset-y-0 rtl:inset-r-0 start-0 flex items-center ps-3 pointer-events-none">
-                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
-                        </svg>
+                    <!-- Manage menu -->
+                    <div id="manageSearch" class="z-10 hidden bg-white rounded-lg shadow-sm w-60 dark:bg-gray-700" style="cursor: pointer;">
+                        <div class="p-3">
+                        <label for="input-group-search" class="sr-only">Search</label>
+                        <div class="relative">
+                            <div class="absolute inset-y-0 rtl:inset-r-0 start-0 flex items-center ps-3 pointer-events-none">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
+                            </svg>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <ul id="manage-list" class="h-48 px-3 pb-3 overflow-y-auto text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownSearchButton">
-                </ul>
-                </div>
-            </li>
-            <li class="right">
-                <!-- Add button -->
-                <button id="addButton" data-dropdown-toggle="addSearch" data-dropdown-placement="bottom" style="cursor: pointer;" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">Add<svg class="w-2.5 h-2.5 ms-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
-                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
-                </svg>
-                </button>
+                    <ul id="manage-list" class="h-48 px-3 pb-3 overflow-y-auto text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownSearchButton">
+                    </ul>
+                    </div>
+                </li>
+                <li>
+                    <!-- Add button -->
+                    <button id="addButton" data-dropdown-toggle="addSearch" data-dropdown-placement="bottom" style="cursor: pointer;" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">Add<svg class="w-2.5 h-2.5 ms-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
+                    </svg>
+                    </button>
 
-                <!-- Add menu -->
-                <div id="addSearch" class="z-10 hidden bg-white rounded-lg shadow-sm w-60 dark:bg-gray-700" style="cursor: pointer;">
-                    <div class="p-3">
-                    <label for="input-group-search" class="sr-only">Search</label>
-                    <div class="relative">
-                        <div class="absolute inset-y-0 rtl:inset-r-0 start-0 flex items-center ps-3 pointer-events-none">
-                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
-                        </svg>
+                    <!-- Add menu -->
+                    <div id="addSearch" class="z-10 hidden bg-white rounded-lg shadow-sm w-60 dark:bg-gray-700" style="cursor: pointer;">
+                        <div class="p-3">
+                        <label for="input-group-search" class="sr-only">Search</label>
+                        <div class="relative">
+                            <div class="absolute inset-y-0 rtl:inset-r-0 start-0 flex items-center ps-3 pointer-events-none">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
+                            </svg>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <ul id="add-list" class="h-48 px-3 pb-3 overflow-y-auto text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownSearchButton">
-                </ul>
-            </li>
-            <li class="right">
-                <!-- Color theme button -->
-                <button id="colorThemeButton" data-dropdown-toggle="colorThemeSearch" data-dropdown-placement="bottom" style="cursor: pointer;" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">Color Theme<svg class="w-2.5 h-2.5 ms-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
-                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
-                </svg>
-                </button>
+                    <ul id="add-list" class="h-48 px-3 pb-3 overflow-y-auto text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownSearchButton">
+                    </ul>
+                </li>
+                <li>
+                    <!-- Color theme button -->
+                    <button id="colorThemeButton" data-dropdown-toggle="colorThemeSearch" data-dropdown-placement="bottom" style="cursor: pointer;" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">Color Theme<svg class="w-2.5 h-2.5 ms-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
+                    </svg>
+                    </button>
 
-                <!-- Color theme menu -->
-                <div id="colorThemeSearch" class="z-10 hidden bg-white rounded-lg shadow-sm w-60 dark:bg-gray-700" style="cursor: pointer;">
-                    <div class="p-3">
-                    <label for="input-group-search" class="sr-only">Search</label>
-                    <div class="relative">
-                        <div class="absolute inset-y-0 rtl:inset-r-0 start-0 flex items-center ps-3 pointer-events-none">
-                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
-                        </svg>
+                    <!-- Color theme menu -->
+                    <div id="colorThemeSearch" class="z-10 hidden bg-white rounded-lg shadow-sm w-60 dark:bg-gray-700" style="cursor: pointer;">
+                        <div class="p-3">
+                        <label for="input-group-search" class="sr-only">Search</label>
+                        <div class="relative">
+                            <div class="absolute inset-y-0 rtl:inset-r-0 start-0 flex items-center ps-3 pointer-events-none">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
+                            </svg>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <ul id="guest-list" class="h-48 px-3 pb-3 overflow-y-auto text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownSearchButton">
-                </ul>
-            </li>
-        </ul>
+                    <ul id="guest-list" class="h-48 px-3 pb-3 overflow-y-auto text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownSearchButton">
+                    </ul>
+                </li>
+            </ul>
+        </div>
     </header>
 
     <div class="main">

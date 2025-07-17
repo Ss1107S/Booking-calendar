@@ -24,10 +24,11 @@ header .list {
     height: 50px;
 }
 header .right{
-   float: right;
+   margin-left: auto;
 }
 .main{
     display: flex;
+    gap: 20px;
 }
 .filter{
     display: flex;
