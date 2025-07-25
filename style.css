@@ -35,9 +35,15 @@ header .right{
 }
 .middle_part{
     display: flex;
+    flex-direction: column; 
+    gap: 20px;
 }
 .header_of_table{
     display: flex;
+}
+
+.header_of_table .right{
+   margin-left: auto;
 }
 .calendar_table{
     display: flex;
@@ -45,9 +51,13 @@ header .right{
 .view{
     display: flex;
 }
-.time > div {
+ .days{
+    height: 10px;
+}      
+.time > div,
+.days > div {
+    height: 60px;
     border: 1px solid #ccc;
-    border-collapse: collapse;
-    padding: 8px;
+    padding: 4px;
+    box-sizing: border-box;
 }
-       

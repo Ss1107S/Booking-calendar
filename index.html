@@ -229,41 +229,45 @@
         <div class="middle_part">
             <!--Header of the table-->
             <div class="header_of_table">
-                <button>Count of the Day</button>
-                <button>right</button>
-                <button>left</button>
-                <p>Count of scheduels of this week</p>
-                <button>Icon</button>
-                <div>
-                    <!-- Weekly view button -->
-                    <button id="weeklyViewButton" data-dropdown-toggle="weeklyViewSearch" data-dropdown-placement="bottom" style="cursor: pointer;" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">Weekly view<svg class="w-2.5 h-2.5 ms-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
-                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
-                    </svg>
-                    </button>
+                <div class="left">
+                    <button>Count of the Day</button>
+                    <button>right</button>
+                    <button>left</button>
+                    <p>Count of scheduels of this week</p>
+                </div>
+                <div class="right">
+                    <button>Icon</button>
+                    <div>
+                        <!-- Weekly view button -->
+                        <button id="weeklyViewButton" data-dropdown-toggle="weeklyViewSearch" data-dropdown-placement="bottom" style="cursor: pointer;" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">Weekly view<svg class="w-2.5 h-2.5 ms-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
+                        </svg>
+                        </button>
 
-                    <!-- Weekly view menu -->
-                    <div id="weeklyViewSearch" class="z-10 hidden bg-white rounded-lg shadow-sm w-60 dark:bg-gray-700" style="cursor: pointer;">
-                        <div class="p-3">
-                            <label for="input-group-search" class="sr-only">Search</label>
-                            <div class="relative">
-                                <div class="absolute inset-y-0 rtl:inset-r-0 start-0 flex items-center ps-3 pointer-events-none">
-                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
-                                </svg>
+                        <!-- Weekly view menu -->
+                        <div id="weeklyViewSearch" class="z-10 hidden bg-white rounded-lg shadow-sm w-60 dark:bg-gray-700" style="cursor: pointer;">
+                            <div class="p-3">
+                                <label for="input-group-search" class="sr-only">Search</label>
+                                <div class="relative">
+                                    <div class="absolute inset-y-0 rtl:inset-r-0 start-0 flex items-center ps-3 pointer-events-none">
+                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
+                                    </svg>
+                                    </div>
                                 </div>
                             </div>
+                            <ul id="weeklyView-list" class="h-48 px-3 pb-3 overflow-y-auto text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownSearchButton">
+                            </ul>
                         </div>
-                        <ul id="weeklyView-list" class="h-48 px-3 pb-3 overflow-y-auto text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownSearchButton">
-                        </ul>
                     </div>
                 </div>
             </div>
 
             <!--Calendar Table-->
             <div class="calendar_table">
-                <div>
-                    <div></div>
-                </div>
                 <div class="time">
+                    <div>
+                        <div class="empty"></div>
+                    </div>
                     <div>
                         <div>9 AM</div>
                         <div class="empty"></div>
@@ -317,7 +321,63 @@
                         <div class="empty"></div>
                     </div>
                 </div>
-                
+                <div class="days">
+                    <div>
+                        <div class="count_of_the_day">Count</div>
+                    </div>
+                    <div>
+                        <div class="1st_staff_for_9AM"></div>
+                        <div class="2nd_staff_for_9AM"></div>
+                    </div>
+                    <div>
+                        <div class="1st_staff_for_10AM"></div>
+                        <div class="2nd_staff_for_10AM"></div>
+                    </div>
+                    <div>
+                        <div class="1st_staff_for_11AM"></div>
+                        <div class="2nd_staff_for_11AM"></div>
+                    </div>
+                    <div>
+                        <div class="1st_staff_for_12AM"></div>
+                        <div class="2nd_staff_for_12AM"></div>
+                    </div>
+                    <div>
+                        <div class="1st_staff_for_1PM"></div>
+                        <div class="2nd_staff_for_1PM"></div>
+                    </div>
+                    <div>
+                        <div class="1st_staff_for_2PM"></div>
+                        <div class="2nd_staff_for_2PM"></div>
+                    </div>
+                    <div>
+                        <div class="1st_staff_for_3PM"></div>
+                        <div class="2nd_staff_for_3PM"></div>
+                    </div>
+                    <div>
+                        <div class="1st_staff_for_4PM"></div>
+                        <div class="2nd_staff_for_4PM"></div>
+                    </div>
+                    <div>
+                        <div class="1st_staff_for_5PM"></div>
+                        <div class="2nd_staff_for_5PM"></div>
+                    </div>
+                    <div>
+                        <div class="1st_staff_for_6PM"></div>
+                        <div class="2nd_staff_for_6PM"></div>
+                    </div>
+                    <div>
+                        <div class="1st_staff_for_7PM"></div>
+                        <div class="2nd_staff_for_7PM"></div>
+                    </div>
+                    <div>
+                        <div class="1st_staff_for_8PM"></div>
+                        <div class="2nd_staff_for_8PM"></div>
+                    </div>
+                    <div>
+                        <div class="1st_staff_for_9PM"></div>
+                        <div class="2nd_staff_for_9PM"></div>
+                    </div>
+                </div>
             </div>
         </div> 
         
