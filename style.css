@@ -30,8 +30,20 @@ header .right{
     display: flex;
     gap: 20px;
 }
+.left_part {
+    width: 320px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+#calendar-container {
+    width: 320px;
+}
 .filter{
     display: flex;
+}
+.filter_right{
+    margin-left: auto;
 }
 .middle_part{
     display: flex;
@@ -48,9 +60,6 @@ header .right{
 .calendar_table{
     display: flex;
 } 
-.view{
-    display: flex;
-}
  .days{
     height: 10px;
 }      
@@ -60,4 +69,8 @@ header .right{
     border: 1px solid #ccc;
     padding: 4px;
     box-sizing: border-box;
+}
+.right_part{
+    display: flex;
+    margin-left: auto;
 }
