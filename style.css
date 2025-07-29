@@ -4,8 +4,6 @@ body{
 }
 button{
     cursor: pointer;
-    border-radius: 8px;
-    border: 3px solid rgb(164, 164, 250);
     padding: 0px 8px;
 }
 header{
@@ -14,6 +12,14 @@ header{
     display: flex;
     text-align: center;
 }   
+header .left button{
+    color: grey;
+}
+header .right button{
+    border-radius: 20px;
+    border: 2px solid rgb(164, 164, 250);
+    padding: 7px 15px;
+}
 .list li{
     display: inline-block;
     margin: 0;
@@ -28,7 +34,6 @@ header .right{
 }
 .main{
     display: flex;
-    gap: 20px;
 }
 .left_part {
     width: 320px;
@@ -41,9 +46,20 @@ header .right{
 }
 .filter{
     display: flex;
+    height: 50px;
+    align-items: center;
+    padding-left: 10px;
 }
 .filter_right{
     margin-left: auto;
+}
+.main .first_section,
+.main .second_section,
+.main .third_section,
+.main .fourth_section,
+.main .fifth_section{
+    height: 50px;
+    align-items: center;
 }
 .middle_part{
     display: flex;
@@ -56,6 +72,11 @@ header .right{
 
 .header_of_table .right{
    margin-left: auto;
+}
+.middle_part .count{
+    border-radius: 20px;
+    border: 2px solid grey;
+    padding: 5px 10px;
 }
 .calendar_table{
     display: flex;
