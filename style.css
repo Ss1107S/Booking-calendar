@@ -29,6 +29,24 @@ header .right button{
 header .list {
     height: 50px;
 }
+.list .update,
+.list .dots{
+    padding: 5px 10px;
+}
+.list .update::before{
+    content: "\f021";
+    vertical-align: middle;
+    font-family: "Font Awesome 6 Free";
+    color: rgb(164, 164, 250);
+    font-weight: 900;
+}
+.list .dots::before{
+    content: "\f141";
+    vertical-align: middle;
+    font-family: "Font Awesome 6 Free";
+    color: rgb(164, 164, 250);
+    font-weight: 900;
+}
 header .right{
    margin-left: auto;
 }
@@ -61,6 +79,13 @@ header .right{
     height: 50px;
     align-items: center;
 }
+#staffButton::after{
+    content: "\f043";
+    vertical-align: middle;
+    font-family: "Font Awesome 6 Free";
+    color: black;
+    font-weight: 900;
+}
 .middle_part{
     display: flex;
     flex-direction: column; 
@@ -69,7 +94,20 @@ header .right{
 .header_of_table{
     display: flex;
 }
-
+.header_of_table .button_right::before{
+    content: "\f061";
+    vertical-align: middle;
+    font-family: "Font Awesome 6 Free";
+    color: grey;
+    font-weight: 900;
+}
+.header_of_table .button_left::before{
+    content: "\f060";
+    vertical-align: middle;
+    font-family: "Font Awesome 6 Free";
+    color: grey;
+    font-weight: 900;
+}
 .header_of_table .right{
    margin-left: auto;
 }
@@ -77,6 +115,13 @@ header .right{
     border-radius: 20px;
     border: 2px solid grey;
     padding: 5px 10px;
+}
+.header_of_table .right .icon::before{
+    content: "\f0ac";
+    vertical-align: middle;
+    font-family: "Font Awesome 6 Free";
+    color: black;
+    font-weight: 900;
 }
 .calendar_table{
     display: flex;
@@ -94,4 +139,26 @@ header .right{
 .right_part{
     display: flex;
     margin-left: auto;
+    flex-direction: column;
+    gap: 20px;
+    padding: 20px 10px;
+}
+.right_part button{
+    border-radius: 20px;
+    border: 1px solid grey;
+    padding: 5px 10px;
+}
+.right_part .list::before{
+    content: "\f0ae";
+    vertical-align: middle;
+    font-family: "Font Awesome 6 Free";
+    color: grey;
+    font-weight: 900;
+}
+.right_part .diagramm::before{
+    content: "\f201";
+    vertical-align: middle;
+    font-family: "Font Awesome 6 Free";
+    color: grey;
+    font-weight: 900;
 }
