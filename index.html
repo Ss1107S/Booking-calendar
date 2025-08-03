@@ -242,7 +242,7 @@
             <!--Header of the table-->
             <div class="header_of_table">
                 <div class="left">
-                    <button class="count">Count of the Day</button>
+                    <button class="count">CountDay</button>
                     <button class="button_left"></button>
                     <button class="button_right"></button>
                     <p>Count of scheduels of this week</p>
@@ -275,123 +275,21 @@
             </div>
 
             <!--Calendar Table-->
-            <div class="calendar_table">
-                <div class="time">
-                    <div>
-                        <div class="empty"></div>
+           <div class="calendar_table">
+                <div class="first_row">
+                    <div class="first_dio">
+                    <div class="time"></div>
                     </div>
-                    <div>
-                        <div>9 AM</div>
-                        <div class="empty"></div>
-                    </div>
-                    <div>
-                        <div>10 AM</div>
-                        <div class="empty"></div>
-                    </div>
-                    <div>
-                        <div>11 AM</div>
-                        <div class="empty"></div>
-                    </div>
-                    <div>
-                        <div>12 AM</div>
-                        <div class="empty"></div>
-                    </div>
-                    <div>
-                        <div>1 PM</div>
-                        <div class="empty"></div>
-                    </div>
-                    <div>
-                        <div>2 PM</div>
-                        <div class="empty"></div>
-                    </div>
-                    <div>
-                        <div>3 PM</div>
-                        <div class="empty"></div>
-                    </div>
-                    <div>
-                        <div>4 PM</div>
-                        <div class="empty"></div>
-                    </div>
-                    <div>
-                        <div>5 PM</div>
-                        <div class="empty"></div>
-                    </div>
-                    <div>
-                        <div>6 PM</div>
-                        <div class="empty"></div>
-                    </div>
-                    <div>
-                        <div>7 PM</div>
-                        <div class="empty"></div>
-                    </div>
-                    <div>
-                        <div>8 PM</div>
-                        <div class="empty"></div>
-                    </div>
-                    <div>
-                        <div>9 PM</div>
-                        <div class="empty"></div>
+                    <div class="second_dio" id="dayHeaders">
+                    <!-- Дни будут вставлены динамически -->
                     </div>
                 </div>
-                <div class="days">
-                    <div>
-                        <div class="count_of_the_day">Count</div>
-                    </div>
-                    <div>
-                        <div class="1st_staff_for_9AM"></div>
-                        <div class="2nd_staff_for_9AM"></div>
-                    </div>
-                    <div>
-                        <div class="1st_staff_for_10AM"></div>
-                        <div class="2nd_staff_for_10AM"></div>
-                    </div>
-                    <div>
-                        <div class="1st_staff_for_11AM"></div>
-                        <div class="2nd_staff_for_11AM"></div>
-                    </div>
-                    <div>
-                        <div class="1st_staff_for_12AM"></div>
-                        <div class="2nd_staff_for_12AM"></div>
-                    </div>
-                    <div>
-                        <div class="1st_staff_for_1PM"></div>
-                        <div class="2nd_staff_for_1PM"></div>
-                    </div>
-                    <div>
-                        <div class="1st_staff_for_2PM"></div>
-                        <div class="2nd_staff_for_2PM"></div>
-                    </div>
-                    <div>
-                        <div class="1st_staff_for_3PM"></div>
-                        <div class="2nd_staff_for_3PM"></div>
-                    </div>
-                    <div>
-                        <div class="1st_staff_for_4PM"></div>
-                        <div class="2nd_staff_for_4PM"></div>
-                    </div>
-                    <div>
-                        <div class="1st_staff_for_5PM"></div>
-                        <div class="2nd_staff_for_5PM"></div>
-                    </div>
-                    <div>
-                        <div class="1st_staff_for_6PM"></div>
-                        <div class="2nd_staff_for_6PM"></div>
-                    </div>
-                    <div>
-                        <div class="1st_staff_for_7PM"></div>
-                        <div class="2nd_staff_for_7PM"></div>
-                    </div>
-                    <div>
-                        <div class="1st_staff_for_8PM"></div>
-                        <div class="2nd_staff_for_8PM"></div>
-                    </div>
-                    <div>
-                        <div class="1st_staff_for_9PM"></div>
-                        <div class="2nd_staff_for_9PM"></div>
-                    </div>
+                <div id="timeSlots" class="time-slots">
+                    <!-- Слоты будут генерироваться скриптом -->
                 </div>
             </div>
-        </div> 
+        </div>
+    
         
         <div class="right_part">
             <button class="list"></button>

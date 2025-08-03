@@ -1,4 +1,5 @@
-body{
+html, body {
+    height: 100%;
     margin: 0;
     font-family: sans-serif;
 }
@@ -18,7 +19,7 @@ header .left button{
 header .right button{
     border-radius: 20px;
     border: 2px solid rgb(164, 164, 250);
-    padding: 7px 15px;
+    padding: 5px 17px;
 }
 .list li{
     display: inline-block;
@@ -31,7 +32,7 @@ header .list {
 }
 .list .update,
 .list .dots{
-    padding: 5px 10px;
+    padding: 3px 8px;
 }
 .list .update::before{
     content: "\f021";
@@ -53,11 +54,12 @@ header .right{
 .main{
     display: flex;
 }
-.left_part {
+.left_part{
     width: 320px;
     display: flex;
     flex-direction: column;
     gap: 20px;
+    height: 100%;
 }
 #calendar-container {
     width: 320px;
@@ -76,8 +78,11 @@ header .right{
 .main .third_section,
 .main .fourth_section,
 .main .fifth_section{
-    height: 50px;
+    height: 40px;
     align-items: center;
+}
+.filter_left {
+    font-weight: bold;
 }
 #staffButton::after{
     content: "\f043";
@@ -90,9 +95,17 @@ header .right{
     display: flex;
     flex-direction: column; 
     gap: 20px;
+    height: 100%;
 }
-.header_of_table{
+.header_of_table {
     display: flex;
+    align-items: center;
+    width: 100%;
+}
+.header_of_table .left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
 }
 .header_of_table .button_right::before{
     content: "\f061";
@@ -109,12 +122,14 @@ header .right{
     font-weight: 900;
 }
 .header_of_table .right{
-   margin-left: auto;
+    display: flex; 
+    align-items: center;
+    margin-left: auto;
 }
 .middle_part .count{
     border-radius: 20px;
     border: 2px solid grey;
-    padding: 5px 10px;
+    padding: 3px 15px;
 }
 .header_of_table .right .icon::before{
     content: "\f0ac";
@@ -123,18 +138,79 @@ header .right{
     color: black;
     font-weight: 900;
 }
-.calendar_table{
+.calendar_table {
     display: flex;
-} 
- .days{
-    height: 10px;
-}      
-.time > div,
-.days > div {
-    height: 60px;
+    flex-direction: column;
+    font-size: x-small;
+}
+
+.first_row {
+    font-size: small;
+    display: flex;
+}
+
+.first_row .first_dio {
+    height: 40px;
+    width: 40px;
     border: 1px solid #ccc;
     padding: 4px;
     box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.first_row .second_dio {
+    display: flex;
+    width: 980px;
+}
+
+.first_row .second_dio > div {
+    height: 40px;
+    width: 140px;
+    border: 1px solid #ccc;
+    padding: 4px;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.time-slots > div {
+    display: flex;
+}
+
+.time-slots .first_dio {
+    height: 40px;
+    width: 40px;
+    border: 1px solid #ccc;
+    padding: 4px;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.time-slots .second_dio {
+    display: flex;
+    width: 980px;
+}
+
+.time-slots .second_dio > div {
+    height: 20px;
+    width: 140px;
+    border: 1px solid #ccc;
+    padding: 4px;
+    box-sizing: border-box;
+}
+
+.day-headers {
+    display: flex;
+}
+
+#timeSlots {
+    display: flex;
+    flex-direction: column;
 }
 .right_part{
     display: flex;
@@ -142,11 +218,12 @@ header .right{
     flex-direction: column;
     gap: 20px;
     padding: 20px 10px;
+    height: 100%;
 }
 .right_part button{
     border-radius: 20px;
     border: 1px solid grey;
-    padding: 5px 10px;
+    padding: 3px 8px;
 }
 .right_part .list::before{
     content: "\f0ae";
