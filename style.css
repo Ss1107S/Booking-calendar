@@ -94,8 +94,8 @@ header .right{
 .middle_part{
     display: flex;
     flex-direction: column; 
-    gap: 20px;
     height: 100%;
+    gap: 20px;
 }
 .header_of_table {
     display: flex;
@@ -150,8 +150,8 @@ header .right{
 }
 
 .first_row .first_dio {
-    height: 40px;
-    width: 40px;
+    height: 46px;
+    width: 46px;
     border: 1px solid #ccc;
     padding: 4px;
     box-sizing: border-box;
@@ -162,12 +162,12 @@ header .right{
 
 .first_row .second_dio {
     display: flex;
-    width: 980px;
+    width: 1085px;
 }
 
 .first_row .second_dio > div {
-    height: 40px;
-    width: 140px;
+    height: 46px;
+    width: 155px;
     border: 1px solid #ccc;
     padding: 4px;
     box-sizing: border-box;
@@ -181,8 +181,8 @@ header .right{
 }
 
 .time-slots .first_dio {
-    height: 40px;
-    width: 40px;
+    height: 46px;
+    width: 46px;
     border: 1px solid #ccc;
     padding: 4px;
     box-sizing: border-box;
@@ -193,12 +193,12 @@ header .right{
 
 .time-slots .second_dio {
     display: flex;
-    width: 980px;
+    width: 1085px;
 }
 
 .time-slots .second_dio > div {
-    height: 20px;
-    width: 140px;
+    height: 23px;
+    width: 155px;
     border: 1px solid #ccc;
     padding: 4px;
     box-sizing: border-box;

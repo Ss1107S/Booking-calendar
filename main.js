@@ -43,8 +43,8 @@ function generateTable(selectedDate) {
   // Header row
   days.forEach((day) => {
     const dayDiv = document.createElement("div");
-    dayDiv.style.height = "40px";
-    dayDiv.style.width = "140px";
+    dayDiv.style.height = "46px";
+    dayDiv.style.width = "155px";
     dayDiv.style.border = "1px solid #ccc";
     dayDiv.style.padding = "4px";
     dayDiv.style.boxSizing = "border-box";
@@ -67,8 +67,8 @@ function generateTable(selectedDate) {
 
     const timeCell = document.createElement("div");
     timeCell.className = "first_dio";
-    timeCell.style.height = "40px";
-    timeCell.style.width = "40px";
+    timeCell.style.height = "46px";
+    timeCell.style.width = "46px";
     timeCell.style.border = "1px solid #ccc";
     timeCell.style.padding = "4px";
     timeCell.style.boxSizing = "border-box";
@@ -83,8 +83,8 @@ function generateTable(selectedDate) {
 
     days.forEach(() => {
       const col = document.createElement("div");
-      col.style.height = "20px";
-      col.style.width = "140px";
+      col.style.height = "23px";
+      col.style.width = "155px";
       col.style.border = "1px solid #ccc";
       col.style.padding = "4px";
       col.style.boxSizing = "border-box";
