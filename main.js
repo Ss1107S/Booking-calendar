@@ -111,3 +111,77 @@ fp.config.onChange.push(function(selectedDates) {
     generateTable(selectedDates[0]);
   }
 });
+
+//Переключение языков
+const translations = {
+    en: {
+        title: "Booking Calendar",
+        dateButton: "Selection Date",
+        scheduleText: "Count of scheduels of this week",
+        weeklyView: "Weekly view",
+        languageLabel: "EN",
+        manage: "Manage",
+        add: "Add",
+        colorTheme: "Color Theme",
+        filterBy: "Filter by:",
+        allSelected: "All selected",
+        services: "Services",
+        staff: "Staff",
+        location: "Location",
+        sessionAvailability: "Session availability",
+        otherEvents: "Other events",
+        countDay: "CountDay"
+    },
+    hr: {
+        title: "Kalendar za rezervacije",
+        dateButton: "Odabir datuma",
+        scheduleText: "Broj rasporeda za ovaj tjedan",
+        weeklyView: "Tjedni pregled",
+        languageLabel: "HR",
+        manage: "Upravljaj",
+        add: "Dodaj",
+        colorTheme: "Tema boje",
+        filterBy: "Filtriraj po:",
+        allSelected: "Svi odabrani",
+        services: "Usluge",
+        staff: "Osoblje",
+        location: "Lokacija",
+        sessionAvailability: "Dostupnost termina",
+        otherEvents: "Ostali događaji",
+        countDay: "Broj dana"
+    }
+};
+    let currentLanguage = localStorage.getItem('language') || 'en';
+
+    function translateUI() {
+    const t = translations[currentLanguage];
+
+    document.querySelectorAll('[data-key]').forEach(el => {
+        const key = el.getAttribute('data-key');
+        if (t[key]) {
+            // Учитываем, если кнопка содержит вложенные теги (например, иконки)
+            if (el.childNodes.length > 1 && el.childNodes[0].nodeType === Node.TEXT_NODE) {
+                el.childNodes[0].nodeValue = t[key] + " ";
+            } else {
+                el.textContent = t[key];
+            }
+        }
+    });
+
+    // Перевод текста в календаре
+    if (fp.selectedDates.length > 0) {
+        const date = fp.selectedDates[0];
+        const formatted = months[date.getMonth()] + " " + date.getFullYear();
+        document.getElementById("dateButton").textContent = formatted;
+    }
+
+    generateTable(fp.selectedDates[0]); // Обновим дни недели
+}
+    document.getElementById('languageToggle').addEventListener('click', () => {
+        currentLanguage = (currentLanguage === 'en') ? 'hr' : 'en';
+        localStorage.setItem('language', currentLanguage);
+        translateUI();
+    });
+
+    // Переводим сразу при загрузке
+    document.addEventListener('DOMContentLoaded', translateUI);

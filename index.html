@@ -22,10 +22,10 @@
         <div class="left">
             <ul class="list">
                 <li>
-                    <h1>Booking Calendar</h1>
+                    <h1 data-key="title">Booking Calendar</h1>
                 </li>
                 <li>
-                    <button id="dateButton">Selection Date</button>
+                    <button id="dateButton" data-key="dateButton">Selection Date</button>
                 </li>
                 
             </ul>    
@@ -38,7 +38,7 @@
                 </li>
                 <li class="right">
                     <!-- Manage button -->
-                    <button id="manageButton" data-dropdown-toggle="manageSearch" data-dropdown-placement="bottom" style="cursor: pointer;" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">Manage<svg class="w-2.5 h-2.5 ms-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                    <button id="manageButton" data-key="manage" data-dropdown-toggle="manageSearch" data-dropdown-placement="bottom" style="cursor: pointer;" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">Manage<svg class="w-2.5 h-2.5 ms-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
                     </svg>
                     </button>
@@ -60,7 +60,7 @@
                 </li>
                 <li>
                     <!-- Add button -->
-                    <button id="addButton" data-dropdown-toggle="addSearch" data-dropdown-placement="bottom" style="cursor: pointer;" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">Add<svg class="w-2.5 h-2.5 ms-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                    <button id="addButton" data-key="add" data-dropdown-toggle="addSearch" data-dropdown-placement="bottom" style="cursor: pointer;" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">Add<svg class="w-2.5 h-2.5 ms-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
                     </svg>
                     </button>
@@ -81,7 +81,7 @@
                 </li>
                 <li>
                     <!-- Color theme button -->
-                    <button id="colorThemeButton" data-dropdown-toggle="colorThemeSearch" data-dropdown-placement="bottom" style="cursor: pointer;" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">Color Theme<svg class="w-2.5 h-2.5 ms-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                    <button id="colorThemeButton" data-key="colorTheme" data-dropdown-toggle="colorThemeSearch" data-dropdown-placement="bottom" style="cursor: pointer;" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">Color Theme<svg class="w-2.5 h-2.5 ms-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
                     </svg>
                     </button>
@@ -119,16 +119,16 @@
             <div>
                 <div class="filter">
                     <div class="filter_left">
-                        <p>Filter by:</p>
+                        <p class="filter-text" data-key="filterBy">Filter by:</p>
                     </div>
                     <div class="filter_right">
-                        <button>All selected</button>
+                        <button data-key="allSelected">All selected</button>
                     </div>
                 </div>
                 <div class="first_section">
                     <!-- Services button -->
                       <div style="display: flex; align-items: center; gap: 10px;">
-                        <button id="servicesButton" data-dropdown-toggle="servicesSearch" data-dropdown-placement="bottom" style="cursor: pointer;" class="hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">
+                        <button id="servicesButton" data-key="services" data-dropdown-toggle="servicesSearch" data-dropdown-placement="bottom" style="cursor: pointer;" class="hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">
                             Services
                         </button>
                         <div class="first_section_right" style="display: flex; align-items: center; gap: 10px;">
@@ -159,7 +159,7 @@
                 <div class="second_section">
                     <!-- Staff button -->
                     <div style="display: flex; align-items: center; gap: 10px;">
-                        <button id="staffButton" data-dropdown-toggle="staffSearch" data-dropdown-placement="bottom" style="cursor: pointer;" class="hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">
+                        <button id="staffButton" data-key="staff" data-dropdown-toggle="staffSearch" data-dropdown-placement="bottom" style="cursor: pointer;" class="hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">
                             Staff
                             <i class="fa-solid fa-droplet" style="font-weight: 900; color: black; margin-left: 10px;"></i>
                         </button>   
@@ -191,7 +191,7 @@
                 <div class="third_section">
                     <!-- Location button -->
                     <div style="display: flex; align-items: center; gap: 10px;">
-                        <button id="locationButton" data-dropdown-toggle="locationSearch" data-dropdown-placement="bottom" style="cursor: pointer;" class="hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">
+                        <button id="locationButton" data-key="location" data-dropdown-toggle="locationSearch" data-dropdown-placement="bottom" style="cursor: pointer;" class="hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">
                             Location
                         </button>    
                         <div class="first_section_right" style="display: flex; align-items: center; gap: 10px;">
@@ -219,7 +219,7 @@
                 <div class="fourth_section">
                     <!-- Session Availability button -->
                      <div style="display: flex; align-items: center; gap: 10px;">
-                        <button id="sessionAvailabilityButton" data-dropdown-toggle="sessionAvailabilitySearch" data-dropdown-placement="bottom" style="cursor: pointer;" class="hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">
+                        <button id="sessionAvailabilityButton" data-key="sessionAvailability" data-dropdown-toggle="sessionAvailabilitySearch" data-dropdown-placement="bottom" style="cursor: pointer;" class="hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">
                             Session availability
                         </button>   
                         <div class="first_section_right" style="display: flex; align-items: center; gap: 10px;">
@@ -246,7 +246,7 @@
                 <div class="fifth_section">
                     <!-- Other Events button -->
                      <div style="display: flex; align-items: center; gap: 10px;">
-                        <button id="otherEventsButton" data-dropdown-toggle="otherEventsSearch" data-dropdown-placement="bottom" style="cursor: pointer;" class="hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">
+                        <button id="otherEventsButton" data-key="otherEvents" data-dropdown-toggle="otherEventsSearch" data-dropdown-placement="bottom" style="cursor: pointer;" class="hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">
                             Other events
                         </button>   
                        <div class="first_section_right" style="display: flex; align-items: center; gap: 10px;">
@@ -277,16 +277,16 @@
             <!--Header of the table-->
             <div class="header_of_table">
                 <div class="left">
-                    <button class="count">CountDay</button>
+                    <button class="count" data-key="countDay">CountDay</button>
                     <button class="button_left"></button>
                     <button class="button_right"></button>
-                    <p>Count of scheduels of this week</p>
+                    <p data-key="scheduleText">Count of scheduels of this week</p>
                 </div>
                 <div class="right">
-                    <button class="icon"></button>
+                    <button class="language" id="languageToggle"></button>
                     <div>
                         <!-- Weekly view button -->
-                        <button id="weeklyViewButton" data-dropdown-toggle="weeklyViewSearch" data-dropdown-placement="bottom" style="cursor: pointer;" class="hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">Weekly view<svg class="w-2.5 h-2.5 ms-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                        <button id="weeklyViewButton" data-key="weeklyView" data-dropdown-toggle="weeklyViewSearch" data-dropdown-placement="bottom" style="cursor: pointer;" class="hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">Weekly view<svg class="w-2.5 h-2.5 ms-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
                         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
                         </svg>
                         </button>

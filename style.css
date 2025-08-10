@@ -131,13 +131,7 @@ svg{
     align-items: center;
     margin-left: auto;
 }
-.middle_part .count{
-    border-radius: 20px;
-    border: 2px solid grey;
-    padding: 3px 15px;
-    font-weight: bold;
-}
-.header_of_table .right .icon::before{
+.header_of_table .right .language::before{
     content: "\f0ac";
     vertical-align: middle;
     font-family: "Font Awesome 6 Free";
