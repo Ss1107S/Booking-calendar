@@ -185,3 +185,88 @@ const translations = {
 
     // Переводим сразу при загрузке
     document.addEventListener('DOMContentLoaded', translateUI);
+
+//Изменение цветового оформления
+const themeButtons = document.querySelectorAll('.theme-option');
+const targetButtons = document.querySelectorAll('#manageButton, #addButton, #colorThemeButton');
+
+// Получаем все ячейки календаря
+function getCalendarCells() {
+  return document.querySelectorAll(
+    '.calendar_table .first_dio, .calendar_table .second_dio > div, .time-slots .first_dio, .time-slots .second_dio > div'
+  );
+}
+
+function clearThemeClasses(button) {
+  button.classList.remove(
+    'bg-blue-700', 'hover:bg-blue-800', 'focus:ring-blue-300',
+    'bg-yellow-500', 'hover:bg-yellow-600', 'focus:ring-yellow-300',
+    'bg-green-600', 'hover:bg-green-700', 'focus:ring-green-300',
+    'bg-red-600', 'hover:bg-red-700', 'focus:ring-red-300',
+    'bg-gradient-to-r', 'from-pink-500', 'via-yellow-500', 'to-green-500'
+  );
+}
+
+function clearCellBackgrounds(cells) {
+  cells.forEach(cell => {
+    cell.style.backgroundColor = ''; // Сброс inline-стиля
+    cell.style.backgroundImage = ''; // На случай градиента
+  });
+}
+
+themeButtons.forEach(themeButton => {
+  themeButton.addEventListener('click', () => {
+    const theme = themeButton.dataset.theme;
+    const calendarCells = getCalendarCells();
+
+    // Обновление кнопок
+    targetButtons.forEach(button => {
+      clearThemeClasses(button);
+      button.classList.remove('dark:bg-blue-600', 'dark:hover:bg-blue-700', 'dark:focus:ring-blue-800');
+
+      switch (theme) {
+        case 'blue':
+          button.classList.add('bg-blue-700', 'hover:bg-blue-800', 'focus:ring-blue-300');
+          break;
+        case 'yellow':
+          button.classList.add('bg-yellow-500', 'hover:bg-yellow-600', 'focus:ring-yellow-300');
+          break;
+        case 'green':
+          button.classList.add('bg-green-600', 'hover:bg-green-700', 'focus:ring-green-300');
+          break;
+        case 'red':
+          button.classList.add('bg-red-600', 'hover:bg-red-700', 'focus:ring-red-300');
+          break;
+        case 'multicolor':
+          button.classList.add('bg-gradient-to-r', 'from-pink-500', 'via-yellow-500', 'to-green-500');
+          break;
+      }
+    });
+
+    // Обновление цвета ячеек календаря
+    clearCellBackgrounds(calendarCells);
+
+    calendarCells.forEach((cell, index) => {
+      switch (theme) {
+        case 'yellow':
+          cell.style.backgroundColor = '#facc15'; // Tailwind yellow-400
+          break;
+        case 'green':
+          cell.style.backgroundColor = '#22c55e'; // Tailwind green-500
+          break;
+        case 'red':
+          cell.style.backgroundColor = '#ef4444'; // Tailwind red-500
+          break;
+        case 'multicolor':
+          // Радуга на ячейках — чередуем цвета
+          const colors = ['#f43f5e', '#facc15', '#10b981', '#3b82f6', '#8b5cf6']; // розовый, жёлтый, зелёный, синий, фиолетовый
+          cell.style.backgroundColor = colors[index % colors.length];
+          break;
+        case 'blue':
+        default:
+          // Ничего не делать — оставить текущий стиль
+          break;
+      }
+    });
+  });
+});
