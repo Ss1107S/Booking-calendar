@@ -249,17 +249,17 @@ themeButtons.forEach(themeButton => {
     calendarCells.forEach((cell, index) => {
       switch (theme) {
         case 'yellow':
-          cell.style.backgroundColor = '#facc15'; // Tailwind yellow-400
+          cell.style.backgroundColor = '#f8e07fff'; // Tailwind yellow-400
           break;
         case 'green':
-          cell.style.backgroundColor = '#22c55e'; // Tailwind green-500
+          cell.style.backgroundColor = '#66c88aff'; // Tailwind green-500
           break;
         case 'red':
-          cell.style.backgroundColor = '#ef4444'; // Tailwind red-500
+          cell.style.backgroundColor = '#ed8b8bff'; // Tailwind red-500
           break;
         case 'multicolor':
           // Радуга на ячейках — чередуем цвета
-          const colors = ['#f43f5e', '#facc15', '#10b981', '#3b82f6', '#8b5cf6']; // розовый, жёлтый, зелёный, синий, фиолетовый
+          const colors = ['#ed8b8bff', '#f8e07fff', '#66c88aff', '#7eacf6ff', '#b395f8ff']; // розовый, жёлтый, зелёный, синий, фиолетовый
           cell.style.backgroundColor = colors[index % colors.length];
           break;
         case 'blue':
