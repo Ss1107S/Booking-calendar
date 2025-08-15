@@ -44,7 +44,7 @@
                     </button>
 
                     <!-- Manage menu -->
-                    <div id="manageSearch" class="z-10 hidden bg-white rounded-lg shadow-sm w-60 dark:bg-gray-700" style="cursor: pointer;">
+                    <div id="manageSearch" class="z-10 hidden bg-white rounded-lg shadow-sm w-40 dark:bg-gray-700" style="cursor: pointer;">
                         <div class="p-3">
                         <label for="input-group-search" class="sr-only">Search</label>
                         <div class="relative">
@@ -54,19 +54,24 @@
                             </div>
                         </div>
                     </div>
-                    <ul id="manage-list" class="h-48 px-3 pb-3 overflow-y-auto text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownSearchButton">
+                    <ul id="manage-list" class="text-sm text-gray-700 dark:text-gray-200 space-y-1 mb-3">
+                        <li class="view-option py-2 px-3 w-full text-left bg-gray-100 hover:bg-gray-200 rounded">
+                            View</li>
+                        <li class="modify-option py-2 px-3 w-full text-left bg-yellow-100 hover:bg-yellow-200 rounded">
+                            Modify</li>
+                        <li class="cancel-option py-2 px-3 w-full text-left bg-green-100 hover:bg-green-200 rounded">
+                            Cancel</li>
                     </ul>
-                    </div>
                 </li>
                 <li>
-                    <!-- Add button -->
+                     <!-- Add button -->
                     <button id="addButton" data-key="add" data-dropdown-toggle="addSearch" data-dropdown-placement="bottom" style="cursor: pointer;" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">Add<svg class="w-2.5 h-2.5 ms-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
                     </svg>
                     </button>
 
                     <!-- Add menu -->
-                    <div id="addSearch" class="z-10 hidden bg-white rounded-lg shadow-sm w-60 dark:bg-gray-700" style="cursor: pointer;">
+                    <div id="addSearch" class="z-10 hidden bg-white rounded-lg shadow-sm w-40 dark:bg-gray-700" style="cursor: pointer;">
                         <div class="p-3">
                         <label for="input-group-search" class="sr-only">Search</label>
                         <div class="relative">
@@ -76,7 +81,11 @@
                             </div>
                         </div>
                     </div>
-                    <ul id="add-list" class="h-48 px-3 pb-3 overflow-y-auto text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownSearchButton">
+                    <ul id="add-list" class="text-sm text-gray-700 dark:text-gray-200 space-y-1 mb-3">
+                        <li class="event-option py-2 px-3 w-full text-left bg-gray-100 hover:bg-gray-200 rounded">
+                            Event</li>
+                        <li class="fewEvents-option py-2 px-3 w-full text-left bg-yellow-100 hover:bg-yellow-200 rounded">
+                            Few Events</li>
                     </ul>
                 </li>
                 <li>
@@ -87,9 +96,8 @@
                     </button>
 
                     <!-- Color theme menu -->
-                    <div id="colorThemeSearch" class="z-10 hidden bg-white rounded-lg shadow-sm w-60 dark:bg-gray-700" style="cursor: pointer;">
+                    <div id="colorThemeSearch" class="z-10 hidden bg-white rounded-lg shadow-sm w-40 dark:bg-gray-700" style="cursor: pointer;">
                         <div class="px-3 pb-3 ">
-                       <!--  <div class="p-3">-->
                         <label for="input-group-search" class="sr-only">Search</label>
                         <div class="relative">
                             <div class="absolute inset-y-0 rtl:inset-r-0 start-0 flex items-center ps-3 pointer-events-none">
@@ -99,16 +107,16 @@
                         </div>
                     </div>
                     <ul id="theme-options" class="text-sm text-gray-700 dark:text-gray-200 space-y-1 mb-3">
-                        <li><button class="theme-option py-2 px-3 w-full text-left bg-gray-100 hover:bg-gray-200 rounded" data-theme="blue">
-                            Blue</button></li>
-                        <li><button class="theme-option py-2 px-3 w-full text-left bg-yellow-100 hover:bg-yellow-200 rounded" data-theme="yellow">
-                            Yellow</button></li>
-                        <li><button class="theme-option py-2 px-3 w-full text-left bg-green-100 hover:bg-green-200 rounded" data-theme="green">
-                            Green</button></li>
-                        <li><button class="theme-option py-2 px-3 w-full text-left bg-red-100 hover:bg-red-200 rounded" data-theme="red">
-                            Red</button></li>
-                        <li><button class="theme-option py-2 px-3 w-full text-left bg-gradient-to-r from-pink-100 via-yellow-100 to-green-100 hover:brightness-110 rounded" data-theme="multicolor">
-                            Multicolor</button></li>
+                        <li class="theme-option py-2 px-3 w-full text-left bg-gray-100 hover:bg-gray-200 rounded" data-theme="blue">
+                            Blue</li>
+                        <li class="theme-option py-2 px-3 w-full text-left bg-yellow-100 hover:bg-yellow-200 rounded" data-theme="yellow">
+                            Yellow</li>
+                        <li class="theme-option py-2 px-3 w-full text-left bg-green-100 hover:bg-green-200 rounded" data-theme="green">
+                            Green</li>
+                        <li class="theme-option py-2 px-3 w-full text-left bg-red-100 hover:bg-red-200 rounded" data-theme="red">
+                            Red</li>
+                        <li class="theme-option py-2 px-3 w-full text-left bg-gradient-to-r from-pink-100 via-yellow-100 to-green-100 hover:brightness-110 rounded" data-theme="multicolor">
+                            Multicolor</li>
                     </ul>
                 </li>
             </ul>
@@ -158,7 +166,6 @@
                                 <div class="relative">
                                     <div class="absolute inset-y-0 rtl:inset-r-0 start-0 flex items-center ps-3 pointer-events-none">
                                         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
-                                    </svg>
                                     </div>
                                 </div>
                             </div>
@@ -190,7 +197,6 @@
                                 <div class="relative">
                                     <div class="absolute inset-y-0 rtl:inset-r-0 start-0 flex items-center ps-3 pointer-events-none">
                                         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
-                                    </svg>
                                     </div>
                                 </div>
                             </div>
@@ -219,7 +225,6 @@
                             <div class="relative">
                                 <div class="absolute inset-y-0 rtl:inset-r-0 start-0 flex items-center ps-3 pointer-events-none">
                                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
-                                </svg>
                                 </div>
                             </div>
                         </div>
@@ -246,7 +251,6 @@
                             <div class="relative">
                                 <div class="absolute inset-y-0 rtl:inset-r-0 start-0 flex items-center ps-3 pointer-events-none">
                                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
-                                </svg>
                                 </div>
                             </div>
                         </div>
@@ -273,7 +277,6 @@
                             <div class="relative">
                                 <div class="absolute inset-y-0 rtl:inset-r-0 start-0 flex items-center ps-3 pointer-events-none">
                                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
-                                </svg>
                                 </div>
                             </div>
                         </div>
@@ -309,7 +312,6 @@
                                 <div class="relative">
                                     <div class="absolute inset-y-0 rtl:inset-r-0 start-0 flex items-center ps-3 pointer-events-none">
                                         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
-                                    </svg>
                                     </div>
                                 </div>
                             </div>
