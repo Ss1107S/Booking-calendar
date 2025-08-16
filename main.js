@@ -82,15 +82,10 @@ function generateTable(selectedDate) {
     secondDio.className = "second_dio";
 
     days.forEach(() => {
-      const col = document.createElement("div");
-      col.style.height = "23px";
-      col.style.width = "155px";
-      col.style.border = "1px solid #ccc";
-      col.style.padding = "4px";
-      col.style.boxSizing = "border-box";
-      secondDio.appendChild(col);
-    });
-
+  const cell = document.createElement("div");
+  cell.className = "split-cell"; 
+  secondDio.appendChild(cell);
+});
     row.appendChild(secondDio);
     timeSlotsContainer.appendChild(row);
   }

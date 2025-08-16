@@ -199,7 +199,6 @@ svg{
 }
 
 .time-slots .second_dio > div {
-    height: 23px;
     width: 155px;
     border: 1px solid #ccc;
     padding: 4px;
@@ -214,6 +213,25 @@ svg{
     display: flex;
     flex-direction: column;
 }
+
+.split-cell {
+  height: 46px;
+  width: 155px;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+  position: relative;
+}
+
+.split-cell::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 100%;
+  height: 0;
+  border-top: 1px solid #ccc;
+}
+
 .right_part{
     display: flex;
     margin-left: auto;
