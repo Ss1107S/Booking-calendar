@@ -127,6 +127,7 @@ header .right{
 .first_section_right{
     margin-left: auto;
 }
+
 .left_part .button_inside{
     border-radius: 20px;
     border: 2px solid rgb(164, 164, 250);
@@ -151,6 +152,20 @@ svg{
     align-items: center;
     gap: 10px;
 }
+
+.middle_part .header_of_table .left  .count{
+    padding: 0px 17px;
+    border: 1px solid gray;
+    border-radius: 20px;
+}
+
+
+
+
+
+
+
+
 .header_of_table .button_right::before{
     content: "\f061";
     vertical-align: middle;
@@ -278,9 +293,9 @@ svg{
     padding: 20px 10px;
     height: 100%;
 }
-.right_part button{
+.main .right_part button{
     border-radius: 20px;
-    border: 1px solid grey;
+    border: 1px solid #ccc;
     padding: 3px 8px;
 }
 .right_part .list::before{

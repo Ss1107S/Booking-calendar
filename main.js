@@ -6,7 +6,7 @@ const months = [
 
 const fp = flatpickr("#calendar-container", {
   inline: true,
-  defaultDate: "2025-06-19",
+  defaultDate: new Date(),
   minDate: "2025-01-01",
   maxDate: "2025-12-31",
   onChange: function(selectedDates) {
@@ -24,6 +24,44 @@ if (fp.selectedDates.length > 0) {
   const formatted = months[date.getMonth()] + " " + date.getFullYear();
   document.getElementById("dateButton").textContent = formatted;
 }
+
+
+//Функциональность для отображения верной даты в header_of_table
+// Функция форматирования даты в нужный формат для кнопки .count
+function formatSelectedDate(date) {
+  return months[date.getMonth()] + " " + date.getDate() + ", " + date.getFullYear();
+}
+
+// Получаем кнопку с классом count
+const countButton = document.querySelector(".count");
+
+// Функция для обновления текста кнопки с учетом верного отображения для сегодня,
+// завтра и вчера и динамического подставления выбранную дату из календаря в остальных случаях.
+
+function updateCountButton(date) {
+  const today = new Date();
+  // Обнуляем время для сравнения только по дате
+  today.setUTCHours(0, 0, 0, 0);
+  const selectedDate = new Date(date.getTime());
+  selectedDate.setUTCHours(0, 0, 0, 0);
+
+  const diffDays = Math.round((selectedDate - today) / (1000 * 60 * 60 * 24));
+
+  let text;
+  if (diffDays === 0) {
+    text = "Today";
+  } else if (diffDays === -1) {
+    text = "Yesterday";
+  } else if (diffDays === 1) {
+    text = "Tomorrow";
+  } else {
+    text = months[date.getMonth()] + " " + date.getDate() + ", " + date.getFullYear();
+  }
+
+  countButton.textContent = text;
+}
+
+
 
 
 //Генерация таблицы и синхронизация с календарём
@@ -95,22 +133,25 @@ function generateTable(selectedDate) {
 
       // Обработчик клика на ячейку
       cell.addEventListener("click", () => {
-        if (selectedCell) {
-          selectedCell.style.backgroundColor = ""; // Убираем подсветку
-        }
+  if (selectedCell) {
+    selectedCell.style.backgroundColor = ""; // Убираем подсветку
+  }
 
-        selectedCell = cell;
-        cell.style.backgroundColor = "#dbeafe"; // Выделение (голубой фон)
+  selectedCell = cell;
+  cell.style.backgroundColor = "#dbeafe"; // Выделение (голубой фон)
 
-        // Сохраняем выбранную дату и время
-        const selectedDateTime = new Date(cell.dataset.date);
-        selectedDateTime.setHours(cell.dataset.hour);
-        selectedDateTime.setMinutes(0);
-        selectedDateTime.setSeconds(0);
+  // Сохраняем выбранную дату и время
+  const selectedDateTime = new Date(cell.dataset.date);
+  selectedDateTime.setHours(cell.dataset.hour);
+  selectedDateTime.setMinutes(0);
+  selectedDateTime.setSeconds(0);
 
-        window.selectedDateTime = selectedDateTime;
-        console.log("Выбрано:", window.selectedDateTime);
-      });
+  window.selectedDateTime = selectedDateTime;
+  console.log("Выбрано:", window.selectedDateTime);
+
+  // ✅ Обновляем текст кнопки .count на основе центрального календаря
+  updateCountButton(selectedDateTime);
+});
 
       secondDio.appendChild(cell);
     });
