@@ -25,9 +25,12 @@ if (fp.selectedDates.length > 0) {
   document.getElementById("dateButton").textContent = formatted;
 }
 
+
 //Генерация таблицы и синхронизация с календарём
 const dayHeadersContainer = document.getElementById("dayHeaders");
 const timeSlotsContainer = document.getElementById("timeSlots");
+let selectedCell = null;
+window.selectedDateTime = null; // Глобально храним выбранную дату и время
 
 function generateTable(selectedDate) {
   dayHeadersContainer.innerHTML = "";
@@ -81,15 +84,49 @@ function generateTable(selectedDate) {
     const secondDio = document.createElement("div");
     secondDio.className = "second_dio";
 
-    days.forEach(() => {
-  const cell = document.createElement("div");
-  cell.className = "split-cell"; 
-  secondDio.appendChild(cell);
-});
+    days.forEach((day) => {
+      const cell = document.createElement("div");
+      cell.className = "split-cell";
+
+      // Сохраняем дату и час в data-атрибутах
+      const dateString = day.toISOString().split("T")[0]; // YYYY-MM-DD
+      cell.dataset.date = dateString;
+      cell.dataset.hour = hour;
+
+      // Обработчик клика на ячейку
+      cell.addEventListener("click", () => {
+        if (selectedCell) {
+          selectedCell.style.backgroundColor = ""; // Убираем подсветку
+        }
+
+        selectedCell = cell;
+        cell.style.backgroundColor = "#dbeafe"; // Выделение (голубой фон)
+
+        // Сохраняем выбранную дату и время
+        const selectedDateTime = new Date(cell.dataset.date);
+        selectedDateTime.setHours(cell.dataset.hour);
+        selectedDateTime.setMinutes(0);
+        selectedDateTime.setSeconds(0);
+
+        window.selectedDateTime = selectedDateTime;
+        console.log("Выбрано:", window.selectedDateTime);
+      });
+
+      secondDio.appendChild(cell);
+    });
+
     row.appendChild(secondDio);
     timeSlotsContainer.appendChild(row);
   }
 }
+
+// Помощник для сравнения дат (без учета времени)
+function sameDay(d1, d2) {
+  return d1.getFullYear() === d2.getFullYear() &&
+         d1.getMonth() === d2.getMonth() &&
+         d1.getDate() === d2.getDate();
+}
+
 
 function formatHour(hour) {
   const suffix = hour >= 12 ? "PM" : "AM";
@@ -106,6 +143,7 @@ fp.config.onChange.push(function(selectedDates) {
     generateTable(selectedDates[0]);
   }
 });
+
 
 //Переключение языков
 const translations = {
@@ -180,6 +218,8 @@ const translations = {
 
     // Переводим сразу при загрузке
     document.addEventListener('DOMContentLoaded', translateUI);
+
+
 
 //Изменение цветового оформления
 const themeButtons = document.querySelectorAll('.theme-option');
@@ -265,3 +305,19 @@ themeButtons.forEach(themeButton => {
     });
   });
 });
+
+
+
+// Переменная для хранения выбранной даты в основном календаре
+let selectedMainDate = fp.selectedDates[0] || new Date();
+
+// CSS класс для выделения выбранного дня
+const style = document.createElement('style');
+style.textContent = `
+  .selected-day {
+    background-color: #3b82f6; /* ярко-синий фон */
+    color: white;
+    border-radius: 4px;
+  }
+`;
+document.head.appendChild(style);
