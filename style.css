@@ -50,8 +50,46 @@ header .list {
 }
 header .right{
    margin-left: auto;
-   margin-right: 10px;
 }
+
+#addButton {
+  display: inline-flex;
+  align-items: center;
+}
+
+.modal {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100vw; height: 100vh;
+  background-color: rgba(0,0,0,0.4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal.hidden {
+  display: none;
+}
+
+.modal-content {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  width: 320px;
+}
+
+/* Меню addSearch позиционируем по кнопке */
+#addSearch {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  margin-top: 4px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  z-index: 100;
+}
+
+
 .main{
     display: flex;
 }

@@ -145,6 +145,26 @@ fp.config.onChange.push(function(selectedDates) {
 });
 
 
+// Переменная для хранения выбранной даты в основном календаре
+let selectedMainDate = fp.selectedDates[0] || new Date();
+
+// CSS класс для выделения выбранного дня
+const style = document.createElement('style');
+style.textContent = `
+  .selected-day {
+    background-color: #3b82f6; /* ярко-синий фон */
+    color: white;
+    border-radius: 4px;
+  }
+`;
+document.head.appendChild(style);
+
+
+
+
+
+
+
 //Переключение языков
 const translations = {
     en: {
@@ -305,19 +325,3 @@ themeButtons.forEach(themeButton => {
     });
   });
 });
-
-
-
-// Переменная для хранения выбранной даты в основном календаре
-let selectedMainDate = fp.selectedDates[0] || new Date();
-
-// CSS класс для выделения выбранного дня
-const style = document.createElement('style');
-style.textContent = `
-  .selected-day {
-    background-color: #3b82f6; /* ярко-синий фон */
-    color: white;
-    border-radius: 4px;
-  }
-`;
-document.head.appendChild(style);
