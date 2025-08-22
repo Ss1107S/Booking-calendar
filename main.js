@@ -103,7 +103,7 @@ function generateTable(selectedDate) {
     
     // Установка цвета для дня
     if (sameDay(day, selectedDate)) {
-      dayDiv.style.color = "rgba(102, 143, 246, 1)"; // выбранный день
+      dayDiv.style.color = "rgba(35, 166, 248, 1)"; // выбранный день
     } else if (day < selectedDate) {
       dayDiv.style.color = "#ccc"; // предыдущие дни
     } else {

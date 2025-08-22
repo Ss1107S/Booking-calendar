@@ -56,11 +56,9 @@
                             </div>
                         </div>
                         <ul id="manage-list" class="text-sm text-gray-700 dark:text-gray-200 space-y-1 mb-3">
-                            <li class="view-option py-2 px-3 w-full text-left bg-gray-100 hover:bg-gray-200 rounded">
-                                View</li>
-                            <li class="modify-option py-2 px-3 w-full text-left bg-yellow-100 hover:bg-yellow-200 rounded">
+                            <li class="modify-option py-2 px-3 w-full text-left bg-blue-100 hover:bg-blue-200 rounded">
                                 Modify</li>
-                            <li class="cancel-option py-2 px-3 w-full text-left bg-green-100 hover:bg-green-200 rounded">
+                            <li class="cancel-option py-2 px-3 w-full text-left bg-yellow-100 hover:bg-yellow-200 rounded">
                                 Cancel</li>
                         </ul>
                     </li>
@@ -72,9 +70,9 @@
                             </svg>
                         </button>
 
-                        <div id="addSearch" class="hidden z-10 bg-white rounded-lg shadow-sm w-40 dark:bg-gray-700" style="cursor: pointer; position:absolute;">
+                        <div id="addSearch" class="hidden z-10 bg-white rounded-lg shadow-sm w-40 dark:bg-gray-700" style="cursor: pointer">
                             <ul id="add-list" class="text-sm text-gray-700 dark:text-gray-200 space-y-1 mb-3 p-2">
-                            <li class="event-option py-2 px-3 w-full text-left bg-gray-100 hover:bg-gray-200 rounded cursor-pointer">
+                            <li class="event-option py-2 px-3 w-full text-left bg-blue-100 hover:bg-blue-200 rounded cursor-pointer">
                                 Event
                             </li>
                             <li class="fewEvents-option py-2 px-3 w-full text-left bg-yellow-100 hover:bg-yellow-200 rounded cursor-pointer">
@@ -118,7 +116,7 @@
                         </button>
 
                         <!-- Color theme menu -->
-                        <div id="colorThemeSearch" class="z-10 hidden bg-white rounded-lg shadow-sm w-40 dark:bg-gray-700" style="cursor: pointer;">
+                        <div id="colorThemeSearch" class="z-10 hidden bg-white rounded-lg shadow-sm w-40 dark:bg-gray-700" data-dropdown-toggle="colorTheme" data-dropdown-placement="bottom" style="cursor: pointer;">
                             <div class="px-3 pb-3 ">
                             <label for="input-group-search" class="sr-only">Search</label>
                             <div class="relative">
@@ -129,7 +127,7 @@
                             </div>
                         </div>
                         <ul id="theme-options" class="text-sm text-gray-700 dark:text-gray-200 space-y-1 mb-3">
-                            <li class="theme-option py-2 px-3 w-full text-left bg-gray-100 hover:bg-gray-200 rounded" data-theme="blue">
+                            <li class="theme-option py-2 px-3 w-full text-left bg-blue-100 hover:bg-blue-200 rounded" data-theme="blue">
                                 Blue</li>
                             <li class="theme-option py-2 px-3 w-full text-left bg-yellow-100 hover:bg-yellow-200 rounded" data-theme="yellow">
                                 Yellow</li>
@@ -175,7 +173,7 @@
                         </button>
                         <div class="first_section_right" style="display: flex; align-items: center; gap: 10px;">
                             <span class="button_inside">
-                                <i class="fa-solid fa-plus" style="font-weight: 900; color:  rgb(164, 164, 250);"></i>
+                                <i class="fa-solid fa-plus" style="font-weight: 900; color:  rgba(35, 166, 248, 1);"></i>
                             </span>
                             <svg class="w-2.5 h-2.5 ms-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
                                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
@@ -206,7 +204,7 @@
                         </button>   
                         <div class="first_section_right" style="display: flex; align-items: center; gap: 10px;">
                             <span class="button_inside">
-                                <i class="fa-solid fa-plus" style="font-weight: 900; color:  rgb(164, 164, 250);"></i>
+                                <i class="fa-solid fa-plus" style="font-weight: 900; color: rgba(35, 166, 248, 1);"></i>
                             </span>
                             <svg class="w-2.5 h-2.5 ms-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
                                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4" />
@@ -321,11 +319,12 @@
                 </div>
                 <div class="right">
                     <button class="language" id="languageToggle"></button>
-                    <div>
+                    <div class="weeklyButton">
                         <!-- Weekly view button -->
-                        <button id="weeklyViewButton" data-key="weeklyView" data-dropdown-toggle="weeklyViewSearch" data-dropdown-placement="bottom" style="cursor: pointer;" class="hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">Weekly view<svg class="w-2.5 h-2.5 ms-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
-                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
-                        </svg>
+                        <button id="weeklyViewButton" data-key="weeklyView" data-dropdown-toggle="weeklyViewSearch" data-dropdown-placement="bottom" class="hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">
+                            Weekly view
+                            <svg class="w-2.5 h-2.5 ms-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6"> <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
+                            </svg>
                         </button>
 
                         <!-- Weekly view menu -->
@@ -338,7 +337,19 @@
                                     </div>
                                 </div>
                             </div>
-                            <ul id="weeklyView-list" class="h-48 px-3 pb-3 overflow-y-auto text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownSearchButton">
+                            <ul id="weeklyView-list" class="text-sm text-gray-700 dark:text-gray-200 space-y-1 mb-3">
+                                <li class="theme-option py-2 px-3 w-full text-left bg-blue-100 hover:bg-blue-200 rounded" data-theme="blue">
+                                    First week</li>
+                                <li class="theme-option py-2 px-3 w-full text-left bg-yellow-100 hover:bg-yellow-200 rounded" data-theme="yellow">
+                                    Second week</li>
+                                <li class="theme-option py-2 px-3 w-full text-left bg-green-100 hover:bg-green-200 rounded" data-theme="green">
+                                    Fhird week</li>
+                                <li class="theme-option py-2 px-3 w-full text-left bg-red-100 hover:bg-red-200 rounded" data-theme="red">
+                                    Fourth week</li>
+                                <li class="theme-option py-2 px-3 w-full text-left bg-gradient-to-r from-pink-100 via-yellow-100 to-green-100 hover:brightness-110 rounded" data-theme="multicolor">
+                                    Fith week</li>
+                                <li class="theme-option py-2 px-3 w-full text-left bg-gray-100 hover:bg-gray-200 rounded" data-theme="gray">
+                                    Sixth week</li>
                             </ul>
                         </div>
                     </div>
