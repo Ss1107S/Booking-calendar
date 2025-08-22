@@ -62,8 +62,6 @@ function updateCountButton(date) {
 }
 
 
-
-
 //Генерация таблицы и синхронизация с календарём
 const dayHeadersContainer = document.getElementById("dayHeaders");
 const timeSlotsContainer = document.getElementById("timeSlots");
@@ -75,7 +73,7 @@ function generateTable(selectedDate) {
   timeSlotsContainer.innerHTML = "";
 
   const days = [];
-  for (let i = 0; i < 7; i++) {
+  for (let i = -2; i < 5; i++) {
     const day = new Date(selectedDate);
     day.setDate(selectedDate.getDate() + i);
     days.push(day);
@@ -92,11 +90,26 @@ function generateTable(selectedDate) {
     dayDiv.style.display = "flex";
     dayDiv.style.alignItems = "center";
     dayDiv.style.justifyContent = "center";
-    dayDiv.textContent = day.toLocaleDateString("en-US", {
-      weekday: "short",
-      month: "short",
-      day: "numeric"
-    });
+    
+    const dayName = day.toLocaleDateString("en-US",{ weekday: "short" }); // День недели
+    const dayNumber = day.getDate(); // Число
+
+    dayDiv.innerHTML = `
+      <div style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
+        <div style="font-size: 12px;">${dayName}</div>
+        <div style="font-size: 16px; font-weight: 600;">${dayNumber}</div>
+      </div>
+    `;
+    
+    // Установка цвета для дня
+    if (sameDay(day, selectedDate)) {
+      dayDiv.style.color = "rgba(102, 143, 246, 1)"; // выбранный день
+    } else if (day < selectedDate) {
+      dayDiv.style.color = "#ccc"; // предыдущие дни
+    } else {
+      dayDiv.style.color = "#000"; // последующие дни
+    }
+    
     dayHeadersContainer.appendChild(dayDiv);
   });
 
@@ -149,7 +162,7 @@ function generateTable(selectedDate) {
   window.selectedDateTime = selectedDateTime;
   console.log("Выбрано:", window.selectedDateTime);
 
-  // ✅ Обновляем текст кнопки .count на основе центрального календаря
+  // Обновляем текст кнопки .count на основе центрального календаря
   updateCountButton(selectedDateTime);
 });
 
