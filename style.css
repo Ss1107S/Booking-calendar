@@ -64,8 +64,12 @@ header .right{
 }
 
 #addButton {
-  display: inline-flex;
-  align-items: center;
+  display: flex;
+  position: relative;
+}
+
+#addSearch {
+  position: absolute;
 }
 
 .modal {
@@ -88,16 +92,6 @@ header .right{
   padding: 20px;
   border-radius: 8px;
   width: 320px;
-}
-
-/* Position the addSearch menu relative to the button */
-#addSearch {
-  position: absolute;
-  top: 100%;
-  left: 0;
-  margin-top: 4px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
-  z-index: 100;
 }
 
 .main{

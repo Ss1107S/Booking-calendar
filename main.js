@@ -219,6 +219,177 @@ document.head.appendChild(style);
 
 
 
+// Уникальные переменные для Add-кнопок и форм
+const uniqueAddButton = document.getElementById("addButton");
+const uniqueAddSearch = document.getElementById("addSearch");
+const uniqueEventModal = document.getElementById("eventModal");
+const uniqueFewEventsModal = document.getElementById("fewEventsModal");
+
+const uniqueEventForm = document.getElementById("eventForm");
+const uniqueFewEventsForm = document.getElementById("fewEventsForm");
+
+const uniqueAddList = document.getElementById("add-list");
+
+// Хранилище событий для отображения и сортировки
+const eventDataMap = {}; // { "YYYY-MM-DD_HH": [ "Meeting", "Zoo" ] }
+
+// Показать модальную форму
+function openModal(modal) {
+  modal.classList.remove("hidden");
+}
+
+// Скрыть модальную форму
+function closeModal(modal) {
+  modal.classList.add("hidden");
+}
+
+// Очистка модальных форм
+function resetForm(formElement) {
+  formElement.reset();
+}
+
+// Обработчик отображения выпадающего меню при клике на Add
+uniqueAddButton.addEventListener("click", () => {
+  uniqueAddSearch.classList.toggle("hidden");
+});
+
+// Обработка клика по пунктам Add -> Event или Few Events
+uniqueAddList.querySelector(".event-option").addEventListener("click", () => {
+  openModal(uniqueEventModal);
+  uniqueAddSearch.classList.add("hidden");
+});
+
+uniqueAddList.querySelector(".fewEvents-option").addEventListener("click", () => {
+  openModal(uniqueFewEventsModal);
+  uniqueAddSearch.classList.add("hidden");
+});
+
+// Добавление Event
+uniqueEventForm.addEventListener("submit", async (e) => {
+  e.preventDefault();
+
+  const title = e.target.title.value.trim();
+  const description = e.target.description.value.trim();
+
+  if (!window.selectedDateTime) {
+    alert("Please select a time slot first.");
+    return;
+  }
+
+  const payload = {
+    title,
+    description,
+    datetime: window.selectedDateTime.toISOString(),
+  };
+
+  try {
+    await fetch("http://localhost:3000/events", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(payload),
+    });
+
+    insertEventIntoCell(window.selectedDateTime, title);
+    resetForm(uniqueEventForm);
+    closeModal(uniqueEventModal);
+  } catch (err) {
+    console.error("Failed to send event:", err);
+  }
+});
+
+// Добавление Few Events 
+// (с сортировкой по алфавиту при добавлении новых событий)
+uniqueFewEventsForm.addEventListener("submit", async (e) => {
+  e.preventDefault();
+
+  const summary = e.target.summary.value.trim();
+  const details = e.target.details.value.trim();
+
+  if (!window.selectedDateTime) {
+    alert("Please select a time slot first.");
+    return;
+  }
+
+  const payload = {
+    title: summary,
+    description: details,
+    datetime: window.selectedDateTime.toISOString(),
+  };
+
+  try {
+    await fetch("http://localhost:3000/events", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(payload),
+    });
+
+    insertEventIntoCell(window.selectedDateTime, summary, true);
+    resetForm(uniqueFewEventsForm);
+    closeModal(uniqueFewEventsModal);
+  } catch (err) {
+    console.error("Failed to send few events:", err);
+  }
+});
+
+// Вставка события в нужную ячейку
+function insertEventIntoCell(dateObj, title, sort = false) {
+  const dateStr = dateObj.toISOString().split("T")[0];
+  const hour = dateObj.getHours();
+  const key = `${dateStr}_${hour}`;
+
+  if (!eventDataMap[key]) {
+    eventDataMap[key] = [];
+  }
+
+  eventDataMap[key].push(title);
+
+  // Сортировка (для Few Events)
+  if (sort) {
+    eventDataMap[key].sort((a, b) => a.localeCompare(b));
+  }
+
+  // Найти нужную ячейку
+  const targetCell = document.querySelector(
+    `.split-cell[data-date="${dateStr}"][data-hour="${hour}"]`
+  );
+
+  if (targetCell) {
+    // Очищаем и пересоздаем список событий
+    targetCell.innerHTML = ""; // Очистить предыдущее содержимое
+    const ul = document.createElement("ul");
+    eventDataMap[key].forEach((item) => {
+      const li = document.createElement("li");
+      li.textContent = item;
+      ul.appendChild(li);
+    });
+    targetCell.appendChild(ul);
+  }
+}
+
+// Закрытие модальных форм при клике на Cancel
+function closeModal(modal) {
+  modal.classList.add("hidden");
+}
+
+uniqueEventForm.querySelector('button[type="button"]').addEventListener("click", () => {
+  resetForm(uniqueEventForm);
+  closeModal(uniqueEventModal);
+});
+
+uniqueFewEventsForm.querySelector('button[type="button"]').addEventListener("click", () => {
+  resetForm(uniqueFewEventsForm);
+  closeModal(uniqueFewEventsModal);
+});
+
+
+
+
+
+
 // Correct logic for the weeklyViewButton:
 // When selecting a corresponding item from the dropdown menu (First week, Second week, etc.),
 // a specific week should be displayed, starting from Monday and ending on Sunday.
