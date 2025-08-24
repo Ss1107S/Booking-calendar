@@ -41,9 +41,9 @@ const countButton = document.querySelector(".count");
 function updateCountButton(date) {
   const today = new Date();
   // Обнуляем время для сравнения только по дате
-  today.setUTCHours(0, 0, 0, 0);
+  today.setHours(0, 0, 0, 0);
   const selectedDate = new Date(date.getTime());
-  selectedDate.setUTCHours(0, 0, 0, 0);
+  selectedDate.setHours(0, 0, 0, 0);
 
   const diffDays = Math.round((selectedDate - today) / (1000 * 60 * 60 * 24));
 
@@ -154,7 +154,8 @@ function generateTable(selectedDate) {
   cell.style.backgroundColor = "#dbeafe"; // Выделение (голубой фон)
 
   // Сохраняем выбранную дату и время
-  const selectedDateTime = new Date(cell.dataset.date);
+  const parts = cell.dataset.date.split('-');
+  const selectedDateTime = new Date(parts[0], parts[1] - 1, parts[2]);
   selectedDateTime.setHours(cell.dataset.hour);
   selectedDateTime.setMinutes(0);
   selectedDateTime.setSeconds(0);
@@ -195,6 +196,7 @@ generateTable(fp.selectedDates[0] || new Date());
 fp.config.onChange.push(function(selectedDates) {
   if (selectedDates.length > 0) {
     generateTable(selectedDates[0]);
+    updateCountButton(selectedDates[0]);
   }
 });
 
@@ -340,8 +342,52 @@ weeklyListItems.forEach((item, index) => {
     const selectedDate = fp.selectedDates[0] || new Date();
     const weekStartDate = getStartOfWeekForMonth(index, selectedDate);
     generateWeeklyTable(weekStartDate);
+    
+    // Update the .count button, passing the date of the first day of the week (Monday)
+    updateCountButton(weekStartDate);
+
+    // Optionally: reset the highlight of the selected cell
+    if (selectedCell) {
+      selectedCell.style.backgroundColor = "";
+      selectedCell = null;
+    }
+
+    // Update the global selected date and time
+    window.selectedDateTime = new Date(weekStartDate);
+    window.selectedDateTime.setHours(9, 0, 0, 0); // for example, the first hour of the working day
   });
 });
+
+
+// Handlers for buttonLeft and buttonRight
+const buttonLeft = document.querySelector(".button_left");
+const buttonRight = document.querySelector(".button_right");
+
+buttonLeft.addEventListener("click", () => {
+  if (!window.selectedDateTime) {
+    window.selectedDateTime = fp.selectedDates[0] || new Date();
+  }
+  // Subtract 1 day
+  window.selectedDateTime.setDate(window.selectedDateTime.getDate() - 1);
+
+  // Update Flatpickr calendar and table
+  fp.setDate(window.selectedDateTime, true);  // true to trigger onChange
+  generateTable(window.selectedDateTime);
+  updateCountButton(window.selectedDateTime);
+});
+
+buttonRight.addEventListener("click", () => {
+  if (!window.selectedDateTime) {
+    window.selectedDateTime = fp.selectedDates[0] || new Date();
+  }
+  // Add 1 day
+  window.selectedDateTime.setDate(window.selectedDateTime.getDate() + 1);
+
+  fp.setDate(window.selectedDateTime, true);
+  generateTable(window.selectedDateTime);
+  updateCountButton(window.selectedDateTime);
+});
+
 
 
 // Language switching
