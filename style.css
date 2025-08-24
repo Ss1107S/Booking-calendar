@@ -90,7 +90,7 @@ header .right{
   width: 320px;
 }
 
-/* Меню addSearch позиционируем по кнопке */
+/* Position the addSearch menu relative to the button */
 #addSearch {
   position: absolute;
   top: 100%;
@@ -126,9 +126,11 @@ header .right{
     align-items: center;
     padding-left: 10px;
 }
+
 .filter_right{
     margin-left: auto;
 }
+
 .main .first_section,
 .main .second_section,
 .main .third_section,
@@ -138,9 +140,11 @@ header .right{
     align-items: center;
     padding: 0 10px;
 }
+
 .filter_left {
     font-weight: bold;
 }
+
 .first_section_right{
     margin-left: auto;
 }
@@ -150,25 +154,30 @@ header .right{
     border: 1px solid rgba(35, 166, 248, 1);
     padding: 4px 9px;
 }
+
 svg{
     color:  rgba(35, 166, 248, 1);
 }
+
 .middle_part{
     display: flex;
     flex-direction: column; 
     height: 100%;
     gap: 20px;
 }
+
 .header_of_table {
     display: flex;
     align-items: center;
     width: 100%;
 }
+
 .header_of_table .left {
     display: flex;
     align-items: center;
     gap: 10px;
 }
+
 .middle_part .header_of_table .left .count{
     padding: 0px 17px;
     border: 1px solid gray;
@@ -182,6 +191,7 @@ svg{
     color: grey;
     font-weight: 900;
 }
+
 .header_of_table .button_left::before{
     content: "\f060";
     vertical-align: middle;
@@ -189,11 +199,13 @@ svg{
     color: grey;
     font-weight: 900;
 }
+
 .header_of_table .right{
     display: flex; 
     align-items: center;
     margin-left: auto;
 }
+
 .header_of_table .right .language::before{
     content: "\f0ac";
     vertical-align: middle;
@@ -319,11 +331,13 @@ svg{
     padding-right: 20px;
     height: 100%;
 }
+
 .main .right_part button{
     border-radius: 20px;
     border: 1px solid #ccc;
     padding: 3px 8px;
 }
+
 .right_part .list::before{
     content: "\f0ae";
     vertical-align: middle;
@@ -331,6 +345,7 @@ svg{
     color: grey;
     font-weight: 900;
 }
+
 .right_part .diagramm::before{
     content: "\f201";
     vertical-align: middle;

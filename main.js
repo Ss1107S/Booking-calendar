@@ -219,7 +219,7 @@ document.head.appendChild(style);
 
 
 
-//Переключение языков
+// Language switching
 const translations = {
     en: {
         title: "Booking Calendar",
@@ -266,7 +266,7 @@ const translations = {
     document.querySelectorAll('[data-key]').forEach(el => {
         const key = el.getAttribute('data-key');
         if (t[key]) {
-            // Учитываем, если кнопка содержит вложенные теги (например, иконки)
+            // Consider if the button contains nested tags (e.g., icons)
             if (el.childNodes.length > 1 && el.childNodes[0].nodeType === Node.TEXT_NODE) {
                 el.childNodes[0].nodeValue = t[key] + " ";
             } else {
@@ -275,14 +275,14 @@ const translations = {
         }
     });
 
-    // Перевод текста в календаре
+    // Text translation in the calendar
     if (fp.selectedDates.length > 0) {
         const date = fp.selectedDates[0];
         const formatted = months[date.getMonth()] + " " + date.getFullYear();
         document.getElementById("dateButton").textContent = formatted;
     }
 
-    generateTable(fp.selectedDates[0]); // Обновим дни недели
+    generateTable(fp.selectedDates[0]); // Update the days of the week
 }
     document.getElementById('languageToggle').addEventListener('click', () => {
         currentLanguage = (currentLanguage === 'en') ? 'hr' : 'en';
@@ -290,16 +290,15 @@ const translations = {
         translateUI();
     });
 
-    // Переводим сразу при загрузке
+    // Translate immediately on load
     document.addEventListener('DOMContentLoaded', translateUI);
 
 
-
-//Изменение цветового оформления
+// Change color scheme
 const themeButtons = document.querySelectorAll('.theme-option');
 const targetButtons = document.querySelectorAll('#manageButton, #addButton, #colorThemeButton');
 
-// Получаем все ячейки календаря
+// Get all calendar cells
 function getCalendarCells() {
   return document.querySelectorAll(
     '.calendar_table .first_dio, .calendar_table .second_dio > div, .time-slots .first_dio, .time-slots .second_dio > div'
@@ -318,8 +317,8 @@ function clearThemeClasses(button) {
 
 function clearCellBackgrounds(cells) {
   cells.forEach(cell => {
-    cell.style.backgroundColor = ''; // Сброс inline-стиля
-    cell.style.backgroundImage = ''; // На случай градиента
+    cell.style.backgroundColor = ''; // Reset inline style
+    cell.style.backgroundImage = ''; // In case of gradient
   });
 }
 
@@ -328,7 +327,7 @@ themeButtons.forEach(themeButton => {
     const theme = themeButton.dataset.theme;
     const calendarCells = getCalendarCells();
 
-    // Обновление кнопок
+    // Update buttons
     targetButtons.forEach(button => {
       clearThemeClasses(button);
       button.classList.remove('dark:bg-blue-600', 'dark:hover:bg-blue-700', 'dark:focus:ring-blue-800');
@@ -352,7 +351,7 @@ themeButtons.forEach(themeButton => {
       }
     });
 
-    // Обновление цвета ячеек календаря
+    // Update calendar cell colors
     clearCellBackgrounds(calendarCells);
 
     calendarCells.forEach((cell, index) => {
@@ -367,13 +366,13 @@ themeButtons.forEach(themeButton => {
           cell.style.backgroundColor = '#ed8b8bff'; // Tailwind red-500
           break;
         case 'multicolor':
-          // Радуга на ячейках — чередуем цвета
-          const colors = ['#ed8b8bff', '#f8e07fff', '#66c88aff', '#7eacf6ff', '#b395f8ff']; // розовый, жёлтый, зелёный, синий, фиолетовый
+          // Rainbow on the cells — alternate colors
+          const colors = ['#ed8b8bff', '#f8e07fff', '#66c88aff', '#7eacf6ff', '#b395f8ff']; // pink, yellow, green, blue, purple
           cell.style.backgroundColor = colors[index % colors.length];
           break;
         case 'blue':
         default:
-          // Ничего не делать — оставить текущий стиль
+          // Do nothing — keep the current style
           break;
       }
     });
