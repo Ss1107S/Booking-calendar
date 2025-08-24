@@ -217,6 +217,131 @@ document.head.appendChild(style);
 
 
 
+// Correct logic for the weeklyViewButton:
+// When selecting a corresponding item from the dropdown menu (First week, Second week, etc.),
+// a specific week should be displayed, starting from Monday and ending on Sunday.
+let isWeeklyViewMode = false;
+
+// Get the date of the Monday of the required week of the month
+function getStartOfWeekForMonth(weekIndex, referenceDate) {
+  const year = referenceDate.getFullYear();
+  const month = referenceDate.getMonth();
+  
+  const firstOfMonth = new Date(year, month, 1);
+  
+  // Find the first Monday (might be in the previous month)
+  const dayOfWeek = firstOfMonth.getDay(); // 0 (Sun) - 6 (Sat)
+  const offsetToMonday = dayOfWeek === 0 ? -6 : 1 - dayOfWeek;
+  const firstMonday = new Date(year, month, 1 + offsetToMonday);
+
+  const startOfTargetWeek = new Date(firstMonday);
+  startOfTargetWeek.setDate(firstMonday.getDate() + weekIndex * 7);
+  return startOfTargetWeek;
+}
+
+// Function to generate a full week (Mon-Sun)
+function generateWeeklyTable(startDate) {
+  isWeeklyViewMode = true;
+  dayHeadersContainer.innerHTML = "";
+  timeSlotsContainer.innerHTML = "";
+
+  const days = [];
+  for (let i = 0; i < 7; i++) {
+    const day = new Date(startDate);
+    day.setDate(startDate.getDate() + i);
+    days.push(day);
+  }
+
+  // Day headers
+  days.forEach((day) => {
+    const dayDiv = document.createElement("div");
+    dayDiv.style.height = "46px";
+    dayDiv.style.width = "155px";
+    dayDiv.style.border = "1px solid #ccc";
+    dayDiv.style.padding = "4px";
+    dayDiv.style.boxSizing = "border-box";
+    dayDiv.style.display = "flex";
+    dayDiv.style.alignItems = "center";
+    dayDiv.style.justifyContent = "center";
+
+    const dayName = day.toLocaleDateString("en-US", { weekday: "short" });
+    const dayNumber = day.getDate();
+
+    dayDiv.innerHTML = `
+      <div style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
+        <div style="font-size: 12px;">${dayName}</div>
+        <div style="font-size: 16px; font-weight: 600;">${dayNumber}</div>
+      </div>
+    `;
+
+    dayHeadersContainer.appendChild(dayDiv);
+  });
+
+  // Time slots by hour
+  for (let hour = 9; hour <= 21; hour++) {
+    const row = document.createElement("div");
+    row.className = `row_weekly_${hour}`;
+    row.style.display = "flex";
+
+    const timeCell = document.createElement("div");
+    timeCell.className = "first_dio";
+    timeCell.style.height = "46px";
+    timeCell.style.width = "46px";
+    timeCell.style.border = "1px solid #ccc";
+    timeCell.style.padding = "4px";
+    timeCell.style.boxSizing = "border-box";
+    timeCell.style.display = "flex";
+    timeCell.style.alignItems = "center";
+    timeCell.style.justifyContent = "center";
+    timeCell.textContent = formatHour(hour);
+    row.appendChild(timeCell);
+
+    const secondDio = document.createElement("div");
+    secondDio.className = "second_dio";
+
+    days.forEach((day) => {
+      const cell = document.createElement("div");
+      cell.className = "split-cell";
+
+      const dateString = day.toISOString().split("T")[0];
+      cell.dataset.date = dateString;
+      cell.dataset.hour = hour;
+
+      // Cell selection handler
+      cell.addEventListener("click", () => {
+        if (selectedCell) {
+          selectedCell.style.backgroundColor = "";
+        }
+
+        selectedCell = cell;
+        cell.style.backgroundColor = "#dbeafe";
+
+        const selectedDateTime = new Date(cell.dataset.date);
+        selectedDateTime.setHours(cell.dataset.hour);
+        selectedDateTime.setMinutes(0);
+        selectedDateTime.setSeconds(0);
+
+        window.selectedDateTime = selectedDateTime;
+        updateCountButton(selectedDateTime);
+      });
+
+      secondDio.appendChild(cell);
+    });
+
+    row.appendChild(secondDio);
+    timeSlotsContainer.appendChild(row);
+  }
+}
+
+// Week menu click handler
+const weeklyListItems = document.querySelectorAll("#weeklyView-list .theme-option");
+weeklyListItems.forEach((item, index) => {
+  item.addEventListener("click", () => {
+    const selectedDate = fp.selectedDates[0] || new Date();
+    const weekStartDate = getStartOfWeekForMonth(index, selectedDate);
+    generateWeeklyTable(weekStartDate);
+  });
+});
 
 
 // Language switching
