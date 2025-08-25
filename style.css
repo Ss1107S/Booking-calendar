@@ -94,6 +94,24 @@ header .right{
   width: 320px;
 }
 
+.modalButton{
+    margin-top: 5%;
+    display: flex;
+    justify-content: space-evenly
+}
+
+.modal .modal-content input{
+  margin-top: 5%;
+}
+.description, .details{
+  margin-top: 10%;
+  width: 100%;
+}
+
+.summary, .title{
+  width: 100%;
+}
+
 .main{
     display: flex;
 }

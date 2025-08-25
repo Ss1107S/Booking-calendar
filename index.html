@@ -47,11 +47,11 @@
                         </button>
 
                         <!-- Manage menu -->
-                        <div id="manageSearch" class="absolute left-0 mt-2 z-10 hidden bg-white rounded-lg shadow-sm w-40 dark:bg-gray-700" style="cursor: pointer;">
-                            <div class="p-3">
+                        <div id="manageSearch" class="z-10 hidden bg-white rounded-lg shadow-sm w-40 dark:bg-gray-700" style="cursor: pointer;">
+                            <div class="p-1">
                             <label for="input-group-search" class="sr-only">Search</label>
                             <div class="relative">
-                                <div class="absolute inset-y-0 rtl:inset-r-0 start-0 flex items-center ps-3 pointer-events-none">
+                                <div class="inset-y-0 rtl:inset-r-0 start-0 flex items-center ps-3 pointer-events-none">
                                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
                                 </svg>
                                 </div>
@@ -66,7 +66,7 @@
                     </li>
                     <li>
                         <!-- Add button -->
-                        <button id="addButton" data-key="add"style="cursor: pointer" data-dropdown-placement="bottom" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                        <button id="addButton" data-key="add"style="cursor: pointer" data-dropdown-toggle="addSearch" data-dropdown-placement="bottom" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
                             Add
                             <svg class="w-2.5 h-2.5 ms-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
                             <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
@@ -74,28 +74,31 @@
                         </button>
                         
                         <!-- Add menu -->
-                        <div id="addSearch" class="absolute mt-2 z-10 hidden bg-white rounded-lg shadow-sm w-40 dark:bg-gray-700" style="cursor: pointer">
-                            <ul id="add-list" class="text-sm text-gray-700 dark:text-gray-200 space-y-1 mb-3 p-2">
-                                <li class="event-option py-2 px-3 w-full text-left bg-blue-100 hover:bg-blue-200 rounded cursor-pointer">
-                                    Event
-                                </li>
-                                <li class="fewEvents-option py-2 px-3 w-full text-left bg-yellow-100 hover:bg-yellow-200 rounded cursor-pointer">
-                                    Few Events
-                                </li>
-                            </ul>
+                        <div id="addSearch" class="z-10 hidden bg-white rounded-lg shadow-sm w-40 dark:bg-gray-700" style="cursor: pointer;">
+                            <div class="p-1">
+                                <ul id="add-list" class="text-sm text-gray-700 dark:text-gray-200 space-y-1 mb-3">
+                                    <li class="event-option py-2 px-3 w-full text-left bg-blue-100 hover:bg-blue-200 rounded cursor-pointer">
+                                        Event
+                                    </li>
+                                    <li class="fewEvents-option py-2 px-3 w-full text-left bg-yellow-100 hover:bg-yellow-200 rounded cursor-pointer">
+                                        Few Events
+                                    </li>
+                                </ul>
+                            </div>
                         </div>
                     
 
                         <!-- Modal for Event -->
                         <div id="eventModal" class="modal hidden">
                         <div class="modal-content">
-                            <h2>Add Event</h2>
+                            <h2>Add a new Event</h2>
                             <form id="eventForm">
-                                <input type="text" name="title" placeholder="Title" required />
-                                <textarea name="description" placeholder="Description"></textarea>
-                                <button type="submit">Add</button>
-                                <button type="button" onclick="closeModal(document.getElementById('eventModal'))">Cancel</button>
-
+                                <input type="text" class="title" name="title" placeholder="Title" required />
+                                <textarea name="description" class="description" placeholder="Describe your plans for the day."></textarea>
+                                <div class="modalButton">
+                                    <button type="submit" class="hover:bg-blue-800">Add</button>
+                                    <button type="button" class="hover:bg-blue-800" onclick="closeModal(document.getElementById('fewEventsModal'))">Cancel</button>
+                                </div>
                             </form>
                         </div>
                         </div>
@@ -105,11 +108,12 @@
                         <div class="modal-content">
                             <h2>Add Few Events</h2>
                             <form id="fewEventsForm">
-                                <input type="text" name="summary" placeholder="Summary" required />
-                                <textarea name="details" placeholder="Details"></textarea>
-                                <button type="submit">Add</button>
-                                <button type="button" onclick="closeModal(document.getElementById('eventModal'))">Cancel</button>
-
+                                <input type="text" class="summary" name="summary" placeholder="Summary" required />
+                                <textarea name="details" class="details" placeholder="Details of your plans for the day."></textarea>
+                                <div class="modalButton">
+                                    <button type="submit" class="hover:bg-blue-800">Add</button>
+                                    <button type="button" class="hover:bg-blue-800" onclick="closeModal(document.getElementById('fewEventsModal'))">Cancel</button>
+                                </div>
                             </form>
                         </div>
                         </div>
@@ -124,11 +128,11 @@
                         </button>
 
                         <!-- Color theme menu -->
-                        <div id="colorThemeSearch" class="absolute left-0 mt-2 z-10 hidden bg-white rounded-lg shadow-sm w-40 dark:bg-gray-700" style="cursor: pointer;">
-                            <div class="px-3 pb-3 ">
+                        <div id="colorThemeSearch" class="z-10 hidden bg-white rounded-lg shadow-sm w-40 dark:bg-gray-700" style="cursor: pointer;">
+                            <div class="p-1 ">
                             <label for="input-group-search" class="sr-only">Search</label>
                             <div class="relative">
-                                <div class="absolute inset-y-0 rtl:inset-r-0 start-0 flex items-center ps-3 pointer-events-none">
+                                <div class="inset-y-0 rtl:inset-r-0 start-0 flex items-center ps-3 pointer-events-none">
                                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
                                 </svg>
                                 </div>
@@ -337,7 +341,7 @@
 
                         <!-- Weekly view menu -->
                         <div id="weeklyViewSearch" class="z-10 hidden bg-white rounded-lg shadow-sm w-60 dark:bg-gray-700" style="cursor: pointer;">
-                            <div class="p-3">
+                            <div class="p-1">
                                 <label for="input-group-search" class="sr-only">Search</label>
                                 <div class="relative">
                                     <div class="absolute inset-y-0 rtl:inset-r-0 start-0 flex items-center ps-3 pointer-events-none">
