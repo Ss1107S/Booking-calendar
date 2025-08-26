@@ -124,7 +124,7 @@ function generateTable(selectedDate) {
   timeSlotsContainer.innerHTML = "";
 
   const days = [];
-  for (let i = 0; i < 7; i++) {
+  for (let i = -2; i < 5; i++) {
     const day = new Date(selectedDate);
     day.setDate(selectedDate.getDate() + i);
     days.push(day);
@@ -147,8 +147,19 @@ function generateTable(selectedDate) {
       day: "numeric"
     });
     dayHeadersContainer.appendChild(dayDiv);
+    
+    // Установка цвета для дня
+    if (sameDay(day, selectedDate)) {
+      dayDiv.style.color = "rgba(35, 166, 248, 1)"; // выбранный день
+    } else if (day < selectedDate) {
+      dayDiv.style.color = "#ccc"; // предыдущие дни
+    } else {
+      dayDiv.style.color = "#000"; // последующие дни
+    }
+    
+    dayHeadersContainer.appendChild(dayDiv);
   });
-
+  
   // Time slots
   for (let hour = 9; hour <= 21; hour++) {
     const row = document.createElement("div");
@@ -644,7 +655,7 @@ function generateWeeklyTable(startDate) {
 const weeklyListItems = document.querySelectorAll("#weeklyView-list .theme-option");
 weeklyListItems.forEach((item, index) => {
   item.addEventListener("click", () => {
-    const selectedDate = fp.selectedDates[0] || new Date();
+    const selectedDate = currentSelectedDate || new Date();
     const weekStartDate = getStartOfWeekForMonth(index, selectedDate);
     generateWeeklyTable(weekStartDate);
     
@@ -668,27 +679,25 @@ weeklyListItems.forEach((item, index) => {
 const buttonLeft = document.querySelector(".button_left");
 const buttonRight = document.querySelector(".button_right");
 
-buttonLeft.addEventListener("click", () => {
-  if (!window.selectedDateTime) {
-    window.selectedDateTime = fp.selectedDates[0] || new Date();
+buttonLeft.addEventListener("click", () => { 
+  // Если currentSelectedDate не определена, взять сегодняшнюю дату 
+if (!currentSelectedDate) {
+   currentSelectedDate = new Date(); 
+  } 
+  currentSelectedDate.setDate(currentSelectedDate.getDate() - 1);
+   // Синхронизируем глобальную дату 
+   window.selectedDateTime = new Date(currentSelectedDate); 
+   // Обновляем UI
+    generateTable(currentSelectedDate); 
+    updateCountButton(currentSelectedDate); 
+    updateDateButton(currentSelectedDate); 
+  }); 
+  buttonRight.addEventListener("click", () => {
+  if (!currentSelectedDate) { 
+    currentSelectedDate = new Date(); 
   }
-  // Subtract 1 day
-  window.selectedDateTime.setDate(window.selectedDateTime.getDate() - 1);
-
-  // Update Flatpickr calendar and table
-  fp.setDate(window.selectedDateTime, true);  // true to trigger onChange
-  generateTable(window.selectedDateTime);
-  updateCountButton(window.selectedDateTime);
-});
-
-buttonRight.addEventListener("click", () => {
-  if (!window.selectedDateTime) {
-    window.selectedDateTime = fp.selectedDates[0] || new Date();
-  }
-  // Add 1 day
-  window.selectedDateTime.setDate(window.selectedDateTime.getDate() + 1);
-
-  fp.setDate(window.selectedDateTime, true);
-  generateTable(window.selectedDateTime);
-  updateCountButton(window.selectedDateTime);
-});
+   currentSelectedDate.setDate(currentSelectedDate.getDate() + 1); 
+   window.selectedDateTime = new Date(currentSelectedDate); 
+   generateTable(currentSelectedDate); 
+   updateCountButton(currentSelectedDate); 
+   updateDateButton(currentSelectedDate); });
