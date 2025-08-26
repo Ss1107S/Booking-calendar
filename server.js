@@ -13,7 +13,7 @@ let storedEventList = [];
 // Route to receive event data
 app.post('/events', (req, res) => {
   const incomingEventData = req.body;
-  console.log("📩 Event received:", incomingEventData);
+  console.log("Event received:", incomingEventData);
 
   storedEventList.push(incomingEventData); // Optional storage for testing
 
@@ -22,12 +22,12 @@ app.post('/events', (req, res) => {
 
 // Simple check route
 app.get('/', (req, res) => {
-  res.send('🟢 Event server is running.');
+  res.send('Event server is running.');
 });
 
 // Start server
 app.listen(PORT, () => {
-  console.log(`🚀 Server running at http://localhost:${PORT}`);
+  console.log(`Server running at http://localhost:${PORT}`);
 });
 
 

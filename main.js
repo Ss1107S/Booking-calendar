@@ -1,49 +1,105 @@
+let currentSelectedDate = new Date();
+// Переменная для хранения выбранной даты в основном календаре
+let selectedMainDate = currentSelectedDate;
+let selectedCell = null;
+window.selectedDateTime = null; // Глобально храним выбранную дату и время
+
+// Language switching
+const translations = {
+    en: {
+        title: "Booking Calendar",
+        dateButton: "Selection Date",
+        scheduleText: "Count of scheduels of this week",
+        weeklyView: "Weekly view",
+        languageLabel: "EN",
+        manage: "Manage",
+        add: "Add",
+        colorTheme: "Color Theme",
+        filterBy: "Filter by:",
+        allSelected: "All selected",
+        services: "Services",
+        staff: "Staff",
+        location: "Location",
+        sessionAvailability: "Session availability",
+        otherEvents: "Other events",
+        countDay: "CountDay"
+    },
+    hr: {
+        title: "Kalendar za rezervacije",
+        dateButton: "Odabir datuma",
+        scheduleText: "Broj rasporeda za ovaj tjedan",
+        weeklyView: "Tjedni pregled",
+        languageLabel: "HR",
+        manage: "Upravljaj",
+        add: "Dodaj",
+        colorTheme: "Tema boje",
+        filterBy: "Filtriraj po:",
+        allSelected: "Svi odabrani",
+        services: "Usluge",
+        staff: "Osoblje",
+        location: "Lokacija",
+        sessionAvailability: "Dostupnost termina",
+        otherEvents: "Ostali događaji",
+        countDay: "Broj dana"
+    }
+};
+
 //Отображение даты в кнопке button id="dateButton">Selection Date< + работа Calendar
 const months = [
   "January", "February", "March", "April", "May", "June",
   "July", "August", "September", "October", "November", "December"
 ];
+// -- persisted --
+let currentLanguage = localStorage.getItem('language') || 'en';
 
-const fp = flatpickr("#calendar-container", {
-  inline: true,
-  defaultDate: new Date(),
-  minDate: "2025-01-01",
-  maxDate: "2025-12-31",
-  onChange: function(selectedDates) {
-    if (selectedDates.length > 0) {
-      const date = selectedDates[0];
-      const formatted = months[date.getMonth()] + " " + date.getFullYear();
-      document.getElementById("dateButton").textContent = formatted;
-    }
+// -- elements --
+// Получаем кнопку с классом count
+const countButton = document.querySelector(".count");
+//Генерация таблицы и синхронизация с календарём
+const dayHeadersContainer = document.getElementById("dayHeaders");
+const timeSlotsContainer = document.getElementById("timeSlots");
+const calendarContainer = document.getElementById('calendar-container');
+//Изменение цветового оформления
+const themeButtons = document.querySelectorAll('.theme-option');
+const targetButtons = document.querySelectorAll('#manageButton, #addButton, #colorThemeButton');
+
+
+const picker = new DatePicker({
+  container: calendarContainer,
+  value: currentSelectedDate,
+  autoClose: false,
+  onSelect: (selectedDate) => {
+    currentSelectedDate = selectedDate;
+
+    updateDateButton(currentSelectedDate);
+    generateTable(currentSelectedDate);
+
+    updateCountButton(currentSelectedDate);
   }
 });
 
-// Обновляем кнопку сразу при загрузке страницы
-if (fp.selectedDates.length > 0) {
-  const date = fp.selectedDates[0];
+updateDateButton(currentSelectedDate); // update on load
+
+// Первичная генерация
+generateTable(currentSelectedDate);
+
+
+
+// -- button Count --
+
+function updateDateButton(date) {
   const formatted = months[date.getMonth()] + " " + date.getFullYear();
   document.getElementById("dateButton").textContent = formatted;
 }
-
-
-//Функциональность для отображения верной даты в header_of_table
-// Функция форматирования даты в нужный формат для кнопки .count
-function formatSelectedDate(date) {
-  return months[date.getMonth()] + " " + date.getDate() + ", " + date.getFullYear();
-}
-
-// Получаем кнопку с классом count
-const countButton = document.querySelector(".count");
-
 // Функция для обновления текста кнопки с учетом верного отображения для сегодня,
 // завтра и вчера и динамического подставления выбранную дату из календаря в остальных случаях.
 
 function updateCountButton(date) {
   const today = new Date();
   // Обнуляем время для сравнения только по дате
-  today.setHours(0, 0, 0, 0);
+  today.setUTCHours(0, 0, 0, 0);
   const selectedDate = new Date(date.getTime());
-  selectedDate.setHours(0, 0, 0, 0);
+  selectedDate.setUTCHours(0, 0, 0, 0);
 
   const diffDays = Math.round((selectedDate - today) / (1000 * 60 * 60 * 24));
 
@@ -61,19 +117,14 @@ function updateCountButton(date) {
   countButton.textContent = text;
 }
 
-
-//Генерация таблицы и синхронизация с календарём
-const dayHeadersContainer = document.getElementById("dayHeaders");
-const timeSlotsContainer = document.getElementById("timeSlots");
-let selectedCell = null;
-window.selectedDateTime = null; // Глобально храним выбранную дату и время
+// -- table & cells --
 
 function generateTable(selectedDate) {
   dayHeadersContainer.innerHTML = "";
   timeSlotsContainer.innerHTML = "";
 
   const days = [];
-  for (let i = -2; i < 5; i++) {
+  for (let i = 0; i < 7; i++) {
     const day = new Date(selectedDate);
     day.setDate(selectedDate.getDate() + i);
     days.push(day);
@@ -90,26 +141,11 @@ function generateTable(selectedDate) {
     dayDiv.style.display = "flex";
     dayDiv.style.alignItems = "center";
     dayDiv.style.justifyContent = "center";
-    
-    const dayName = day.toLocaleDateString("en-US",{ weekday: "short" }); // День недели
-    const dayNumber = day.getDate(); // Число
-
-    dayDiv.innerHTML = `
-      <div style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
-        <div style="font-size: 12px;">${dayName}</div>
-        <div style="font-size: 16px; font-weight: 600;">${dayNumber}</div>
-      </div>
-    `;
-    
-    // Установка цвета для дня
-    if (sameDay(day, selectedDate)) {
-      dayDiv.style.color = "rgba(35, 166, 248, 1)"; // выбранный день
-    } else if (day < selectedDate) {
-      dayDiv.style.color = "#ccc"; // предыдущие дни
-    } else {
-      dayDiv.style.color = "#000"; // последующие дни
-    }
-    
+    dayDiv.textContent = day.toLocaleDateString("en-US", {
+      weekday: "short",
+      month: "short",
+      day: "numeric"
+    });
     dayHeadersContainer.appendChild(dayDiv);
   });
 
@@ -121,7 +157,7 @@ function generateTable(selectedDate) {
 
     const timeCell = document.createElement("div");
     timeCell.className = "first_dio";
-    timeCell.style.height = "46px";
+    timeCell.style.height = "auto";
     timeCell.style.width = "46px";
     timeCell.style.border = "1px solid #ccc";
     timeCell.style.padding = "4px";
@@ -154,8 +190,7 @@ function generateTable(selectedDate) {
   cell.style.backgroundColor = "#dbeafe"; // Выделение (голубой фон)
 
   // Сохраняем выбранную дату и время
-  const parts = cell.dataset.date.split('-');
-  const selectedDateTime = new Date(parts[0], parts[1] - 1, parts[2]);
+  const selectedDateTime = new Date(cell.dataset.date);
   selectedDateTime.setHours(cell.dataset.hour);
   selectedDateTime.setMinutes(0);
   selectedDateTime.setSeconds(0);
@@ -174,6 +209,21 @@ function generateTable(selectedDate) {
     timeSlotsContainer.appendChild(row);
   }
 }
+function clearCellBackgrounds(cells) {
+  cells.forEach(cell => {
+    cell.style.backgroundColor = ''; // Сброс inline-стиля
+    cell.style.backgroundImage = ''; // На случай градиента
+  });
+}
+
+// Получаем все ячейки календаря
+function getCalendarCells() {
+  return document.querySelectorAll(
+    '.calendar_table .first_dio, .calendar_table .second_dio > div, .time-slots .first_dio, .time-slots .second_dio > div'
+  );
+}
+
+// -- time helpers --
 
 // Помощник для сравнения дат (без учета времени)
 function sameDay(d1, d2) {
@@ -189,36 +239,119 @@ function formatHour(hour) {
   return `${hour12} ${suffix}`;
 }
 
-// Первичная генерация
-generateTable(fp.selectedDates[0] || new Date());
 
-// Перегенерация при выборе даты
-fp.config.onChange.push(function(selectedDates) {
-  if (selectedDates.length > 0) {
-    generateTable(selectedDates[0]);
-    updateCountButton(selectedDates[0]);
-  }
+// -- language --
+
+function translateUI() {
+    const t = translations[currentLanguage];
+
+    document.querySelectorAll('[data-key]').forEach(el => {
+        const key = el.getAttribute('data-key');
+        if (t[key]) {
+            // Учитываем, если кнопка содержит вложенные теги (например, иконки)
+            if (el.childNodes.length > 1 && el.childNodes[0].nodeType === Node.TEXT_NODE) {
+                el.childNodes[0].nodeValue = t[key] + " ";
+            } else {
+                el.textContent = t[key];
+            }
+        }
+    });
+
+      // Перевод текста в календаре (use DatePicker state)
+      if (currentSelectedDate) {
+        updateDateButton(currentSelectedDate);
+      }
+      generateTable(currentSelectedDate); // Обновим дни недели
+
+}
+
+
+// -- theme --
+
+function clearThemeClasses(button) {
+  button.classList.remove(
+    'bg-blue-700', 'hover:bg-blue-800', 'focus:ring-blue-300',
+    'bg-yellow-500', 'hover:bg-yellow-600', 'focus:ring-yellow-300',
+    'bg-green-600', 'hover:bg-green-700', 'focus:ring-green-300',
+    'bg-red-600', 'hover:bg-red-700', 'focus:ring-red-300',
+    'bg-gradient-to-r', 'from-pink-500', 'via-yellow-500', 'to-green-500'
+  );
+}
+
+
+// -- events --
+
+// Переводим сразу при загрузке
+document.addEventListener('DOMContentLoaded', ()=>{
+  translateUI();
+
+  themeButtons.forEach(themeButton => {
+    themeButton.addEventListener('click', () => {
+      const theme = themeButton.dataset.theme;
+      const calendarCells = getCalendarCells();
+
+      // Обновление кнопок
+      targetButtons.forEach(button => {
+        clearThemeClasses(button);
+        button.classList.remove('dark:bg-blue-600', 'dark:hover:bg-blue-700', 'dark:focus:ring-blue-800');
+
+        switch (theme) {
+          case 'blue':
+            button.classList.add('bg-blue-700', 'hover:bg-blue-800', 'focus:ring-blue-300');
+            break;
+          case 'yellow':
+            button.classList.add('bg-yellow-500', 'hover:bg-yellow-600', 'focus:ring-yellow-300');
+            break;
+          case 'green':
+            button.classList.add('bg-green-600', 'hover:bg-green-700', 'focus:ring-green-300');
+            break;
+          case 'red':
+            button.classList.add('bg-red-600', 'hover:bg-red-700', 'focus:ring-red-300');
+            break;
+          case 'multicolor':
+            button.classList.add('bg-gradient-to-r', 'from-pink-500', 'via-yellow-500', 'to-green-500');
+            break;
+        }
+      });
+
+      // Обновление цвета ячеек календаря
+      clearCellBackgrounds(calendarCells);
+
+      calendarCells.forEach((cell, index) => {
+        switch (theme) {
+          case 'yellow':
+            cell.style.backgroundColor = '#f8e07fff'; // Tailwind yellow-400
+            break;
+          case 'green':
+            cell.style.backgroundColor = '#66c88aff'; // Tailwind green-500
+            break;
+          case 'red':
+            cell.style.backgroundColor = '#ed8b8bff'; // Tailwind red-500
+            break;
+          case 'multicolor':
+            // Радуга на ячейках — чередуем цвета
+            const colors = ['#ed8b8bff', '#f8e07fff', '#66c88aff', '#7eacf6ff', '#b395f8ff']; // розовый, жёлтый, зелёный, синий, фиолетовый
+            cell.style.backgroundColor = colors[index % colors.length];
+            break;
+          case 'blue':
+          default:
+            // Ничего не делать — оставить текущий стиль
+            break;
+        }
+      });
+    });
+  });
+
+});
+
+document.getElementById('languageToggle').addEventListener('click', () => {
+  currentLanguage = (currentLanguage === 'en') ? 'hr' : 'en';
+  localStorage.setItem('language', currentLanguage);
+  translateUI();
 });
 
 
-// Переменная для хранения выбранной даты в основном календаре
-let selectedMainDate = fp.selectedDates[0] || new Date();
-
-// CSS класс для выделения выбранного дня
-const style = document.createElement('style');
-style.textContent = `
-  .selected-day {
-    background-color: #3b82f6; /* ярко-синий фон */
-    color: white;
-    border-radius: 4px;
-  }
-`;
-document.head.appendChild(style);
-
-
-
-
-
+//--button Add--
 // Уникальные переменные для Add-кнопок и форм
 const uniqueAddButton = document.getElementById("addButton");
 const uniqueAddSearch = document.getElementById("addSearch");
@@ -264,6 +397,7 @@ uniqueAddList.querySelector(".fewEvents-option").addEventListener("click", () =>
   uniqueAddSearch.classList.add("hidden");
 });
 
+//--modal form Event--
 // Добавление Event
 uniqueEventForm.addEventListener("submit", async (e) => {
   e.preventDefault();
@@ -299,6 +433,7 @@ uniqueEventForm.addEventListener("submit", async (e) => {
   }
 });
 
+//--modal form Few Events--
 // Добавление Few Events 
 // (с сортировкой по алфавиту при добавлении новых событий)
 uniqueFewEventsForm.addEventListener("submit", async (e) => {
@@ -388,8 +523,7 @@ uniqueFewEventsForm.querySelector('button[type="button"]').addEventListener("cli
 
 
 
-
-
+//--button weeklyViewButton--
 // Correct logic for the weeklyViewButton:
 // When selecting a corresponding item from the dropdown menu (First week, Second week, etc.),
 // a specific week should be displayed, starting from Monday and ending on Sunday.
@@ -530,7 +664,7 @@ weeklyListItems.forEach((item, index) => {
 });
 
 
-// Handlers for buttonLeft and buttonRight
+//--handlers for buttonLeft and buttonRight--
 const buttonLeft = document.querySelector(".button_left");
 const buttonRight = document.querySelector(".button_right");
 
@@ -557,166 +691,4 @@ buttonRight.addEventListener("click", () => {
   fp.setDate(window.selectedDateTime, true);
   generateTable(window.selectedDateTime);
   updateCountButton(window.selectedDateTime);
-});
-
-
-
-// Language switching
-const translations = {
-    en: {
-        title: "Booking Calendar",
-        dateButton: "Selection Date",
-        scheduleText: "Count of scheduels of this week",
-        weeklyView: "Weekly view",
-        languageLabel: "EN",
-        manage: "Manage",
-        add: "Add",
-        colorTheme: "Color Theme",
-        filterBy: "Filter by:",
-        allSelected: "All selected",
-        services: "Services",
-        staff: "Staff",
-        location: "Location",
-        sessionAvailability: "Session availability",
-        otherEvents: "Other events",
-        countDay: "CountDay"
-    },
-    hr: {
-        title: "Kalendar za rezervacije",
-        dateButton: "Odabir datuma",
-        scheduleText: "Broj rasporeda za ovaj tjedan",
-        weeklyView: "Tjedni pregled",
-        languageLabel: "HR",
-        manage: "Upravljaj",
-        add: "Dodaj",
-        colorTheme: "Tema boje",
-        filterBy: "Filtriraj po:",
-        allSelected: "Svi odabrani",
-        services: "Usluge",
-        staff: "Osoblje",
-        location: "Lokacija",
-        sessionAvailability: "Dostupnost termina",
-        otherEvents: "Ostali događaji",
-        countDay: "Broj dana"
-    }
-};
-    let currentLanguage = localStorage.getItem('language') || 'en';
-
-    function translateUI() {
-    const t = translations[currentLanguage];
-
-    document.querySelectorAll('[data-key]').forEach(el => {
-        const key = el.getAttribute('data-key');
-        if (t[key]) {
-            // Consider if the button contains nested tags (e.g., icons)
-            if (el.childNodes.length > 1 && el.childNodes[0].nodeType === Node.TEXT_NODE) {
-                el.childNodes[0].nodeValue = t[key] + " ";
-            } else {
-                el.textContent = t[key];
-            }
-        }
-    });
-
-    // Text translation in the calendar
-    if (fp.selectedDates.length > 0) {
-        const date = fp.selectedDates[0];
-        const formatted = months[date.getMonth()] + " " + date.getFullYear();
-        document.getElementById("dateButton").textContent = formatted;
-    }
-
-    generateTable(fp.selectedDates[0]); // Update the days of the week
-}
-    document.getElementById('languageToggle').addEventListener('click', () => {
-        currentLanguage = (currentLanguage === 'en') ? 'hr' : 'en';
-        localStorage.setItem('language', currentLanguage);
-        translateUI();
-    });
-
-    // Translate immediately on load
-    document.addEventListener('DOMContentLoaded', translateUI);
-
-
-// Change color scheme
-const themeButtons = document.querySelectorAll('.theme-option');
-const targetButtons = document.querySelectorAll('#manageButton, #addButton, #colorThemeButton');
-
-// Get all calendar cells
-function getCalendarCells() {
-  return document.querySelectorAll(
-    '.calendar_table .first_dio, .calendar_table .second_dio > div, .time-slots .first_dio, .time-slots .second_dio > div'
-  );
-}
-
-function clearThemeClasses(button) {
-  button.classList.remove(
-    'bg-blue-700', 'hover:bg-blue-800', 'focus:ring-blue-300',
-    'bg-yellow-500', 'hover:bg-yellow-600', 'focus:ring-yellow-300',
-    'bg-green-600', 'hover:bg-green-700', 'focus:ring-green-300',
-    'bg-red-600', 'hover:bg-red-700', 'focus:ring-red-300',
-    'bg-gradient-to-r', 'from-pink-500', 'via-yellow-500', 'to-green-500'
-  );
-}
-
-function clearCellBackgrounds(cells) {
-  cells.forEach(cell => {
-    cell.style.backgroundColor = ''; // Reset inline style
-    cell.style.backgroundImage = ''; // In case of gradient
-  });
-}
-
-themeButtons.forEach(themeButton => {
-  themeButton.addEventListener('click', () => {
-    const theme = themeButton.dataset.theme;
-    const calendarCells = getCalendarCells();
-
-    // Update buttons
-    targetButtons.forEach(button => {
-      clearThemeClasses(button);
-      button.classList.remove('dark:bg-blue-600', 'dark:hover:bg-blue-700', 'dark:focus:ring-blue-800');
-
-      switch (theme) {
-        case 'blue':
-          button.classList.add('bg-blue-700', 'hover:bg-blue-800', 'focus:ring-blue-300');
-          break;
-        case 'yellow':
-          button.classList.add('bg-yellow-500', 'hover:bg-yellow-600', 'focus:ring-yellow-300');
-          break;
-        case 'green':
-          button.classList.add('bg-green-600', 'hover:bg-green-700', 'focus:ring-green-300');
-          break;
-        case 'red':
-          button.classList.add('bg-red-600', 'hover:bg-red-700', 'focus:ring-red-300');
-          break;
-        case 'multicolor':
-          button.classList.add('bg-gradient-to-r', 'from-pink-500', 'via-yellow-500', 'to-green-500');
-          break;
-      }
-    });
-
-    // Update calendar cell colors
-    clearCellBackgrounds(calendarCells);
-
-    calendarCells.forEach((cell, index) => {
-      switch (theme) {
-        case 'yellow':
-          cell.style.backgroundColor = '#f8e07fff'; // Tailwind yellow-400
-          break;
-        case 'green':
-          cell.style.backgroundColor = '#66c88aff'; // Tailwind green-500
-          break;
-        case 'red':
-          cell.style.backgroundColor = '#ed8b8bff'; // Tailwind red-500
-          break;
-        case 'multicolor':
-          // Rainbow on the cells — alternate colors
-          const colors = ['#ed8b8bff', '#f8e07fff', '#66c88aff', '#7eacf6ff', '#b395f8ff']; // pink, yellow, green, blue, purple
-          cell.style.backgroundColor = colors[index % colors.length];
-          break;
-        case 'blue':
-        default:
-          // Do nothing — keep the current style
-          break;
-      }
-    });
-  });
 });

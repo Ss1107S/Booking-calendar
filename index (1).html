@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="style.css">
+    <!--Calendar-->
+    <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+     -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+
+    <script src="datepicker.js"></script>
+
+    <title>Booking calendar</title>
+
+
+     <style>
+        /*====== datepicker =========*/
+
+        .datepicker-root { @apply bg-white shadow text-xs z-50; }
+        .datepicker-root .highlight { @apply bg-yellow-200; }
+
+        .datepicker-root .is-base{
+            background-color: #155dfc;
+            color: #fff;
+        }
+        .datepicker-root .is-base:hover {
+            border: 2.25px solid #66AEE7 !important;
+        }
+        .datepicker-root .selected{ 
+            --tw-ring-color: #155dfc;
+            border: 2px solid #155dfc;
+            box-shadow: 0 0 0 1.5px #ffffff inset;
+            transition: border-color .001s;
+        }
+
+        .datepicker-root [data-date]:not(.selected):hover{ 
+            border: 2px solid #d0d0d0;
+        }
+        .datepicker-root [data-date].selected:hover{ 
+            border: 2px solid #0868B4;
+        }
+        .picker-wrapper{
+            position: relative;
+            left: -1.5px;
+            top: calc(100% + 1.5px);
+        }
+    </style>
+    </head>
+    <body>
+
+    <!--Header-->
+    <header class="header">
+        <div class="left">
+            <ul class="list">
+                <li>
+                    <h1 data-key="title">Booking Calendar</h1>
+                </li>
+                <li>
+                    <button id="dateButton" data-key="dateButton">Selection Date</button>
+                </li>
+                
+            </ul>    
+        </div>
+        <div class="right">
+            <ul class="list">
+                <li>
+                    <button class="update"></button>
+                    <button class="dots"></button>
+                </li>
+                <li class="right">
+                    <li>
+                        <!-- Manage button -->
+                        <button id="manageButton" data-key="manage" data-dropdown-toggle="manageSearch" data-dropdown-placement="bottom" style="cursor: pointer;" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">Manage<svg class="w-2.5 h-2.5 ms-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
+                        </svg>
+                        </button>
+
+                        <!-- Manage menu -->
+                        <div id="manageSearch" class="z-10 hidden bg-white rounded-lg shadow-sm w-40 dark:bg-gray-700" style="cursor: pointer;">
+                            <div class="p-3">
+                            <label for="input-group-search" class="sr-only">Search</label>
+                            <div class="relative">
+                                <div class="absolute inset-y-0 rtl:inset-r-0 start-0 flex items-center ps-3 pointer-events-none">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
+                                </svg>
+                                </div>
+                            </div>
+                        </div>
+                        <ul id="manage-list" class="text-sm text-gray-700 dark:text-gray-200 space-y-1 mb-3">
+                            <li class="view-option py-2 px-3 w-full text-left bg-gray-100 hover:bg-gray-200 rounded">
+                                Modify</li>
+                            <li class="modify-option py-2 px-3 w-full text-left bg-yellow-100 hover:bg-yellow-200 rounded">
+                                Cancel</li>
+                        </ul>
+                    </li>
+                    <li>
+                        <button id="addButton" data-key="add"style="cursor: pointer;" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                            Add
+                            <svg class="w-2.5 h-2.5 ms-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
+                            </svg>
+                        </button>
+
+                        <div id="addSearch" class="hidden z-10 bg-white rounded-lg shadow-sm w-40 dark:bg-gray-700" style="cursor: pointer; position:absolute;">
+                            <ul id="add-list" class="text-sm text-gray-700 dark:text-gray-200 space-y-1 mb-3 p-2">
+                            <li class="event-option py-2 px-3 w-full text-left bg-gray-100 hover:bg-gray-200 rounded cursor-pointer">
+                                Event
+                            </li>
+                            <li class="fewEvents-option py-2 px-3 w-full text-left bg-yellow-100 hover:bg-yellow-200 rounded cursor-pointer">
+                                Few Events
+                            </li>
+                            </ul>
+                        </div>
+                    
+
+                        <!-- Modal for Event -->
+                        <div id="eventModal" class="modal hidden">
+                        <div class="modal-content">
+                            <h2>Add a new Event</h2>
+                            <form id="eventForm">
+                                <input type="text" class="title" name="title" placeholder="Title" required />
+                                <textarea name="description" class="description" placeholder="Describe your plans for the day."></textarea>
+                                <div class="modalButton">
+                                    <button type="submit" class="hover:bg-blue-800">Add</button>
+                                    <button type="button" class="hover:bg-blue-800" onclick="closeModal(document.getElementById('fewEventsModal'))">Cancel</button>
+                                </div>
+                            </form>
+                        </div>
+                        </div>
+
+                        <!-- Modal for Few Events -->
+                        <div id="fewEventsModal" class="modal hidden">
+                        <div class="modal-content">
+                            <h2>Add Few Events</h2>
+                            <form id="fewEventsForm">
+                                <input type="text" class="summary" name="summary" placeholder="Summary" required />
+                                <textarea name="details" class="details" placeholder="Details of your plans for the day."></textarea>
+                                <div class="modalButton">
+                                    <button type="submit" class="hover:bg-blue-800">Add</button>
+                                    <button type="button" class="hover:bg-blue-800" onclick="closeModal(document.getElementById('fewEventsModal'))">Cancel</button>
+                                </div>
+                            </form>
+                        </div>
+                        </div>
+                    </li>
+                    <li>
+                        <!-- Color theme button -->
+                        <button id="colorThemeButton" data-key="colorTheme" data-dropdown-toggle="colorThemeSearch" data-dropdown-placement="bottom" style="cursor: pointer;" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">Color Theme<svg class="w-2.5 h-2.5 ms-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
+                        </svg>
+                        </button>
+
+                        <!-- Color theme menu -->
+                        <div id="colorThemeSearch" class="z-10 hidden bg-white rounded-lg shadow-sm w-40 dark:bg-gray-700" style="cursor: pointer;">
+                            <div class="px-3 pb-3 ">
+                            <label for="input-group-search" class="sr-only">Search</label>
+                            <div class="relative">
+                                <div class="absolute inset-y-0 rtl:inset-r-0 start-0 flex items-center ps-3 pointer-events-none">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
+                                </svg>
+                                </div>
+                            </div>
+                        </div>
+                        <ul id="theme-options" class="text-sm text-gray-700 dark:text-gray-200 space-y-1 mb-3">
+                            <li class="theme-option py-2 px-3 w-full text-left bg-gray-100 hover:bg-gray-200 rounded" data-theme="blue">
+                                Blue</li>
+                            <li class="theme-option py-2 px-3 w-full text-left bg-yellow-100 hover:bg-yellow-200 rounded" data-theme="yellow">
+                                Yellow</li>
+                            <li class="theme-option py-2 px-3 w-full text-left bg-green-100 hover:bg-green-200 rounded" data-theme="green">
+                                Green</li>
+                            <li class="theme-option py-2 px-3 w-full text-left bg-red-100 hover:bg-red-200 rounded" data-theme="red">
+                                Red</li>
+                            <li class="theme-option py-2 px-3 w-full text-left bg-gradient-to-r from-pink-100 via-yellow-100 to-green-100 hover:brightness-110 rounded" data-theme="multicolor">
+                                Multicolor</li>
+                        </ul>
+                    </li>
+                </li>
+            </ul>
+        </div>
+    </header>
+
+    <div class="main">
+        <div class="left_part">
+            <!--Select date menu-->
+            <form class="">
+                <div class="relative">
+                    <!-- This input will be hidden because we display the calendar inline -->
+                    <input id="calendar" type="text" class="hidden" />
+                    <!-- The container where we will insert the calendar -->
+                        <div id="calendar-container" class="w-full picker-wrapper"></div>
+                </div>
+            </form>
+            <!--Filter Menu-->
+            <div>
+                <div class="filter">
+                    <div class="filter_left">
+                        <p class="filter-text" data-key="filterBy">Filter by:</p>
+                    </div>
+                    <div class="filter_right">
+                        <button data-key="allSelected">All selected</button>
+                    </div>
+                </div>
+                <div class="first_section">
+                    <!-- Services button -->
+                      <div style="display: flex; align-items: center; gap: 10px;">
+                        <button id="servicesButton" data-key="services" data-dropdown-toggle="servicesSearch" data-dropdown-placement="bottom" style="cursor: pointer;" class="hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">
+                            Services
+                        </button>
+                        <div class="first_section_right" style="display: flex; align-items: center; gap: 10px;">
+                            <span class="button_inside">
+                                <i class="fa-solid fa-plus" style="font-weight: 900; color:rgba(35, 166, 248, 1);"></i>
+                            </span>
+                            <svg class="w-2.5 h-2.5 ms-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
+                            </svg>
+                        </div>
+                        
+                        <!-- Services menu -->
+                        <div id="servicesSearch" class="z-10 hidden bg-white rounded-lg shadow-sm w-60 dark:bg-gray-700" style="cursor: pointer;">
+                            <div class="p-3">
+                                <label for="input-group-search" class="sr-only">Search</label>
+                                <div class="relative">
+                                    <div class="absolute inset-y-0 rtl:inset-r-0 start-0 flex items-center ps-3 pointer-events-none">
+                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <ul id="services-list" class="h-48 px-3 pb-3 overflow-y-auto text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownSearchButton">
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="second_section">
+                    <!-- Staff button -->
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                        <button id="staffButton" data-key="staff" data-dropdown-toggle="staffSearch" data-dropdown-placement="bottom" style="cursor: pointer;" class="hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">
+                            Staff
+                            <i class="fa-solid fa-droplet" style="font-weight: 900; color: black; margin-left: 10px;"></i>
+                        </button>   
+                        <div class="first_section_right" style="display: flex; align-items: center; gap: 10px;">
+                            <span class="button_inside">
+                                <i class="fa-solid fa-plus" style="font-weight: 900; color:rgba(35, 166, 248, 1);"></i>
+                            </span>
+                            <svg class="w-2.5 h-2.5 ms-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4" />
+                            </svg>
+                        </div>
+
+                        <!-- Staff menu -->
+                        <div id="staffSearch" class="z-10 hidden bg-white rounded-lg shadow-sm w-60 dark:bg-gray-700" style="cursor: pointer;">
+                            <div class="p-3">
+                            <label for="input-group-search" class="sr-only">Search</label>
+                                <div class="relative">
+                                    <div class="absolute inset-y-0 rtl:inset-r-0 start-0 flex items-center ps-3 pointer-events-none">
+                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <ul id="staff-list" class="h-48 px-3 pb-3 overflow-y-auto text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownSearchButton">
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="third_section">
+                    <!-- Location button -->
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                        <button id="locationButton" data-key="location" data-dropdown-toggle="locationSearch" data-dropdown-placement="bottom" style="cursor: pointer;" class="hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">
+                            Location
+                        </button>    
+                        <div class="first_section_right" style="display: flex; align-items: center; gap: 10px;">
+                            <svg class="w-2.5 h-2.5 ms-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
+                            </svg>
+                        </div>
+                    </div>
+                   
+                    <!-- Location menu -->
+                    <div id="locationSearch" class="z-10 hidden bg-white rounded-lg shadow-sm w-60 dark:bg-gray-700" style="cursor: pointer;">
+                        <div class="p-3">
+                            <label for="input-group-search" class="sr-only">Search</label>
+                            <div class="relative">
+                                <div class="absolute inset-y-0 rtl:inset-r-0 start-0 flex items-center ps-3 pointer-events-none">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
+                                </div>
+                            </div>
+                        </div>
+                        <ul id="location-list" class="h-48 px-3 pb-3 overflow-y-auto text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownSearchButton">
+                        </ul>
+                    </div>
+                </div>
+                <div class="fourth_section">
+                    <!-- Session Availability button -->
+                     <div style="display: flex; align-items: center; gap: 10px;">
+                        <button id="sessionAvailabilityButton" data-key="sessionAvailability" data-dropdown-toggle="sessionAvailabilitySearch" data-dropdown-placement="bottom" style="cursor: pointer;" class="hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">
+                            Session availability
+                        </button>   
+                        <div class="first_section_right" style="display: flex; align-items: center; gap: 10px;">
+                            <svg class="w-2.5 h-2.5 ms-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
+                            </svg>
+                        </div>                  
+                    </div>
+                    <!-- Session Availability menu -->
+                    <div id="sessionAvailabilitySearch" class="z-10 hidden bg-white rounded-lg shadow-sm w-60 dark:bg-gray-700" style="cursor: pointer;">
+                        <div class="p-3">
+                            <label for="input-group-search" class="sr-only">Search</label>
+                            <div class="relative">
+                                <div class="absolute inset-y-0 rtl:inset-r-0 start-0 flex items-center ps-3 pointer-events-none">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
+                                </div>
+                            </div>
+                        </div>
+                        <ul id="sessionAvailability-list" class="h-48 px-3 pb-3 overflow-y-auto text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownSearchButton">
+                        </ul>
+                    </div>
+                </div>
+                <div class="fifth_section">
+                    <!-- Other Events button -->
+                     <div style="display: flex; align-items: center; gap: 10px;">
+                        <button id="otherEventsButton" data-key="otherEvents" data-dropdown-toggle="otherEventsSearch" data-dropdown-placement="bottom" style="cursor: pointer;" class="hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">
+                            Other events
+                        </button>   
+                       <div class="first_section_right" style="display: flex; align-items: center; gap: 10px;">
+                            <svg class="w-2.5 h-2.5 ms-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
+                            </svg>
+                        </div>
+                    </div>
+                    <!-- Other Events menu -->
+                    <div id="otherEventsSearch" class="z-10 hidden bg-white rounded-lg shadow-sm w-60 dark:bg-gray-700" style="cursor: pointer;">
+                        <div class="p-3">
+                            <label for="input-group-search" class="sr-only">Search</label>
+                            <div class="relative">
+                                <div class="absolute inset-y-0 rtl:inset-r-0 start-0 flex items-center ps-3 pointer-events-none">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
+                                </div>
+                            </div>
+                        </div>
+                        <ul id="otherEvents-list" class="h-48 px-3 pb-3 overflow-y-auto text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownSearchButton">
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    
+        <div class="middle_part">
+            <!--Header of the table-->
+            <div class="header_of_table">
+                <div class="left">
+                    <button class="count" data-key="countDay">CountDay</button>
+                    <button class="button_left"></button>
+                    <button class="button_right"></button>
+                    <p data-key="scheduleText">Count of scheduels of this week</p>
+                </div>
+                <div class="right">
+                    <button class="language" id="languageToggle"></button>
+                    <div class="weeklyButton">
+                        <!-- Weekly view button -->
+                        <button id="weeklyViewButton" data-key="weeklyView" data-dropdown-toggle="weeklyViewSearch" data-dropdown-placement="bottom" class="hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">
+                            Weekly view
+                            <svg class="w-2.5 h-2.5 ms-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6"> <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
+                            </svg>
+                        </button>
+
+                        <!-- Weekly view menu -->
+                        <div id="weeklyViewSearch" class="z-10 hidden bg-white rounded-lg shadow-sm w-60 dark:bg-gray-700" style="cursor: pointer;">
+                            <div class="p-1">
+                                <label for="input-group-search" class="sr-only">Search</label>
+                                <div class="relative">
+                                    <div class="absolute inset-y-0 rtl:inset-r-0 start-0 flex items-center ps-3 pointer-events-none">
+                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <ul id="weeklyView-list" class="text-sm text-gray-700 dark:text-gray-200 space-y-1 mb-3">
+                                <li class="theme-option py-2 px-3 w-full text-left bg-blue-100 hover:bg-blue-200 rounded" data-theme="blue">
+                                    First week</li>
+                                <li class="theme-option py-2 px-3 w-full text-left bg-yellow-100 hover:bg-yellow-200 rounded" data-theme="yellow">
+                                    Second week</li>
+                                <li class="theme-option py-2 px-3 w-full text-left bg-green-100 hover:bg-green-200 rounded" data-theme="green">
+                                    Fhird week</li>
+                                <li class="theme-option py-2 px-3 w-full text-left bg-red-100 hover:bg-red-200 rounded" data-theme="red">
+                                    Fourth week</li>
+                                <li class="theme-option py-2 px-3 w-full text-left bg-gradient-to-r from-pink-100 via-yellow-100 to-green-100 hover:brightness-110 rounded" data-theme="multicolor">
+                                    Fith week</li>
+                                <li class="theme-option py-2 px-3 w-full text-left bg-gray-100 hover:bg-gray-200 rounded" data-theme="gray">
+                                    Sixth week</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="calendar_table_wrap">
+                <!--Calendar Table-->
+            <div class="calendar_table">
+                    <div class="first_row">
+                        <div class="first_dio">
+                        <div class="time"></div>
+                        </div>
+                        <div class="second_dio" id="dayHeaders">
+                        <!-- The days will be inserted dynamically -->
+                        </div>
+                    </div>
+                    <div id="timeSlots" class="time-slots">
+                        <!-- The slots will be generated by the javascript -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    
+        
+        <div class="right_part">
+            <button class="list"></button>
+            <button class="diagramm"></button>
+        </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/simple-datatables@9.0.3"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.js"></script>
+    <script src="main.js"></script>
+
+</body>
+</html>
