@@ -160,7 +160,7 @@
     <!-- Modal for Event -->
     <div id="eventModal" class="modal hidden">
         <div class="modal-content">
-            <h2>Add a new Event</h2>
+            <h2 class="modalHeader">Add a new Event</h2>
             <form id="eventForm">
                 <input type="text" name="title" placeholder="Title" required />
 
@@ -186,12 +186,9 @@
                 <input type="datetime-local" name="endTime" required />
 
                 <!-- Tags (services, other events) -->
-                <label>Tags:</label>
-                <div>
-                    <input type="checkbox" name="tags" value="service1" /> Service 1
-                    <input type="checkbox" name="tags" value="service2" /> Service 2
-                    <input type="checkbox" name="tags" value="otherEvent1" /> Other Event 1
-                </div>
+                <label for="tagsInput">Tags:</label>
+                <div id="tagsContainer" class="tags-container"></div>
+                <input type="text" id="tagsInput" placeholder="Enter tag and press Enter" />
                 
                 <div class="modalButton">
                     <button type="submit" class="hover:bg-blue-800">Add</button>
@@ -206,7 +203,7 @@
     <!-- Modal for Few Events -->
     <div id="fewEventsModal" class="modal hidden">
         <div class="modal-content">
-            <h2>Add Few Events</h2>
+            <h2 class="modalHeader">Add Few Events</h2>
             <form id="fewEventsForm">
                 <input type="text" name="title[]" placeholder="Title" required />
                 <textarea name="description[]" class="details" placeholder="Details of your plans for the day.">
@@ -225,11 +222,10 @@
                 <label>End Time:</label>
                 <input type="datetime-local" name="endTime[]" required />
 
-                <label>Tags:</label>
-                <div>
-                    <input type="checkbox" name="tags1[]" value="service1" /> Service 1
-                    <input type="checkbox" name="tags1[]" value="service2" /> Service 2
-                </div>
+                <!-- Tags (services, other events) -->
+                <label for="tagsInputFew">Tags:</label>
+                <div id="tagsContainerFew" class="tags-container"></div>
+                <input type="text" id="tagsInputFew" placeholder="Enter tag and press Enter" />
 
                 <div class="modalButton">
                     <button type="button" onclick="addEventBlock()"class="hover:bg-blue-800">Add another event</button>

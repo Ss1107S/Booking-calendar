@@ -389,11 +389,6 @@ function openModal(modal) {
   modal.classList.remove("hidden");
 }
 
-// Скрыть модальную форму
-function closeModal(modal) {
-  modal.classList.add("hidden");
-}
-
 // Очистка модальных форм
 function resetForm(formElement) {
   formElement.reset();
@@ -459,7 +454,10 @@ uniqueEventForm.addEventListener("submit", async (e) => {
   } catch (err) {
     console.error("Failed to send event:", err);
   }*/
- insertEventIntoCell(window.selectedDateTime, title); // без сортировки
+insertEventIntoCell(window.selectedDateTime, { // без сортировки
+  title,
+  tags: eventTags.getTags(),
+});
 resetForm(uniqueEventForm);
 closeModal(uniqueEventModal);
 });
@@ -500,54 +498,81 @@ uniqueFewEventsForm.addEventListener("submit", async (e) => {
   } catch (err) {
     console.error("Failed to send few events:", err);
   }*/
- insertEventIntoCell(window.selectedDateTime, summary, true); // сортировка включена
+insertEventIntoCell(window.selectedDateTime, { // сортировка включена
+  title: summary,
+  tags: fewEventsTags.getTags(),
+}, true); 
 resetForm(uniqueFewEventsForm);
 closeModal(uniqueFewEventsModal);
 });
 
 // Вставка события в нужную ячейку календаря
-function insertEventIntoCell(dateObj, title, sort = false) {
-  const dateStr = dateObj.toISOString().split("T")[0];  // Получаем YYYY-MM-DD
-  const hour = dateObj.getHours();                      // Час события
-  const key = `${dateStr}_${hour}`;                     // Уникальный ключ события
+// dateObj — объект даты и времени события
+// event — объект события { title: string, tags: string[] }
+// sort — если true, сортируем события по названию
+function insertEventIntoCell(dateObj, event, sort = false) {
+  const dateStr = dateObj.toISOString().split("T")[0];  // Получаем дату в формате YYYY-MM-DD
+  const hour = dateObj.getHours();                      // Получаем час события (0-23)
+  const key = `${dateStr}_${hour}`;                     // Формируем уникальный ключ для ячейки (дата + час)
 
-  // Если в ячейке ещё нет данных — создаём массив
+  // Если для этой ячейки еще нет массива с событиями, создаём пустой массив
   if (!eventDataMap[key]) {
     eventDataMap[key] = [];
   }
 
-  // Добавляем новое событие
-  eventDataMap[key].push(title);
+  // Добавляем новое событие (объект с title и tags) в массив
+  eventDataMap[key].push(event);
 
-  // Сортировка по алфавиту, если нужно (для Few Events)
+  // Если нужно, сортируем массив событий по названию (title)
   if (sort) {
-    eventDataMap[key].sort((a, b) => a.localeCompare(b));
+    eventDataMap[key].sort((a, b) => a.title.localeCompare(b.title));
   }
 
-  // Поиск соответствующей ячейки календаря
+  // Находим DOM-элемент ячейки календаря по дате и часу
   const targetCell = document.querySelector(
     `.split-cell[data-date="${dateStr}"][data-hour="${hour}"]`
   );
 
+  // Если ячейка не найдена, выводим предупреждение и выходим
   if (!targetCell) {
     console.warn(`⚠️ Calendar cell not found for date: ${dateStr}, hour: ${hour}`);
     return;
   }
 
-  // Очистка содержимого ячейки перед добавлением новых событий
+  // Очищаем содержимое ячейки перед добавлением новых событий
   targetCell.innerHTML = "";
 
-  // Создание и вставка списка событий
+  // Создаем список ul для отображения всех событий в ячейке
   const ul = document.createElement("ul");
-  eventDataMap[key].forEach((item) => {
+
+  // Проходим по каждому событию в массиве для данной ячейки
+  eventDataMap[key].forEach(({ title, tags }) => {
+    // Создаем элемент li с названием события
     const li = document.createElement("li");
-    li.textContent = item;
+    li.textContent = title;
+
+    // Создаем контейнер для тегов события
+    const tagsContainer = document.createElement("div");
+    tagsContainer.classList.add("tags-container");
+
+    // Для каждого тега создаем span и добавляем в контейнер тегов
+    tags.forEach(tag => {
+      const tagElem = document.createElement("span");
+      tagElem.classList.add("tag");
+      tagElem.textContent = tag;
+      tagsContainer.appendChild(tagElem);
+    });
+
+    // Добавляем контейнер тегов в элемент события
+    li.appendChild(tagsContainer);
+
+    // Добавляем событие в список ul
     ul.appendChild(li);
   });
 
+  // Вставляем список событий в ячейку календаря
   targetCell.appendChild(ul);
 }
-
 // Закрытие модальных форм при клике на Cancel
 function closeModal(modal) {
   modal.classList.add("hidden");
@@ -562,6 +587,153 @@ uniqueFewEventsForm.querySelector('button[type="button"]').addEventListener("cli
   resetForm(uniqueFewEventsForm);
   closeModal(uniqueFewEventsModal);
 });
+
+
+
+
+
+
+// --- Теги для модальных окон ---
+
+// Функция инициализации тегов для модалки
+function initTagInput(tagsInputId, tagsContainerId) {
+  const tagsInput = document.getElementById(tagsInputId);
+  const tagsContainer = document.getElementById(tagsContainerId);
+
+  // Массив текущих тегов
+  let tags = [];
+
+  // Функция отрисовки тегов
+  function renderTags() {
+    tagsContainer.innerHTML = "";
+    tags.forEach((tag, index) => {
+      const tagElem = document.createElement("span");
+      tagElem.classList.add("tag");
+      tagElem.textContent = tag;
+
+      // Кнопка удаления тега
+      const removeBtn = document.createElement("span");
+      removeBtn.classList.add("remove-tag");
+      removeBtn.textContent = "×";
+      removeBtn.addEventListener("click", () => {
+        tags.splice(index, 1);
+        renderTags();
+      });
+
+      tagElem.appendChild(removeBtn);
+      tagsContainer.appendChild(tagElem);
+    });
+  }
+
+  // Обработчик нажатия Enter
+  tagsInput.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      const value = tagsInput.value.trim();
+      if (value && !tags.includes(value)) {
+        tags.push(value);
+        renderTags();
+        tagsInput.value = "";
+      }
+    }
+  });
+
+  // Функция получения тегов
+  function getTags() {
+    return tags;
+  }
+
+  // Функция сброса тегов
+  function resetTags() {
+    tags = [];
+    renderTags();
+    tagsInput.value = "";
+  }
+
+  return { getTags, resetTags };
+}
+
+// --- Инициализация для каждой модалки ---
+const eventTags = initTagInput("tagsInput", "tagsContainer");
+const fewEventsTags = initTagInput("tagsInputFew", "tagsContainerFew");
+
+// --- Добавление тегов в payload при сабмите ---
+
+uniqueEventForm.addEventListener("submit", async (e) => {
+  e.preventDefault();
+
+  const title = e.target.title.value.trim();
+  const description = e.target.description.value.trim();
+
+  if (!window.selectedDateTime) {
+    alert("Please select a time slot first.");
+    return;
+  }
+
+  const payload = {
+    title,
+    description,
+    datetime: window.selectedDateTime.toISOString(),
+    tags: eventTags.getTags(),
+    // Можно добавить другие поля: guests, location, time range и т.д.
+  };
+
+  // Ваш существующий код вставки события
+  insertEventIntoCell(window.selectedDateTime, {
+  title,
+  tags: eventTags.getTags(), 
+});
+
+  // Сброс тегов после отправки
+  eventTags.resetTags();
+
+  resetForm(uniqueEventForm);
+  closeModal(uniqueEventModal);
+});
+
+uniqueFewEventsForm.addEventListener("submit", async (e) => {
+  e.preventDefault();
+
+  const title = e.target.title.value.trim();
+  const description = e.target.description.value.trim();
+
+  if (!window.selectedDateTime) {
+    alert("Please select a time slot first.");
+    return;
+  }
+
+  const payload = {
+    title,
+    description,
+    datetime: window.selectedDateTime.toISOString(),
+    tags: fewEventsTags.getTags(),
+  };
+
+insertEventIntoCell(window.selectedDateTime, {
+  title,
+  tags: fewEventsTags.getTags(),
+}, true);
+
+  fewEventsTags.resetTags();
+
+  resetForm(uniqueFewEventsForm);
+  closeModal(uniqueFewEventsModal);
+});
+
+// --- Сброс тегов при закрытии модалки по Cancel ---
+uniqueEventForm.querySelector('button[type="button"]').addEventListener("click", () => {
+  eventTags.resetTags();
+  resetForm(uniqueEventForm);
+  closeModal(uniqueEventModal);
+});
+
+uniqueFewEventsForm.querySelector('button[type="button"]').addEventListener("click", () => {
+  fewEventsTags.resetTags();
+  resetForm(uniqueFewEventsForm);
+  closeModal(uniqueFewEventsModal);
+});
+
+
 
 
 
