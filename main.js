@@ -404,13 +404,22 @@ uniqueAddButton.addEventListener("click", () => {
   uniqueAddSearch.classList.toggle("hidden");
 });
 
-// Обработка клика по пунктам Add -> Event или Few Events
+// Функция закрывает все модальные окна
+function closeAllModals() {
+  uniqueEventModal.classList.add("hidden");
+  uniqueFewEventsModal.classList.add("hidden");
+}
+
+// При выборе Event:
 uniqueAddList.querySelector(".event-option").addEventListener("click", () => {
-  openModal(uniqueEventModal);
-  uniqueAddSearch.classList.add("hidden");
+  closeAllModals();               // закрываем все формы
+  openModal(uniqueEventModal);    // открываем нужную
+  uniqueAddSearch.classList.add("hidden"); // скрываем выпадающее меню
 });
 
+// При выборе Few Events:
 uniqueAddList.querySelector(".fewEvents-option").addEventListener("click", () => {
+  closeAllModals();
   openModal(uniqueFewEventsModal);
   uniqueAddSearch.classList.add("hidden");
 });
