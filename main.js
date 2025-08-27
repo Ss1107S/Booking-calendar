@@ -434,7 +434,7 @@ uniqueEventForm.addEventListener("submit", async (e) => {
     datetime: window.selectedDateTime.toISOString(),
   };
 
-  try {
+  /*try {
     await fetch("http://localhost:3000/events", {
       method: "POST",
       headers: {
@@ -443,12 +443,16 @@ uniqueEventForm.addEventListener("submit", async (e) => {
       body: JSON.stringify(payload),
     });
 
-    insertEventIntoCell(window.selectedDateTime, title);
+    insertEventIntoCell(window.selectedDateTime, title); // sort = false по умолчанию
+
     resetForm(uniqueEventForm);
     closeModal(uniqueEventModal);
   } catch (err) {
     console.error("Failed to send event:", err);
-  }
+  }*/
+ insertEventIntoCell(window.selectedDateTime, title); // без сортировки
+resetForm(uniqueEventForm);
+closeModal(uniqueEventModal);
 });
 
 //--modal form Few Events--
@@ -471,7 +475,7 @@ uniqueFewEventsForm.addEventListener("submit", async (e) => {
     datetime: window.selectedDateTime.toISOString(),
   };
 
-  try {
+  /*try {
     await fetch("http://localhost:3000/events", {
       method: "POST",
       headers: {
@@ -480,47 +484,59 @@ uniqueFewEventsForm.addEventListener("submit", async (e) => {
       body: JSON.stringify(payload),
     });
 
-    insertEventIntoCell(window.selectedDateTime, summary, true);
+    insertEventIntoCell(window.selectedDateTime, summary, true); // сортировка включена
+
     resetForm(uniqueFewEventsForm);
     closeModal(uniqueFewEventsModal);
   } catch (err) {
     console.error("Failed to send few events:", err);
-  }
+  }*/
+ insertEventIntoCell(window.selectedDateTime, summary, true); // сортировка включена
+resetForm(uniqueFewEventsForm);
+closeModal(uniqueFewEventsModal);
 });
 
-// Вставка события в нужную ячейку
+// Вставка события в нужную ячейку календаря
 function insertEventIntoCell(dateObj, title, sort = false) {
-  const dateStr = dateObj.toISOString().split("T")[0];
-  const hour = dateObj.getHours();
-  const key = `${dateStr}_${hour}`;
+  const dateStr = dateObj.toISOString().split("T")[0];  // Получаем YYYY-MM-DD
+  const hour = dateObj.getHours();                      // Час события
+  const key = `${dateStr}_${hour}`;                     // Уникальный ключ события
 
+  // Если в ячейке ещё нет данных — создаём массив
   if (!eventDataMap[key]) {
     eventDataMap[key] = [];
   }
 
+  // Добавляем новое событие
   eventDataMap[key].push(title);
 
-  // Сортировка (для Few Events)
+  // Сортировка по алфавиту, если нужно (для Few Events)
   if (sort) {
     eventDataMap[key].sort((a, b) => a.localeCompare(b));
   }
 
-  // Найти нужную ячейку
+  // Поиск соответствующей ячейки календаря
   const targetCell = document.querySelector(
     `.split-cell[data-date="${dateStr}"][data-hour="${hour}"]`
   );
 
-  if (targetCell) {
-    // Очищаем и пересоздаем список событий
-    targetCell.innerHTML = ""; // Очистить предыдущее содержимое
-    const ul = document.createElement("ul");
-    eventDataMap[key].forEach((item) => {
-      const li = document.createElement("li");
-      li.textContent = item;
-      ul.appendChild(li);
-    });
-    targetCell.appendChild(ul);
+  if (!targetCell) {
+    console.warn(`⚠️ Calendar cell not found for date: ${dateStr}, hour: ${hour}`);
+    return;
   }
+
+  // Очистка содержимого ячейки перед добавлением новых событий
+  targetCell.innerHTML = "";
+
+  // Создание и вставка списка событий
+  const ul = document.createElement("ul");
+  eventDataMap[key].forEach((item) => {
+    const li = document.createElement("li");
+    li.textContent = item;
+    ul.appendChild(li);
+  });
+
+  targetCell.appendChild(ul);
 }
 
 // Закрытие модальных форм при клике на Cancel
