@@ -1,33 +1,62 @@
-const express = require('express');
-const cors = require('cors');
+import express from 'express';
+import cors from 'cors';
+import os from 'os';
+
 const app = express();
 const PORT = 3000;
 
-// Middleware
 app.use(cors());
-app.use(express.json());
+app.use(express.json()); // парсинг JSON
 
-// In-memory storage (optional)
-let storedEventList = [];
+// ========== EVENTS ========== //
+let EventsHandler = {
+  eventList: [],
 
-// Route to receive event data
+  addEvent(event) {
+    this.eventList.push(event);
+  },
+
+  getAllEvents() {
+    return this.eventList;
+  }
+};
+
+// POST-запрос для сохранения события
 app.post('/events', (req, res) => {
-  const incomingEventData = req.body;
-  console.log("Event received:", incomingEventData);
+  const eventData = req.body;
+  console.log("Event received:", eventData);
 
-  storedEventList.push(incomingEventData); // Optional storage for testing
+  if (!eventData.title || !eventData.datetime) {
+    return res.status(400).json({ error: "Invalid event format" });
+  }
 
+  EventsHandler.addEvent(eventData);
   res.status(200).json({ message: "Event successfully saved" });
 });
 
-// Simple check route
-app.get('/', (req, res) => {
-  res.send('Event server is running.');
+// GET-запрос для получения всех событий
+app.get('/events', (req, res) => {
+  res.json(EventsHandler.getAllEvents());
 });
 
-// Start server
-app.listen(PORT, () => {
-  console.log(`Server running at http://localhost:${PORT}`);
+// Тестовый эндпоинт
+app.get('/api/test', (req, res) => {
+  res.send('Test successful');
 });
 
+// Запуск сервера
+const interfaces = os.networkInterfaces();
+let localIP = 'localhost';
 
+for (const name of Object.keys(interfaces)) {
+  for (const iface of interfaces[name]) {
+    if (iface.family === 'IPv4' && !iface.internal) {
+      localIP = iface.address;
+      break;
+    }
+  }
+}
+
+app.listen(PORT, '0.0.0.0', () => {
+  console.log(`Backend listening at http://${localIP}:${PORT}`);
+});
