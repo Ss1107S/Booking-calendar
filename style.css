@@ -115,6 +115,7 @@ header .right{
     flex-direction: column;
     gap: 20px;
     height: 100%;
+    margin-left: 1%;
 }
 
 #calendar-container .dp-year {
@@ -175,11 +176,13 @@ svg{
     height: 100%;
     gap: 20px;
     min-width: 0;
+    margin-left: 2%;
 }
 .header_of_table {
     display: flex;
     align-items: center;
     width: 100%;
+    padding: 0 1%;
 }
 
 .header_of_table .left {
