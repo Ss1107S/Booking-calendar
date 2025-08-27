@@ -141,11 +141,18 @@ function generateTable(selectedDate) {
     dayDiv.style.display = "flex";
     dayDiv.style.alignItems = "center";
     dayDiv.style.justifyContent = "center";
-    dayDiv.textContent = day.toLocaleDateString("en-US", {
-      weekday: "short",
-      month: "short",
-      day: "numeric"
-    });
+
+    const locale = currentLanguage === 'hr' ? 'hr-HR' : 'en-US';
+    const dayName = day.toLocaleDateString(locale, { weekday: "short" });// День недели
+    const dayNumber = day.getDate(); // Число
+
+    dayDiv.innerHTML = `
+      <div style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
+        <div style="font-size: 12px;">${dayName}</div>
+        <div style="font-size: 16px; font-weight: 600;">${dayNumber}</div>
+      </div>
+    `;
+    
     dayHeadersContainer.appendChild(dayDiv);
     
     // Установка цвета для дня
