@@ -455,7 +455,7 @@ uniqueEventForm.addEventListener("submit", async (e) => {
     console.error("Failed to send event:", err);
   }*/
 const tags = eventTags.getTags(); // сначала получи теги
-insertEventIntoCell(window.selectedDateTime, { title, tags });
+insertEventIntoCell(window.selectedDateTime, { title, description, tags });
 eventTags.resetTags(); // потом очисти
 resetForm(uniqueEventForm); // потом форма
 closeModal(uniqueEventModal);
@@ -547,27 +547,39 @@ function insertEventIntoCell(dateObj, event, sort = false) {
   // Создаем список ul для отображения всех событий в ячейке
   const ul = document.createElement("ul");
 
-  // Проходим по каждому событию в массиве для данной ячейки
-  eventDataMap[key].forEach(({ title, tags }) => {
-    // Создаем элемент li с названием события
-    const li = document.createElement("li");
-    li.textContent = title;
+// Проходим по каждому событию в массиве для данной ячейки
+eventDataMap[key].forEach(({ title, description, tags }) => {
+  
+  // Создаем элемент li для события
+  const li = document.createElement("li");
 
-    // Создаем контейнер для тегов события
-    const tagsContainer = document.createElement("div");
-    tagsContainer.classList.add("tags-container");
+  // Создаем элемент strong для заголовка события и добавляем в li
+  const titleElem = document.createElement("strong");
+  titleElem.textContent = title;
+  li.appendChild(titleElem);
 
-    // Для каждого тега создаем span и добавляем в контейнер тегов
-    tags.forEach(tag => {
-      const tagElem = document.createElement("span");
-      tagElem.classList.add("tag");
-      tagElem.textContent = tag;
-      tagsContainer.appendChild(tagElem);
-    });
+  // Если есть описание, создаем параграф с текстом описания и добавляем в li
+  if (description) {
+    const descElem = document.createElement("p");
+    descElem.textContent = description;
+    li.appendChild(descElem);
+  }
 
-    // Добавляем контейнер тегов в элемент события
-    li.appendChild(tagsContainer);
+  // Создаем контейнер для тегов события (как у тебя есть)
+  const tagsContainer = document.createElement("div");
+  tagsContainer.classList.add("tags-container");
 
+  // Для каждого тега создаем span и добавляем в контейнер тегов
+  tags.forEach(tag => {
+    const tagElem = document.createElement("span");
+    tagElem.classList.add("tag");
+    tagElem.textContent = tag;
+    tagsContainer.appendChild(tagElem);
+  });
+
+  // Добавляем контейнер тегов в li
+  li.appendChild(tagsContainer);
+  
     // Добавляем событие в список ul
     ul.appendChild(li);
   });
@@ -683,6 +695,7 @@ uniqueEventForm.addEventListener("submit", async (e) => {
   // Ваш существующий код вставки события
   insertEventIntoCell(window.selectedDateTime, {
   title,
+  description,
   tags: eventTags.getTags(), 
 });
 
@@ -708,6 +721,7 @@ uniqueFewEventsForm.addEventListener("submit", async (e) => {
     if (title) {
       insertEventIntoCell(window.selectedDateTime, {
         title,
+        description: descriptions[index] || "", // взять описание для соответствующего индекса        
         tags: fewEventsTags.getTags(),
       }, true); // сортировка включена
     }
@@ -756,9 +770,6 @@ function addEventBlockAndSaveCurrent() {
   // Добавляем новый блок
   addEventBlock();
 }
-
-
-
 
 
 //--button weeklyViewButton--
@@ -902,7 +913,7 @@ weeklyListItems.forEach((item, index) => {
 });
 
 
-//--handlers for buttonLeft and buttonRight--
+// --handlers for buttonLeft and buttonRight--
 const buttonLeft = document.querySelector(".button_left");
 const buttonRight = document.querySelector(".button_right");
 
@@ -928,6 +939,4 @@ if (!currentSelectedDate) {
    generateTable(currentSelectedDate); 
    updateCountButton(currentSelectedDate); 
    updateDateButton(currentSelectedDate); });
-
-
    
