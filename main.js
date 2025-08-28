@@ -475,12 +475,18 @@ uniqueFewEventsForm.addEventListener("submit", async (e) => {
     alert("Please select a time slot first.");
     return;
   }
+const titles = Array.from(e.target.querySelectorAll('input[name="title[]"]')).map(input => input.value.trim());
+const descriptions = Array.from(e.target.querySelectorAll('textarea[name="description[]"]')).map(textarea => textarea.value.trim());
 
-  const payload = {
-    title: summary,
-    description: details,
-    datetime: window.selectedDateTime.toISOString(),
-  };
+titles.forEach((title, index) => {
+  if (title) {
+    insertEventIntoCell(window.selectedDateTime, {
+      title,
+      description: descriptions[index] || "",
+      tags: fewEventsTags.getTags(),
+    }, true); // сортировка включена
+  }
+});
 
   /*try {
     await fetch("http://localhost:3000/events", {
@@ -694,28 +700,24 @@ uniqueEventForm.addEventListener("submit", async (e) => {
 uniqueFewEventsForm.addEventListener("submit", async (e) => {
   e.preventDefault();
 
-  const title = e.target.title.value.trim();
-  const description = e.target.description.value.trim();
-
   if (!window.selectedDateTime) {
     alert("Please select a time slot first.");
     return;
   }
 
-  const payload = {
-    title,
-    description,
-    datetime: window.selectedDateTime.toISOString(),
-    tags: fewEventsTags.getTags(),
-  };
+  const titles = Array.from(e.target.querySelectorAll('input[name="title[]"]')).map(input => input.value.trim());
+  const descriptions = Array.from(e.target.querySelectorAll('textarea[name="description[]"]')).map(textarea => textarea.value.trim());
 
-insertEventIntoCell(window.selectedDateTime, {
-  title,
-  tags: fewEventsTags.getTags(),
-}, true);
+  titles.forEach((title, index) => {
+    if (title) {
+      insertEventIntoCell(window.selectedDateTime, {
+        title,
+        tags: fewEventsTags.getTags(),
+      }, true); // сортировка включена
+    }
+  });
 
   fewEventsTags.resetTags();
-
   resetForm(uniqueFewEventsForm);
   closeModal(uniqueFewEventsModal);
 });
@@ -732,6 +734,31 @@ uniqueFewEventsForm.querySelector('button[type="button"]').addEventListener("cli
   resetForm(uniqueFewEventsForm);
   closeModal(uniqueFewEventsModal);
 });
+
+
+
+//Сохранение сразу, при нажатии "Add another event"(чтобы каждое событие сохранялось при его добавлении
+
+function addEventBlockAndSaveCurrent() {
+  const titles = Array.from(document.querySelectorAll('input[name="title[]"]')).map(input => input.value.trim());
+  const descriptions = Array.from(document.querySelectorAll('textarea[name="description[]"]')).map(textarea => textarea.value.trim());
+
+  // Сохраняем последнее заполненное событие
+  const lastIndex = titles.length - 1;
+  const title = titles[lastIndex];
+  const description = descriptions[lastIndex];
+
+  if (title) {
+    insertEventIntoCell(window.selectedDateTime, {
+      title,
+      description,
+      tags: fewEventsTags.getTags(),
+    }, true);
+  }
+
+  // Добавляем новый блок
+  addEventBlock();
+}
 
 
 

@@ -162,10 +162,9 @@
         <div class="modal-content">
             <h2 class="modalHeader">Add a new Event</h2>
             <form id="eventForm">
-                <input type="text" name="title" placeholder="Title" required />
+                <input type="text" class="title" name="title" placeholder="Title" required />
 
-                <textarea name="description" class="description" placeholder="Describe your plans for the day.">
-                </textarea>
+                <textarea name="description" class="description" placeholder="Describe your plans for the day"></textarea>
 
                 <!-- Guests (staff) -->
                 <label for="guests">Guests:</label>
@@ -174,16 +173,12 @@
                 </select>
 
                 <!-- Location -->
-                <label for="location">Location:</label>
-                <select name="location" id="location">
-                    <!-- Список локаций -->
-                </select>
-
-                <!-- Time interval -->
-                <label for="startTime">Start Time:</label>
-                <input type="datetime-local" name="startTime" required />
-                <label for="endTime">End Time:</label>
-                <input type="datetime-local" name="endTime" required />
+                 <div>
+                    <label for="location">Location:</label>
+                    <select name="location" id="location">
+                        <!-- Список локаций -->
+                    </select>
+                </div>
 
                 <!-- Tags (services, other events) -->
                 <label for="tagsInput">Tags:</label>
@@ -205,22 +200,20 @@
         <div class="modal-content">
             <h2 class="modalHeader">Add Few Events</h2>
             <form id="fewEventsForm">
-                <input type="text" name="title[]" placeholder="Title" required />
-                <textarea name="description[]" class="details" placeholder="Details of your plans for the day.">
-                </textarea>
+                <input type="text" class="title" name="title[]" placeholder="Title" required />
+                <textarea name="description[]" class="details" placeholder="Details of your plans for the day"></textarea>
 
+                <!-- Guests (staff) -->
                 <label>Guests:</label>
                 <select name="guests[]" multiple>
                 <!-- список гостей -->
                 </select>
 
-                <label>Location:</label>
-                <select name="location[]"></select>
-
-                <label>Start Time:</label>
-                <input type="datetime-local" name="startTime[]" required />
-                <label>End Time:</label>
-                <input type="datetime-local" name="endTime[]" required />
+                <!-- Location -->
+                <div>
+                    <label>Location:</label>
+                    <select name="location[]"></select>
+                </div>
 
                 <!-- Tags (services, other events) -->
                 <label for="tagsInputFew">Tags:</label>
@@ -228,7 +221,7 @@
                 <input type="text" id="tagsInputFew" placeholder="Enter tag and press Enter" />
 
                 <div class="modalButton">
-                    <button type="button" onclick="addEventBlock()"class="hover:bg-blue-800">Add another event</button>
+                    <button type="button" onclick="addEventBlockAndSaveCurrent()"class="hover:bg-blue-800">Add another event</button>
                     <button type="submit"class="hover:bg-blue-800">Add all</button>
                     <button type="button" class="hover:bg-blue-800" onclick="closeModal(document.getElementById('fewEventsModal'))">
                         Cancel
@@ -237,8 +230,6 @@
             </form>
         </div>
     </div>
-
-
 
     <div class="main">
         <div class="left_part">

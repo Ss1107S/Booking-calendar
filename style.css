@@ -83,7 +83,7 @@ header .right{
   background: white;
   padding: 20px;
   border-radius: 8px;
-  width: 420px;
+  width: 320px;
 }
 
 .modalHeader{
@@ -105,9 +105,16 @@ header .right{
   margin-top: 5%;
 }
 
-.description, .details{
+.title, .description, .details{
   margin-top: 10%;
   width: 100%;
+}
+
+.title:hover, 
+.description:hover, 
+.details:hover,
+#tagsInput:hover {
+  background-color: rgb(201, 230, 248);
 }
 
 .tags-container {
