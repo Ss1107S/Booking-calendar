@@ -454,40 +454,43 @@ uniqueEventForm.addEventListener("submit", async (e) => {
   } catch (err) {
     console.error("Failed to send event:", err);
   }*/
-insertEventIntoCell(window.selectedDateTime, { // без сортировки
-  title,
-  tags: eventTags.getTags(),
-});
-resetForm(uniqueEventForm);
+const tags = eventTags.getTags(); // сначала получи теги
+insertEventIntoCell(window.selectedDateTime, { title, tags });
+eventTags.resetTags(); // потом очисти
+resetForm(uniqueEventForm); // потом форма
 closeModal(uniqueEventModal);
 });
-
 //--modal form Few Events--
 // Добавление Few Events 
 // (с сортировкой по алфавиту при добавлении новых событий)
+
 uniqueFewEventsForm.addEventListener("submit", async (e) => {
   e.preventDefault();
-
-  const summary = e.target.summary.value.trim();
-  const details = e.target.details.value.trim();
 
   if (!window.selectedDateTime) {
     alert("Please select a time slot first.");
     return;
   }
-const titles = Array.from(e.target.querySelectorAll('input[name="title[]"]')).map(input => input.value.trim());
-const descriptions = Array.from(e.target.querySelectorAll('textarea[name="description[]"]')).map(textarea => textarea.value.trim());
+
+  const titles = Array.from(e.target.querySelectorAll('input[name="title[]"]')).map(input => input.value.trim());
+  const descriptions = Array.from(e.target.querySelectorAll('textarea[name="description[]"]')).map(textarea => textarea.value.trim());
+
+  const tags = fewEventsTags.getTags(); // сохраняем ОДИН раз
 
 titles.forEach((title, index) => {
   if (title) {
     insertEventIntoCell(window.selectedDateTime, {
       title,
       description: descriptions[index] || "",
-      tags: fewEventsTags.getTags(),
-    }, true); // сортировка включена
+      tags,
+    }, true);
   }
 });
 
+fewEventsTags.resetTags();
+resetForm(uniqueFewEventsForm);
+closeModal(uniqueFewEventsModal);
+});
   /*try {
     await fetch("http://localhost:3000/events", {
       method: "POST",
@@ -504,13 +507,6 @@ titles.forEach((title, index) => {
   } catch (err) {
     console.error("Failed to send few events:", err);
   }*/
-insertEventIntoCell(window.selectedDateTime, { // сортировка включена
-  title: summary,
-  tags: fewEventsTags.getTags(),
-}, true); 
-resetForm(uniqueFewEventsForm);
-closeModal(uniqueFewEventsModal);
-});
 
 // Вставка события в нужную ячейку календаря
 // dateObj — объект даты и времени события
@@ -735,16 +731,17 @@ uniqueFewEventsForm.querySelector('button[type="button"]').addEventListener("cli
   closeModal(uniqueFewEventsModal);
 });
 
-
-
 //Сохранение сразу, при нажатии "Add another event"(чтобы каждое событие сохранялось при его добавлении
+
 
 function addEventBlockAndSaveCurrent() {
   const titles = Array.from(document.querySelectorAll('input[name="title[]"]')).map(input => input.value.trim());
   const descriptions = Array.from(document.querySelectorAll('textarea[name="description[]"]')).map(textarea => textarea.value.trim());
 
+  const tags = fewEventsTags.getTags(); // ✅ теги получаем один раз здесь
+
   // Сохраняем последнее заполненное событие
-  const lastIndex = titles.length - 1;
+    const lastIndex = titles.length - 1;
   const title = titles[lastIndex];
   const description = descriptions[lastIndex];
 
@@ -752,14 +749,13 @@ function addEventBlockAndSaveCurrent() {
     insertEventIntoCell(window.selectedDateTime, {
       title,
       description,
-      tags: fewEventsTags.getTags(),
+      tags, // ✅ вставляем теги
     }, true);
   }
 
   // Добавляем новый блок
   addEventBlock();
 }
-
 
 
 
@@ -932,3 +928,6 @@ if (!currentSelectedDate) {
    generateTable(currentSelectedDate); 
    updateCountButton(currentSelectedDate); 
    updateDateButton(currentSelectedDate); });
+
+
+   
