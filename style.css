@@ -57,7 +57,6 @@ header .right{
 
 #addButton {
   display: flex;
-  position: relative;
 }
 
 #addSearch {
@@ -122,6 +121,9 @@ header .right{
   flex-wrap: wrap;
   gap: 5px;
   margin-bottom: 5px;
+    border: 1px solid purple; 
+  min-height: 30px; /* 👈 добавь */
+
 }
 
 .tag {
@@ -133,6 +135,7 @@ header .right{
   user-select: none;
   display: flex;
   align-items: center;
+  border: 1px solid violet; 
 }
 
 .tag .remove-tag {
