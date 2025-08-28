@@ -1,8 +1,8 @@
 let currentSelectedDate = new Date();
-// Переменная для хранения выбранной даты в основном календаре
+// Variable to store the selected date in the main calendar
 let selectedMainDate = currentSelectedDate;
 let selectedCell = null;
-window.selectedDateTime = null; // Глобально храним выбранную дату и время
+window.selectedDateTime = null; // Globally store the selected date and time
 
 // Language switching
 const translations = {
@@ -44,7 +44,7 @@ const translations = {
     }
 };
 
-//Отображение даты в кнопке button id="dateButton">Selection Date< + работа Calendar
+// Display the date in the button with id="dateButton" > Selection Date < + Calendar functionality
 const months = [
   "January", "February", "March", "April", "May", "June",
   "July", "August", "September", "October", "November", "December"
@@ -53,13 +53,13 @@ const months = [
 let currentLanguage = localStorage.getItem('language') || 'en';
 
 // -- elements --
-// Получаем кнопку с классом count
+// Get the button with the class 'count'
 const countButton = document.querySelector(".count");
-//Генерация таблицы и синхронизация с календарём
+// Generate the table and synchronize it with the calendar
 const dayHeadersContainer = document.getElementById("dayHeaders");
 const timeSlotsContainer = document.getElementById("timeSlots");
 const calendarContainer = document.getElementById('calendar-container');
-//Изменение цветового оформления
+// Change color scheme/styling
 const themeButtons = document.querySelectorAll('.theme-option');
 const targetButtons = document.querySelectorAll('#manageButton, #addButton, #colorThemeButton');
 
@@ -80,23 +80,20 @@ const picker = new DatePicker({
 
 updateDateButton(currentSelectedDate); // update on load
 
-// Первичная генерация
+// Initial generation
 generateTable(currentSelectedDate);
 
 
-
 // -- button Count --
-
 function updateDateButton(date) {
   const formatted = months[date.getMonth()] + " " + date.getFullYear();
   document.getElementById("dateButton").textContent = formatted;
 }
-// Функция для обновления текста кнопки с учетом верного отображения для сегодня,
-// завтра и вчера и динамического подставления выбранную дату из календаря в остальных случаях.
-
+// Function to update the button text with correct display for today,
+// tomorrow, and yesterday, and dynamically insert the selected date from the calendar in other cases.
 function updateCountButton(date) {
   const today = new Date();
-  // Обнуляем время для сравнения только по дате
+  // Reset time to compare only by date
   today.setUTCHours(0, 0, 0, 0);
   const selectedDate = new Date(date.getTime());
   selectedDate.setUTCHours(0, 0, 0, 0);
@@ -118,7 +115,6 @@ function updateCountButton(date) {
 }
 
 // -- table & cells --
-
 function generateTable(selectedDate) {
   dayHeadersContainer.innerHTML = "";
   timeSlotsContainer.innerHTML = "";
@@ -143,8 +139,8 @@ function generateTable(selectedDate) {
     dayDiv.style.justifyContent = "center";
 
     const locale = currentLanguage === 'hr' ? 'hr-HR' : 'en-US';
-    const dayName = day.toLocaleDateString(locale, { weekday: "short" });// День недели
-    const dayNumber = day.getDate(); // Число
+    const dayName = day.toLocaleDateString(locale, { weekday: "short" });// Day of the week
+    const dayNumber = day.getDate(); // Date number
 
     dayDiv.innerHTML = `
       <div style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
@@ -155,13 +151,13 @@ function generateTable(selectedDate) {
     
     dayHeadersContainer.appendChild(dayDiv);
     
-    // Установка цвета для дня
+    // Set color for the day
     if (sameDay(day, selectedDate)) {
-      dayDiv.style.color = "rgba(35, 166, 248, 1)"; // выбранный день
+      dayDiv.style.color = "rgba(35, 166, 248, 1)"; // Selected day
     } else if (day < selectedDate) {
-      dayDiv.style.color = "#ccc"; // предыдущие дни
+      dayDiv.style.color = "#ccc"; // Previous days
     } else {
-      dayDiv.style.color = "#000"; // последующие дни
+      dayDiv.style.color = "#000"; // Following days
     }
     
     dayHeadersContainer.appendChild(dayDiv);
@@ -193,21 +189,21 @@ function generateTable(selectedDate) {
       const cell = document.createElement("div");
       cell.className = "split-cell";
 
-      // Сохраняем дату и час в data-атрибутах
+      // Save date and hour in data attributes
       const dateString = day.toISOString().split("T")[0]; // YYYY-MM-DD
       cell.dataset.date = dateString;
       cell.dataset.hour = hour;
 
-      // Обработчик клика на ячейку
+      // Click handler for the cell
       cell.addEventListener("click", () => {
   if (selectedCell) {
-    selectedCell.style.backgroundColor = ""; // Убираем подсветку
+    selectedCell.style.backgroundColor = ""; // Remove highlight
   }
 
   selectedCell = cell;
-  cell.style.backgroundColor = "#dbeafe"; // Выделение (голубой фон)
+  cell.style.backgroundColor = "#dbeafe"; // Selection (blue background)
 
-  // Сохраняем выбранную дату и время
+  // Save the selected date and time
   const selectedDateTime = new Date(cell.dataset.date);
   selectedDateTime.setHours(cell.dataset.hour);
   selectedDateTime.setMinutes(0);
@@ -216,7 +212,7 @@ function generateTable(selectedDate) {
   window.selectedDateTime = selectedDateTime;
   console.log("Выбрано:", window.selectedDateTime);
 
-  // Обновляем текст кнопки .count на основе центрального календаря
+  // Update the text of the .count button based on the main calendar
   updateCountButton(selectedDateTime);
 });
 
@@ -229,12 +225,12 @@ function generateTable(selectedDate) {
 }
 function clearCellBackgrounds(cells) {
   cells.forEach(cell => {
-    cell.style.backgroundColor = ''; // Сброс inline-стиля
-    cell.style.backgroundImage = ''; // На случай градиента
+    cell.style.backgroundColor = ''; // Reset inline style
+    cell.style.backgroundImage = ''; // In case of gradient
   });
 }
 
-// Получаем все ячейки календаря
+// Get all calendar cells
 function getCalendarCells() {
   return document.querySelectorAll(
     '.calendar_table .first_dio, .calendar_table .second_dio > div, .time-slots .first_dio, .time-slots .second_dio > div'
@@ -242,14 +238,12 @@ function getCalendarCells() {
 }
 
 // -- time helpers --
-
-// Помощник для сравнения дат (без учета времени)
+// Helper function for date comparison (ignoring time)
 function sameDay(d1, d2) {
   return d1.getFullYear() === d2.getFullYear() &&
          d1.getMonth() === d2.getMonth() &&
          d1.getDate() === d2.getDate();
 }
-
 
 function formatHour(hour) {
   const suffix = hour >= 12 ? "PM" : "AM";
@@ -257,16 +251,14 @@ function formatHour(hour) {
   return `${hour12} ${suffix}`;
 }
 
-
 // -- language --
-
 function translateUI() {
     const t = translations[currentLanguage];
 
     document.querySelectorAll('[data-key]').forEach(el => {
         const key = el.getAttribute('data-key');
         if (t[key]) {
-            // Учитываем, если кнопка содержит вложенные теги (например, иконки)
+            // Account for buttons containing nested tags (e.g., icons)
             if (el.childNodes.length > 1 && el.childNodes[0].nodeType === Node.TEXT_NODE) {
                 el.childNodes[0].nodeValue = t[key] + " ";
             } else {
@@ -274,18 +266,14 @@ function translateUI() {
             }
         }
     });
-
-      // Перевод текста в календаре (use DatePicker state)
+      // Translate text in the calendar (using DatePicker state)
       if (currentSelectedDate) {
         updateDateButton(currentSelectedDate);
       }
-      generateTable(currentSelectedDate); // Обновим дни недели
-
+      generateTable(currentSelectedDate); // Update weekdays
 }
 
-
 // -- theme --
-
 function clearThemeClasses(button) {
   button.classList.remove(
     'bg-blue-700', 'hover:bg-blue-800', 'focus:ring-blue-300',
@@ -296,10 +284,8 @@ function clearThemeClasses(button) {
   );
 }
 
-
 // -- events --
-
-// Переводим сразу при загрузке
+// Apply translation immediately on load
 document.addEventListener('DOMContentLoaded', ()=>{
   translateUI();
 
@@ -308,7 +294,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
       const theme = themeButton.dataset.theme;
       const calendarCells = getCalendarCells();
 
-      // Обновление кнопок
+      // Update buttons
       targetButtons.forEach(button => {
         clearThemeClasses(button);
         button.classList.remove('dark:bg-blue-600', 'dark:hover:bg-blue-700', 'dark:focus:ring-blue-800');
@@ -332,7 +318,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
         }
       });
 
-      // Обновление цвета ячеек календаря
+      // Update calendar cell colors
       clearCellBackgrounds(calendarCells);
 
       calendarCells.forEach((cell, index) => {
@@ -347,13 +333,13 @@ document.addEventListener('DOMContentLoaded', ()=>{
             cell.style.backgroundColor = '#ed8b8bff'; // Tailwind red-500
             break;
           case 'multicolor':
-            // Радуга на ячейках — чередуем цвета
+            // Rainbow effect on cells — alternate colors
             const colors = ['#ed8b8bff', '#f8e07fff', '#66c88aff', '#7eacf6ff', '#b395f8ff']; // розовый, жёлтый, зелёный, синий, фиолетовый
             cell.style.backgroundColor = colors[index % colors.length];
             break;
           case 'blue':
           default:
-            // Ничего не делать — оставить текущий стиль
+            // Do nothing — keep the current style
             break;
         }
       });
@@ -369,8 +355,8 @@ document.getElementById('languageToggle').addEventListener('click', () => {
 });
 
 
-//--button Add--
-// Уникальные переменные для Add-кнопок и форм
+// --button Add--
+// Unique variables for Add buttons and forms
 const uniqueAddButton = document.getElementById("addButton");
 const uniqueAddSearch = document.getElementById("addSearch");
 const uniqueEventModal = document.getElementById("eventModal");
@@ -381,46 +367,46 @@ const uniqueFewEventsForm = document.getElementById("fewEventsForm");
 
 const uniqueAddList = document.getElementById("add-list");
 
-// Хранилище событий для отображения и сортировки
+// Event storage for display and sorting
 const eventDataMap = {}; // { "YYYY-MM-DD_HH": [ "Meeting", "Zoo" ] }
 
-// Показать модальную форму
+// Show modal form
 function openModal(modal) {
   modal.classList.remove("hidden");
 }
 
-// Очистка модальных форм
+// Clear modal forms
 function resetForm(formElement) {
   formElement.reset();
 }
 
-// Обработчик отображения выпадающего меню при клике на Add
+// Handler to display dropdown menu on Add button click
 uniqueAddButton.addEventListener("click", () => {
   uniqueAddSearch.classList.toggle("hidden");
 });
 
-// Функция закрывает все модальные окна
+// Function to close all modal windows
 function closeAllModals() {
   uniqueEventModal.classList.add("hidden");
   uniqueFewEventsModal.classList.add("hidden");
 }
 
-// При выборе Event:
+// When selecting an Event:
 uniqueAddList.querySelector(".event-option").addEventListener("click", () => {
-  closeAllModals();               // закрываем все формы
-  openModal(uniqueEventModal);    // открываем нужную
-  uniqueAddSearch.classList.add("hidden"); // скрываем выпадающее меню
+  closeAllModals();               // close all forms
+  openModal(uniqueEventModal);    // open the required form
+  uniqueAddSearch.classList.add("hidden"); // hide the dropdown menu
 });
 
-// При выборе Few Events:
+// When selecting Few Events:
 uniqueAddList.querySelector(".fewEvents-option").addEventListener("click", () => {
   closeAllModals();
   openModal(uniqueFewEventsModal);
   uniqueAddSearch.classList.add("hidden");
 });
 
-//--modal form Event--
-// Добавление Event
+// --modal form Event--
+// Add Event
 uniqueEventForm.addEventListener("submit", async (e) => {
   e.preventDefault();
 
@@ -447,22 +433,24 @@ uniqueEventForm.addEventListener("submit", async (e) => {
       body: JSON.stringify(payload),
     });
 
-    insertEventIntoCell(window.selectedDateTime, title); // sort = false по умолчанию
+    insertEventIntoCell(window.selectedDateTime, title); // sort = false by default
 
     resetForm(uniqueEventForm);
     closeModal(uniqueEventModal);
   } catch (err) {
     console.error("Failed to send event:", err);
   }*/
-const tags = eventTags.getTags(); // сначала получи теги
+const tags = eventTags.getTags(); // get tags first
 insertEventIntoCell(window.selectedDateTime, { title, description, tags });
-eventTags.resetTags(); // потом очисти
-resetForm(uniqueEventForm); // потом форма
+eventTags.resetTags(); // then clear
+resetForm(uniqueEventForm); // then the form
 closeModal(uniqueEventModal);
 });
-//--modal form Few Events--
-// Добавление Few Events 
-// (с сортировкой по алфавиту при добавлении новых событий)
+
+
+// --modal form Few Events--
+// Adding Few Events
+// (with alphabetical sorting when adding new events)
 
 uniqueFewEventsForm.addEventListener("submit", async (e) => {
   e.preventDefault();
@@ -475,7 +463,7 @@ uniqueFewEventsForm.addEventListener("submit", async (e) => {
   const titles = Array.from(e.target.querySelectorAll('input[name="title[]"]')).map(input => input.value.trim());
   const descriptions = Array.from(e.target.querySelectorAll('textarea[name="description[]"]')).map(textarea => textarea.value.trim());
 
-  const tags = fewEventsTags.getTags(); // сохраняем ОДИН раз
+  const tags = fewEventsTags.getTags(); // save ONLY once
 
 titles.forEach((title, index) => {
   if (title) {
@@ -500,7 +488,7 @@ closeModal(uniqueFewEventsModal);
       body: JSON.stringify(payload),
     });
 
-    insertEventIntoCell(window.selectedDateTime, summary, true); // сортировка включена
+    insertEventIntoCell(window.selectedDateTime, summary, true); // sorting is enabled
 
     resetForm(uniqueFewEventsForm);
     closeModal(uniqueFewEventsModal);
@@ -508,68 +496,68 @@ closeModal(uniqueFewEventsModal);
     console.error("Failed to send few events:", err);
   }*/
 
-// Вставка события в нужную ячейку календаря
-// dateObj — объект даты и времени события
-// event — объект события { title: string, tags: string[] }
-// sort — если true, сортируем события по названию
+// Insert the event into the appropriate calendar cell
+// dateObj — object containing the event's date and time
+// event — event object { title: string, tags: string[] }
+// sort — if true, sort events by title
 function insertEventIntoCell(dateObj, event, sort = false) {
-  const dateStr = dateObj.toISOString().split("T")[0];  // Получаем дату в формате YYYY-MM-DD
-  const hour = dateObj.getHours();                      // Получаем час события (0-23)
-  const key = `${dateStr}_${hour}`;                     // Формируем уникальный ключ для ячейки (дата + час)
+  const dateStr = dateObj.toISOString().split("T")[0];  // Get the date in YYYY-MM-DD format
+  const hour = dateObj.getHours();                      // Get the event hour (0–23)
+  const key = `${dateStr}_${hour}`;                     // Create a unique key for the cell (date + hour)
 
-  // Если для этой ячейки еще нет массива с событиями, создаём пустой массив
+  // If there's no event array for this cell yet, create an empty array
   if (!eventDataMap[key]) {
     eventDataMap[key] = [];
   }
 
-  // Добавляем новое событие (объект с title и tags) в массив
+  // Add the new event (object with title and tags) to the array
   eventDataMap[key].push(event);
 
-  // Если нужно, сортируем массив событий по названию (title)
+  // If needed, sort the event array by title
   if (sort) {
     eventDataMap[key].sort((a, b) => a.title.localeCompare(b.title));
   }
 
-  // Находим DOM-элемент ячейки календаря по дате и часу
+  // Find the calendar cell DOM element by date and hour
   const targetCell = document.querySelector(
     `.split-cell[data-date="${dateStr}"][data-hour="${hour}"]`
   );
 
-  // Если ячейка не найдена, выводим предупреждение и выходим
+  // If the cell is not found, log a warning and exit
   if (!targetCell) {
     console.warn(`⚠️ Calendar cell not found for date: ${dateStr}, hour: ${hour}`);
     return;
   }
 
-  // Очищаем содержимое ячейки перед добавлением новых событий
+  // Clear the cell's content before adding new events
   targetCell.innerHTML = "";
 
-  // Создаем список ul для отображения всех событий в ячейке
+  // Create a <ul> list to display all events in the cell
   const ul = document.createElement("ul");
 
-// Проходим по каждому событию в массиве для данной ячейки
+// Iterate through each event in the array for this cell
 eventDataMap[key].forEach(({ title, description, tags }) => {
-  
-  // Создаем элемент li для события
+
+  // Create an <li> element for the event
   const li = document.createElement("li");
 
-  // Создаем элемент strong для заголовка события и добавляем в li
+  // Create a <strong> element for the event title and append it to the <li>
   const titleElem = document.createElement("strong");
   titleElem.textContent = title;
   li.appendChild(titleElem);
 
-  // Если есть описание, создаем параграф с текстом описания и добавляем в li
+  // If there is a description, create a <p> with the description text and append it to the <li>
   if (description) {
     const descElem = document.createElement("p");
     descElem.textContent = description;
     li.appendChild(descElem);
   }
 
-  // Создаем контейнер для тегов события (как у тебя есть)
+  // Create a container for the event tags 
   const tagsContainer = document.createElement("div");
   tagsContainer.classList.add("tags-container");
 
-  // Для каждого тега создаем span и добавляем в контейнер тегов
+  // For each tag, create a <span> and add it to the tags container
   tags.forEach(tag => {
     const tagElem = document.createElement("span");
     tagElem.classList.add("tag");
@@ -577,17 +565,17 @@ eventDataMap[key].forEach(({ title, description, tags }) => {
     tagsContainer.appendChild(tagElem);
   });
 
-  // Добавляем контейнер тегов в li
+  // Append the tags container to the <li>
   li.appendChild(tagsContainer);
   
-    // Добавляем событие в список ul
+    // Append the event <li> to the <ul> list
     ul.appendChild(li);
   });
 
-  // Вставляем список событий в ячейку календаря
+  // Insert the event list into the calendar cell
   targetCell.appendChild(ul);
 }
-// Закрытие модальных форм при клике на Cancel
+// Close modal forms when clicking Cancel
 function closeModal(modal) {
   modal.classList.add("hidden");
 }
@@ -603,21 +591,16 @@ uniqueFewEventsForm.querySelector('button[type="button"]').addEventListener("cli
 });
 
 
-
-
-
-
-// --- Теги для модальных окон ---
-
-// Функция инициализации тегов для модалки
+// --- Tags for modal windows ---
+// Function to initialize tags for the modal
 function initTagInput(tagsInputId, tagsContainerId) {
   const tagsInput = document.getElementById(tagsInputId);
   const tagsContainer = document.getElementById(tagsContainerId);
 
-  // Массив текущих тегов
+  // Array of current tags
   let tags = [];
 
-  // Функция отрисовки тегов
+  // Function to render tags
   function renderTags() {
     tagsContainer.innerHTML = "";
     tags.forEach((tag, index) => {
@@ -625,7 +608,7 @@ function initTagInput(tagsInputId, tagsContainerId) {
       tagElem.classList.add("tag");
       tagElem.textContent = tag;
 
-      // Кнопка удаления тега
+      // Tag delete button
       const removeBtn = document.createElement("span");
       removeBtn.classList.add("remove-tag");
       removeBtn.textContent = "×";
@@ -639,7 +622,7 @@ function initTagInput(tagsInputId, tagsContainerId) {
     });
   }
 
-  // Обработчик нажатия Enter
+  // Enter key press handler
   tagsInput.addEventListener("keydown", (e) => {
     if (e.key === "Enter") {
       e.preventDefault();
@@ -652,12 +635,12 @@ function initTagInput(tagsInputId, tagsContainerId) {
     }
   });
 
-  // Функция получения тегов
+  // Function to get tags
   function getTags() {
     return tags;
   }
 
-  // Функция сброса тегов
+  /// Function to reset tags
   function resetTags() {
     tags = [];
     renderTags();
@@ -667,11 +650,11 @@ function initTagInput(tagsInputId, tagsContainerId) {
   return { getTags, resetTags };
 }
 
-// --- Инициализация для каждой модалки ---
+// -- Initialization for each modal form --
 const eventTags = initTagInput("tagsInput", "tagsContainer");
 const fewEventsTags = initTagInput("tagsInputFew", "tagsContainerFew");
 
-// --- Добавление тегов в payload при сабмите ---
+// Add tags to the payload on submit
 
 uniqueEventForm.addEventListener("submit", async (e) => {
   e.preventDefault();
@@ -689,17 +672,17 @@ uniqueEventForm.addEventListener("submit", async (e) => {
     description,
     datetime: window.selectedDateTime.toISOString(),
     tags: eventTags.getTags(),
-    // Можно добавить другие поля: guests, location, time range и т.д.
+    // Other fields can be added: guests, location, time range, etc.
   };
 
-  // Ваш существующий код вставки события
+  // Existing event insertion code
   insertEventIntoCell(window.selectedDateTime, {
   title,
   description,
   tags: eventTags.getTags(), 
 });
 
-  // Сброс тегов после отправки
+  // Reset tags after submission
   eventTags.resetTags();
 
   resetForm(uniqueEventForm);
@@ -721,9 +704,9 @@ uniqueFewEventsForm.addEventListener("submit", async (e) => {
     if (title) {
       insertEventIntoCell(window.selectedDateTime, {
         title,
-        description: descriptions[index] || "", // взять описание для соответствующего индекса        
+        description: descriptions[index] || "", // Get description for the corresponding index      
         tags: fewEventsTags.getTags(),
-      }, true); // сортировка включена
+      }, true); // Sorting enabled
     }
   });
 
@@ -732,7 +715,7 @@ uniqueFewEventsForm.addEventListener("submit", async (e) => {
   closeModal(uniqueFewEventsModal);
 });
 
-// --- Сброс тегов при закрытии модалки по Cancel ---
+// Reset tags when closing the modal via Cancel
 uniqueEventForm.querySelector('button[type="button"]').addEventListener("click", () => {
   eventTags.resetTags();
   resetForm(uniqueEventForm);
@@ -745,16 +728,14 @@ uniqueFewEventsForm.querySelector('button[type="button"]').addEventListener("cli
   closeModal(uniqueFewEventsModal);
 });
 
-//Сохранение сразу, при нажатии "Add another event"(чтобы каждое событие сохранялось при его добавлении
-
-
+// Save immediately when clicking "Add another event" (to save each event upon addition)
 function addEventBlockAndSaveCurrent() {
   const titles = Array.from(document.querySelectorAll('input[name="title[]"]')).map(input => input.value.trim());
   const descriptions = Array.from(document.querySelectorAll('textarea[name="description[]"]')).map(textarea => textarea.value.trim());
 
-  const tags = fewEventsTags.getTags(); // ✅ теги получаем один раз здесь
+  const tags = fewEventsTags.getTags(); // Get tags once here
 
-  // Сохраняем последнее заполненное событие
+  // Save the last filled event
     const lastIndex = titles.length - 1;
   const title = titles[lastIndex];
   const description = descriptions[lastIndex];
@@ -763,16 +744,16 @@ function addEventBlockAndSaveCurrent() {
     insertEventIntoCell(window.selectedDateTime, {
       title,
       description,
-      tags, // ✅ вставляем теги
+      tags, // Insert tags
     }, true);
   }
 
-  // Добавляем новый блок
+  // Add a new block
   addEventBlock();
 }
 
 
-//--button weeklyViewButton--
+// --button weeklyViewButton--
 // Correct logic for the weeklyViewButton:
 // When selecting a corresponding item from the dropdown menu (First week, Second week, etc.),
 // a specific week should be displayed, starting from Monday and ending on Sunday.
@@ -918,14 +899,14 @@ const buttonLeft = document.querySelector(".button_left");
 const buttonRight = document.querySelector(".button_right");
 
 buttonLeft.addEventListener("click", () => { 
-  // Если currentSelectedDate не определена, взять сегодняшнюю дату 
+  // If currentSelectedDate is undefined, use today's date
 if (!currentSelectedDate) {
    currentSelectedDate = new Date(); 
   } 
   currentSelectedDate.setDate(currentSelectedDate.getDate() - 1);
-   // Синхронизируем глобальную дату 
+   // Synchronize the global date
    window.selectedDateTime = new Date(currentSelectedDate); 
-   // Обновляем UI
+   // Update the UI
     generateTable(currentSelectedDate); 
     updateCountButton(currentSelectedDate); 
     updateDateButton(currentSelectedDate); 
