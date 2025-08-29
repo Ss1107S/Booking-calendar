@@ -49,6 +49,7 @@ const months = [
   "January", "February", "March", "April", "May", "June",
   "July", "August", "September", "October", "November", "December"
 ];
+
 // -- persisted --
 let currentLanguage = localStorage.getItem('language') || 'en';
 
@@ -185,40 +186,58 @@ function generateTable(selectedDate) {
     const secondDio = document.createElement("div");
     secondDio.className = "second_dio";
 
-    days.forEach((day) => {
-      const cell = document.createElement("div");
-      cell.className = "split-cell";
 
-      // Save date and hour in data attributes
-      const dateString = day.toISOString().split("T")[0]; // YYYY-MM-DD
-      cell.dataset.date = dateString;
-      cell.dataset.hour = hour;
+let selectedCell = null; // Объяви в области видимости generateTable или выше
 
-      // Click handler for the cell
-      cell.addEventListener("click", () => {
-  if (selectedCell) {
-    selectedCell.style.backgroundColor = ""; // Remove highlight
+days.forEach((day) => {
+  const cell = document.createElement("div");
+  cell.className = "split-cell";
+
+  // Save date and hour as data attributes
+  const dateString = day.toISOString().split("T")[0]; // Format: YYYY-MM-DD
+  cell.dataset.date = dateString;
+  cell.dataset.hour = hour;
+
+  // Restore highlight if this slot was previously selected
+  const savedSelections = loadSelectedCells();
+  const isSelected = savedSelections.some(sel =>
+    sel.date === dateString && sel.hour === hour
+  );
+  if (isSelected) {
+    cell.style.backgroundColor = "#dbeafe"; // Highlight selected slot
+    selectedCell = cell; // Remember current selected cell
   }
 
-  selectedCell = cell;
-  cell.style.backgroundColor = "#dbeafe"; // Selection (blue background)
+  // Click event handler for the cell
+  cell.addEventListener("click", () => {
+    if (selectedCell) {
+      selectedCell.style.backgroundColor = ""; // Remove highlight from previous selection
+    }
+    selectedCell = cell;
+    cell.style.backgroundColor = "#dbeafe"; // Highlight the currently selected cell
 
-  // Save the selected date and time
-  const selectedDateTime = new Date(cell.dataset.date);
-  selectedDateTime.setHours(cell.dataset.hour);
-  selectedDateTime.setMinutes(0);
-  selectedDateTime.setSeconds(0);
+    // Create a Date object for the selected slot
+    const selectedDateTime = new Date(cell.dataset.date);
+    selectedDateTime.setHours(parseInt(cell.dataset.hour));
+    selectedDateTime.setMinutes(0);
+    selectedDateTime.setSeconds(0);
 
-  window.selectedDateTime = selectedDateTime;
-  console.log("Выбрано:", window.selectedDateTime);
+    // Save the selected date/time globally
+    window.selectedDateTime = selectedDateTime;
+    console.log("Selected:", window.selectedDateTime);
 
-  // Update the text of the .count button based on the main calendar
-  updateCountButton(selectedDateTime);
+    // Save the selection to localStorage
+    saveSelectedCell(cell.dataset.date, parseInt(cell.dataset.hour));
+
+    // Update the .count button or other UI elements accordingly
+    updateCountButton(selectedDateTime);
+  });
+
+  secondDio.appendChild(cell);
 });
 
-      secondDio.appendChild(cell);
-    });
 
+// Add row to timeSlotsContainer
     row.appendChild(secondDio);
     timeSlotsContainer.appendChild(row);
   }
@@ -921,3 +940,42 @@ if (!currentSelectedDate) {
    updateCountButton(currentSelectedDate); 
    updateDateButton(currentSelectedDate); });
    
+
+   //функции для работы с localStorage
+
+/**
+ * Сохраняет выбранный слот (дата + час) в localStorage
+ * @param {string} dateString — формат YYYY‑MM‑DD
+ * @param {number} hour — час диапазона
+ */
+function saveSelectedCell(dateString, hour, text = "") {
+  try {
+    // Retrieve the existing 'selectedCells' array from localStorage, or initialize an empty array if not found.
+    const saved = JSON.parse(localStorage.getItem('selectedCells')) || [];
+
+    // Create a new array by updating the matching cell's text, or keeping the existing ones unchanged.
+    const updated = saved.map(item =>
+      item.date === dateString && item.hour === hour
+        ? { ...item, text }  // Update the text for the matching cell
+        : item              // Keep the existing item unchanged
+    );
+
+    // Check if the specified cell was not found and updated; if not, add a new entry.
+    if (!updated.some(item => item.date === dateString && item.hour === hour)) {
+      updated.push({ date: dateString, hour, text });
+    }
+
+    // Store the updated array back into localStorage under the 'selectedCells' key.
+    localStorage.setItem('selectedCells', JSON.stringify(updated));
+  } catch (error) {
+    // Log any errors that occur during the process.
+    console.error('Error saving to localStorage:', error);
+  }
+}
+/**
+ * Загружает сохранённые слоты из localStorage
+ * @returns {Array<{date: string, hour: number}>}
+ */
+function loadSelectedCells() {
+  return JSON.parse(localStorage.getItem('selectedCells')) || [];
+}
