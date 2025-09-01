@@ -187,7 +187,7 @@ function generateTable(selectedDate) {
     secondDio.className = "second_dio";
 
 
-let selectedCell = null; // Объяви в области видимости generateTable или выше
+let selectedCell = null; 
 
 days.forEach((day) => {
   const cell = document.createElement("div");
@@ -940,6 +940,69 @@ if (!currentSelectedDate) {
    updateCountButton(currentSelectedDate); 
    updateDateButton(currentSelectedDate); });
    
+
+
+// -- Unique elements for Cancel --
+function openModal(modalElement) {
+  modalElement.classList.remove('hidden');
+}
+
+function closeModal(modalElement) {
+  modalElement.classList.add('hidden');
+}
+// Получаем элементы
+const manageButton = document.getElementById("manageButton");
+const manageSearch = document.getElementById("manageSearch");
+const cancelModal = document.getElementById("cancelModal");
+const confirmCancelButton = document.getElementById("confirmCancelButton");
+const declineCancelButton = document.getElementById("declineCancelButton");
+const cancelModifyOption = manageSearch.querySelector(".modify-option");
+
+// Обработчик клика на пункт Cancel в меню Manage
+cancelModifyOption.addEventListener("click", () => {
+  // Ищем выделенную ячейку по inline стилю background-color
+  const cancelSelectedCell = document.querySelector('.split-cell[style*="background-color: rgb(219, 234, 254)"], .split-cell[style*="background-color: #dbeafe"]');
+
+  if (!cancelSelectedCell) {
+    alert("Please select a calendar cell first.");
+    return;
+  }
+
+  openModal(cancelModal);
+  manageSearch.classList.add("hidden");
+
+  // Подтверждение удаления
+  confirmCancelButton.onclick = () => {
+    cancelSelectedCell.textContent = "";
+
+    const date = cancelSelectedCell.dataset.date;
+    const hour = parseInt(cancelSelectedCell.dataset.hour);
+
+    const key = `${date}_${hour}`;
+    if (eventDataMap[key]) {
+      delete eventDataMap[key];
+    }
+
+    closeModal(cancelModal);
+  };
+
+  // Отмена удаления
+  declineCancelButton.onclick = () => {
+    closeModal(cancelModal);
+  };
+});
+  // Можно обновить localStorage, если используется
+
+  closeModal(cancelModal);
+
+
+// Отмена удаления
+declineCancelButton.addEventListener("click", () => {
+  closeModal(cancelModal);
+});
+
+
+
 
    //функции для работы с localStorage
 
