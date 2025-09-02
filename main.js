@@ -1036,46 +1036,35 @@ function removeSelectedCell(dateString, hour) {
 // Button Update
 // Немедленно вызываемая функция для настройки кнопки обновления
 (function setupUpdateButton() {
-  // Получаем кнопку по её id
-  const updateButton = document.getElementById('updatePageBtn');
-  
-  // Если кнопка не найдена, прекращаем выполнение
-  if (!updateButton) return;
+    const updateButton = document.getElementById('updatePageBtn');
+    if (!updateButton) return;
 
-  // Добавляем обработчик события клика на кнопку
-  updateButton.addEventListener('click', () => {
-    // При клике просто перезагружаем страницу
-    // localStorage при этом сохраняется автоматически
-    location.reload();
+    // Обработчик клика по кнопке
+    updateButton.addEventListener('click', () => {
+      // Восстанавливаем содержимое ячеек из localStorage
+      restoreSelectedCellsOnLoad();
+    });
+  })();
+
+  // Функция восстановления данных из localStorage
+  function restoreSelectedCellsOnLoad() {
+    const selectedCells = loadSelectedCells();
+
+    selectedCells.forEach(({ date, hour, text }) => {
+      const cell = document.querySelector(`[data-date="${date}"][data-hour="${hour}"]`);
+      if (cell) {
+        cell.textContent = text || ''; // Восстанавливаем текстовое содержимое ячейки
+        cell.classList.add('selected'); // Добавляем класс для подсветки
+      }
+    });
+  }
+
+  // Вызов после генерации таблицы
+  document.addEventListener('DOMContentLoaded', () => {
+    const today = new Date();
+    generateTable(today);            // сначала генерируем ячейки
+    restoreSelectedCellsOnLoad();    // потом восстанавливаем содержимое
   });
-})();
-
-// Функция для восстановления данных из localStorage в ячейки расписания
-function restoreSelectedCellsOnLoad() {
-  // Загружаем сохранённые данные (массив объектов с date, hour и text)
-  const selectedCells = loadSelectedCells();
-
-  // Проходим по каждому сохранённому элементу
-  selectedCells.forEach(({ date, hour, text }) => {
-    // Ищем на странице ячейку с нужными data-date и data-hour
-    const cell = document.querySelector(`[data-date="${date}"][data-hour="${hour}"]`);
-    
-    // Если ячейка найдена — восстанавливаем её содержимое и стили
-    if (cell) {
-      cell.textContent = text || '';         // Вставляем сохранённый текст (или пустую строку)
-      cell.classList.add('selected');        // Добавляем класс для выделения выбранной ячейки
-    }
-  });
-}
-
-// Ждём, пока загрузится DOM-дерево страницы
-document.addEventListener('DOMContentLoaded', () => {
-  const today = new Date();     // Получаем текущую дату
-  
-  generateTable(today);         // Генерируем таблицу с ячейками расписания на сегодня
-  restoreSelectedCellsOnLoad(); // Восстанавливаем содержимое ячеек из localStorage
-});
-
 
 
 
@@ -1084,38 +1073,60 @@ document.addEventListener('DOMContentLoaded', () => {
    //функции для работы с localStorage
 
 /**
- * Сохраняет выбранный слот (дата + час) в localStorage
- * @param {string} dateString — формат YYYY‑MM‑DD
+ * Сохраняет выбранную ячейку (дата + час) и её содержимое в localStorage.
+ * Если ячейка уже существует, обновляет её содержимое.
+ * Если нет — добавляет новую запись.
+ * 
+/**
+ * Сохраняет выбранную ячейку (дата + час) и её текстовое содержимое в localStorage
+ * @param {string} dateString — дата в формате YYYY-MM-DD
  * @param {number} hour — час диапазона
+ * @param {string} text — текстовое содержимое ячейки
  */
 function saveSelectedCell(dateString, hour, text = "") {
   try {
-    // Retrieve the existing 'selectedCells' array from localStorage, or initialize an empty array if not found.
+    // Загружаем существующие сохранённые ячейки
     const saved = JSON.parse(localStorage.getItem('selectedCells')) || [];
 
-    // Create a new array by updating the matching cell's text, or keeping the existing ones unchanged.
-    const updated = saved.map(item =>
-      item.date === dateString && item.hour === hour
-        ? { ...item, text }  // Update the text for the matching cell
-        : item              // Keep the existing item unchanged
-    );
+    // Обновляем или добавляем новую ячейку
+    const updated = saved.filter(item => !(item.date === dateString && item.hour === hour));
+    updated.push({ date: dateString, hour, text });
 
-    // Check if the specified cell was not found and updated; if not, add a new entry.
-    if (!updated.some(item => item.date === dateString && item.hour === hour)) {
-      updated.push({ date: dateString, hour, text });
-    }
-
-    // Store the updated array back into localStorage under the 'selectedCells' key.
+    // Сохраняем обновлённый список в localStorage
     localStorage.setItem('selectedCells', JSON.stringify(updated));
   } catch (error) {
-    // Log any errors that occur during the process.
-    console.error('Error saving to localStorage:', error);
+    console.error('Ошибка при сохранении в localStorage:', error);
   }
+}
+
+/**
+ * Восстанавливает сохранённые ячейки из localStorage
+ */
+function restoreSelectedCellsOnLoad() {
+  const selectedCells = loadSelectedCells();
+
+  selectedCells.forEach(({ date, hour, text }) => {
+    const cell = document.querySelector(`[data-date="${date}"][data-hour="${hour}"]`);
+    if (cell) {
+      cell.textContent = text || ''; // Восстанавливаем текстовое содержимое ячейки
+      cell.classList.add('selected'); // Добавляем класс для подсветки
+    }
+  });
 }
 /**
  * Загружает сохранённые слоты из localStorage
  * @returns {Array<{date: string, hour: number}>}
  */
 function loadSelectedCells() {
-  return JSON.parse(localStorage.getItem('selectedCells')) || [];
+  try {
+    const saved = JSON.parse(localStorage.getItem('selectedCells'));
+    if (Array.isArray(saved)) {
+      return saved;
+    } else {
+      return [];
+    }
+  } catch (error) {
+    console.error('Error loading from localStorage:', error);
+    return [];
+  }
 }
