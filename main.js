@@ -960,48 +960,75 @@ const cancelModifyOption = manageSearch.querySelector(".modify-option");
 
 // Обработчик клика на пункт Cancel в меню Manage
 cancelModifyOption.addEventListener("click", () => {
-  // Ищем выделенную ячейку по inline стилю background-color
-  const cancelSelectedCell = document.querySelector('.split-cell[style*="background-color: rgb(219, 234, 254)"], .split-cell[style*="background-color: #dbeafe"]');
 
-  if (!cancelSelectedCell) {
-    alert("Please select a calendar cell first.");
-    return;
-  }
+// Ищем ячейку календаря, у которой дата и час соответствуют выбранным
+// Проверяем, выбран ли временной слот (дата и час)
+// Это глобальная переменная, устанавливаемая при клике на ячейку календаря
+if (!window.selectedDateTime) {
+  alert("Please select a time slot first."); // Если нет — показываем сообщение
+  return; // Прерываем выполнение
+}
+
+// Получаем строку даты в формате YYYY-MM-DD из выбранной даты и времени
+const dateStr = window.selectedDateTime.toISOString().split("T")[0];
+
+// Получаем час (0–23) из выбранной даты и времени
+const hour = window.selectedDateTime.getHours();
+
+// Ищем ячейку календаря, у которой дата и час соответствуют выбранным
+const cancelSelectedCell = document.querySelector(
+  `.split-cell[data-date="${dateStr}"][data-hour="${hour}"]`
+);
+
+// Если такая ячейка не найдена — предупреждаем пользователя
+if (!cancelSelectedCell) {
+  alert("Please select a time slot first.");
+  return;
+}
 
   openModal(cancelModal);
   manageSearch.classList.add("hidden");
 
-  // Подтверждение удаления
-  confirmCancelButton.onclick = () => {
-    cancelSelectedCell.textContent = "";
+  // Подтверждение удаления через обработчик confirmCancelButton.onclick
 
-    const date = cancelSelectedCell.dataset.date;
-    const hour = parseInt(cancelSelectedCell.dataset.hour);
+confirmCancelButton.onclick = () => {
+  cancelSelectedCell.textContent = "";
 
-    const key = `${date}_${hour}`;
-    if (eventDataMap[key]) {
-      delete eventDataMap[key];
-    }
+  const date = cancelSelectedCell.dataset.date;
+  const hour = parseInt(cancelSelectedCell.dataset.hour);
 
-    closeModal(cancelModal);
-  };
+  const key = `${date}_${hour}`;
 
+  // Удаляем из eventDataMap
+  if (eventDataMap[key]) {
+    delete eventDataMap[key];
+  }
+
+  // Удаляем из localStorage
+  removeSelectedCell(date, hour);
+
+  closeModal(cancelModal);
+};
   // Отмена удаления
   declineCancelButton.onclick = () => {
     closeModal(cancelModal);
   };
 });
-  // Можно обновить localStorage, если используется
-
-  closeModal(cancelModal);
-
-
-// Отмена удаления
-declineCancelButton.addEventListener("click", () => {
-  closeModal(cancelModal);
-});
-
-
+  // Обновление localStorage
+/**
+ * Удаляет слот (по дате и часу) из localStorage
+ * @param {string} dateString — формат YYYY‑MM‑DD
+ * @param {number} hour — час
+ */
+function removeSelectedCell(dateString, hour) {
+  try {
+    const saved = JSON.parse(localStorage.getItem('selectedCells')) || [];
+    const updated = saved.filter(item => !(item.date === dateString && item.hour === hour));
+    localStorage.setItem('selectedCells', JSON.stringify(updated));
+  } catch (error) {
+    console.error('Error removing from localStorage:', error);
+  }
+}
 
 
    //функции для работы с localStorage
