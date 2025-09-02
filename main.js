@@ -1031,6 +1031,56 @@ function removeSelectedCell(dateString, hour) {
 }
 
 
+
+
+// Button Update
+// Немедленно вызываемая функция для настройки кнопки обновления
+(function setupUpdateButton() {
+  // Получаем кнопку по её id
+  const updateButton = document.getElementById('updatePageBtn');
+  
+  // Если кнопка не найдена, прекращаем выполнение
+  if (!updateButton) return;
+
+  // Добавляем обработчик события клика на кнопку
+  updateButton.addEventListener('click', () => {
+    // При клике просто перезагружаем страницу
+    // localStorage при этом сохраняется автоматически
+    location.reload();
+  });
+})();
+
+// Функция для восстановления данных из localStorage в ячейки расписания
+function restoreSelectedCellsOnLoad() {
+  // Загружаем сохранённые данные (массив объектов с date, hour и text)
+  const selectedCells = loadSelectedCells();
+
+  // Проходим по каждому сохранённому элементу
+  selectedCells.forEach(({ date, hour, text }) => {
+    // Ищем на странице ячейку с нужными data-date и data-hour
+    const cell = document.querySelector(`[data-date="${date}"][data-hour="${hour}"]`);
+    
+    // Если ячейка найдена — восстанавливаем её содержимое и стили
+    if (cell) {
+      cell.textContent = text || '';         // Вставляем сохранённый текст (или пустую строку)
+      cell.classList.add('selected');        // Добавляем класс для выделения выбранной ячейки
+    }
+  });
+}
+
+// Ждём, пока загрузится DOM-дерево страницы
+document.addEventListener('DOMContentLoaded', () => {
+  const today = new Date();     // Получаем текущую дату
+  
+  generateTable(today);         // Генерируем таблицу с ячейками расписания на сегодня
+  restoreSelectedCellsOnLoad(); // Восстанавливаем содержимое ячеек из localStorage
+});
+
+
+
+
+
+
    //функции для работы с localStorage
 
 /**
