@@ -50,6 +50,10 @@ header .list {
     font-weight: 900;
 }
 
+.selected {
+  background-color: #dbeafe !important;
+}
+
 .list .dots::before{
     content: "\f141";
     vertical-align: middle;
@@ -397,13 +401,7 @@ svg{
 }
 
 .split-cell::before {
-  content: "";
-  position: absolute;
-  top: 50%;
-  left: 0;
-  width: 100%;
-  height: 0;
-  border-top: 1px solid #ccc;
+  content: none;
 }
 
 .right_part{
