@@ -88,7 +88,7 @@
                                     Modify
                                     </li>
                                     <li class="modify-option py-2 px-3 w-full text-left bg-yellow-100 hover:bg-yellow-200 rounded cursor-pointer">
-                                    Cancel
+                                    Delete
                                     </li>
                                 </ul>
                             </div>
@@ -151,15 +151,15 @@
         </div>
     </header>
 
-    <!-- Modal for Cancel Confirmation -->
-    <div id="cancelModal" class="modal hidden">
+    <!-- Modal for Delete Confirmation -->
+    <div id="deleteModal" class="modal hidden">
     <div class="modal-content">
-        <h2 class="modalHeader">Remove all events.</h2>
-        <p>Are you sure you want to remove all events from the selected time slot?</p>
+        <h2 class="modalHeader">Delete all events.</h2>
+        <p>Are you sure you want to delete all events from the selected time slot?</p>
         
         <div class="modalButton">
-        <button id="confirmCancelButton" class="hover:bg-red-600">Yes, remove</button>
-        <button id="declineCancelButton" class="hover:bg-gray-600">No</button>
+        <button id="confirmDeleteButton" class="hover:bg-red-600">Yes, delete</button>
+        <button id="declineDeleteButton" class="hover:bg-gray-600">No</button>
         </div>
     </div>
     </div>

@@ -925,7 +925,7 @@ if (!currentSelectedDate) {
    
 
 
-// -- Unique elements for Cancel --
+// -- Unique elements for Delete --
 function openModal(modalElement) {
   modalElement.classList.remove('hidden');
 }
@@ -936,13 +936,13 @@ function closeModal(modalElement) {
 // Получаем элементы
 const manageButton = document.getElementById("manageButton");
 const manageSearch = document.getElementById("manageSearch");
-const cancelModal = document.getElementById("cancelModal");
-const confirmCancelButton = document.getElementById("confirmCancelButton");
-const declineCancelButton = document.getElementById("declineCancelButton");
-const cancelModifyOption = manageSearch.querySelector(".modify-option");
+const deleteModal = document.getElementById("deleteModal");
+const confirmDeleteButton = document.getElementById("confirmDeleteButton");
+const declineDeleteButton = document.getElementById("declineDeleteButton");
+const deleteModifyOption = manageSearch.querySelector(".modify-option");
 
-// Обработчик клика на пункт Cancel в меню Manage
-cancelModifyOption.addEventListener("click", () => {
+// Обработчик клика на пункт Delete в меню Manage
+deleteModifyOption.addEventListener("click", () => {
 
 // Ищем ячейку календаря, у которой дата и час соответствуют выбранным
 // Проверяем, выбран ли временной слот (дата и час)
@@ -959,26 +959,26 @@ const dateStr = window.selectedDateTime.toISOString().split("T")[0];
 const hour = window.selectedDateTime.getHours();
 
 // Ищем ячейку календаря, у которой дата и час соответствуют выбранным
-const cancelSelectedCell = document.querySelector(
+const deleteSelectedCell = document.querySelector(
   `.split-cell[data-date="${dateStr}"][data-hour="${hour}"]`
 );
 
 // Если такая ячейка не найдена — предупреждаем пользователя
-if (!cancelSelectedCell) {
+if (!deleteSelectedCell) {
   alert("Please select a time slot first.");
   return;
 }
 
-  openModal(cancelModal);
+  openModal(deleteModal);
   manageSearch.classList.add("hidden");
 
-  // Подтверждение удаления через обработчик confirmCancelButton.onclick
+  // Подтверждение удаления через обработчик confirmDeleteButton.onclick
 
-confirmCancelButton.onclick = () => {
-  cancelSelectedCell.textContent = "";
+confirmDeleteButton.onclick = () => {
+  deleteSelectedCell.textContent = "";
 
-  const date = cancelSelectedCell.dataset.date;
-  const hour = parseInt(cancelSelectedCell.dataset.hour);
+  const date = deleteSelectedCell.dataset.date;
+  const hour = parseInt(deleteSelectedCell.dataset.hour);
 
   const key = `${date}_${hour}`;
 
@@ -990,11 +990,11 @@ confirmCancelButton.onclick = () => {
   // Удаляем из localStorage
   removeSelectedCell(date, hour);
 
-  closeModal(cancelModal);
+  closeModal(deleteModal);
 };
   // Отмена удаления
   declineCancelButton.onclick = () => {
-    closeModal(cancelModal);
+    closeModal(deleteModal);
   };
 });
   // Обновление localStorage
