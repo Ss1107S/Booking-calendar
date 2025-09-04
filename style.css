@@ -118,7 +118,7 @@ header .right{
   margin-top: 5%;
 }
 
-.title, .description, .details{
+.title, .description, .details, #tagsInput, #tagsInputFew{
   margin-top: 10%;
   width: 100%;
 }
