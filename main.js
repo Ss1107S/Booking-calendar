@@ -227,7 +227,7 @@ days.forEach((day) => {
     console.log("Selected:", window.selectedDateTime);
 
     // Save the selection to localStorage
-    saveSelectedCell(cell.dataset.date, parseInt(cell.dataset.hour));
+  saveSelectedCell(cell.dataset.date, parseInt(cell.dataset.hour));
 
     // Update the .count button or other UI elements accordingly
     updateCountButton(selectedDateTime);
@@ -401,6 +401,10 @@ function resetForm(formElement) {
 
 // Handler to display dropdown menu on Add button click
 uniqueAddButton.addEventListener("click", () => {
+  if (!window.selectedDateTime) {
+    alert("Please select a time slot first.");
+    return; // Не показываем меню, если нет выбора
+  }
   uniqueAddSearch.classList.toggle("hidden");
 });
 
@@ -431,12 +435,6 @@ uniqueEventForm.addEventListener("submit", async (e) => {
 
   const title = e.target.title.value.trim();
   const description = e.target.description.value.trim();
-
-  if (!window.selectedDateTime) {
-    alert("Please select a time slot first.");
-    return;
-  }
-
   const payload = {
     title,
     description,
@@ -474,14 +472,8 @@ closeModal(uniqueEventModal);
 uniqueFewEventsForm.addEventListener("submit", async (e) => {
   e.preventDefault();
 
-  if (!window.selectedDateTime) {
-    alert("Please select a time slot first.");
-    return;
-  }
-
   const titles = Array.from(e.target.querySelectorAll('input[name="title[]"]')).map(input => input.value.trim());
   const descriptions = Array.from(e.target.querySelectorAll('textarea[name="description[]"]')).map(textarea => textarea.value.trim());
-
   const tags = fewEventsTags.getTags(); // save ONLY once
 
 titles.forEach((title, index) => {
@@ -1067,10 +1059,7 @@ function removeSelectedCell(dateString, hour) {
   });
 
 
-
-
-
-   //функции для работы с localStorage
+//функции для работы с localStorage
 
 /**
  * Сохраняет выбранную ячейку (дата + час) и её содержимое в localStorage.
