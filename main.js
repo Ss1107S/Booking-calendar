@@ -210,28 +210,29 @@ days.forEach((day) => {
 
   // Click event handler for the cell
   cell.addEventListener("click", () => {
-    if (selectedCell) {
-      selectedCell.style.backgroundColor = ""; // Remove highlight from previous selection
-    }
-    selectedCell = cell;
-    cell.style.backgroundColor = "#dbeafe"; // Highlight the currently selected cell
+    const date = cell.dataset.date;
+    const hour = parseInt(cell.dataset.hour);
 
-    // Create a Date object for the selected slot
-    const selectedDateTime = new Date(cell.dataset.date);
-    selectedDateTime.setHours(parseInt(cell.dataset.hour));
-    selectedDateTime.setMinutes(0);
-    selectedDateTime.setSeconds(0);
+    document.querySelectorAll(".split-cell.selected").forEach(c => { // clear ALL from DOM
+      c.classList.remove("selected");
+      c.style.backgroundColor = "";
+      c.textContent = "";
+    });
 
-    // Save the selected date/time globally
+    localStorage.removeItem("selectedCells"); // clear ALL from localStorage
+
+    // -- mark clicked one
+    cell.classList.add("selected");
+    cell.style.backgroundColor = "#dbeafe";
+
+    const selectedDateTime = new Date(date);
+    selectedDateTime.setHours(hour, 0, 0, 0);
     window.selectedDateTime = selectedDateTime;
-    console.log("Selected:", window.selectedDateTime);
 
-    // Save the selection to localStorage
-  saveSelectedCell(cell.dataset.date, parseInt(cell.dataset.hour));
-
-    // Update the .count button or other UI elements accordingly
+    saveSelectedCell(date, hour, cell.textContent || "");
     updateCountButton(selectedDateTime);
   });
+
 
   secondDio.appendChild(cell);
 });
@@ -456,12 +457,15 @@ uniqueEventForm.addEventListener("submit", async (e) => {
     closeModal(uniqueEventModal);
   } catch (err) {
     console.error("Failed to send event:", err);
+    
   }*/
 const tags = eventTags.getTags(); // get tags first
 insertEventIntoCell(window.selectedDateTime, { title, description, tags });
 eventTags.resetTags(); // then clear
 resetForm(uniqueEventForm); // then the form
 closeModal(uniqueEventModal);
+// Сохраняем изменения в localStorage после добавления всех событий
+saveEventsToLocalStorage();
 });
 
 
@@ -489,6 +493,8 @@ titles.forEach((title, index) => {
 fewEventsTags.resetTags();
 resetForm(uniqueFewEventsForm);
 closeModal(uniqueFewEventsModal);
+// Сохраняем изменения в localStorage после добавления всех событий
+saveEventsToLocalStorage();
 });
   /*try {
     await fetch("http://localhost:3000/events", {
@@ -545,7 +551,7 @@ function insertEventIntoCell(dateObj, event, sort = false) {
 
   // Create a <ul> list to display all events in the cell
   const ul = document.createElement("ul");
-
+  
 // Iterate through each event in the array for this cell
 eventDataMap[key].forEach(({ title, description, tags }) => {
 
@@ -585,6 +591,9 @@ eventDataMap[key].forEach(({ title, description, tags }) => {
 
   // Insert the event list into the calendar cell
   targetCell.appendChild(ul);
+
+  // Сохраняем события в localStorage после обновления
+  saveEventsToLocalStorage();
 }
 // Close modal forms when clicking Cancel
 function closeModal(modal) {
@@ -694,6 +703,9 @@ uniqueEventForm.addEventListener("submit", async (e) => {
 
   resetForm(uniqueEventForm);
   closeModal(uniqueEventModal);
+  
+  // Сохраняем события в localStorage после обновления
+  saveEventsToLocalStorage();
 });
 
 uniqueFewEventsForm.addEventListener("submit", async (e) => {
@@ -715,6 +727,9 @@ uniqueFewEventsForm.addEventListener("submit", async (e) => {
   //fewEventsTags.resetTags();
   resetForm(uniqueFewEventsForm);
   closeModal(uniqueFewEventsModal);
+  
+  // Сохраняем события в localStorage после обновления
+  saveEventsToLocalStorage();
 });
 
 // Reset tags when closing the modal via Cancel
@@ -847,23 +862,34 @@ function generateWeeklyTable(startDate) {
       cell.dataset.hour = hour;
 
       // Cell selection handler
-      cell.addEventListener("click", () => {
-        if (selectedCell) {
-          selectedCell.style.backgroundColor = "";
-        }
+    cell.addEventListener("click", () => {
+    const date = cell.dataset.date;
+    const hour = parseInt(cell.dataset.hour);
 
-        selectedCell = cell;
-        cell.style.backgroundColor = "#dbeafe";
+    // Удалить все предыдущие выделения из DOM
+    document.querySelectorAll(".split-cell.selected").forEach(c => {
+      c.classList.remove("selected");
+      c.style.backgroundColor = "";
+      c.textContent = "";
+    });
 
-        const selectedDateTime = new Date(cell.dataset.date);
-        selectedDateTime.setHours(cell.dataset.hour);
-        selectedDateTime.setMinutes(0);
-        selectedDateTime.setSeconds(0);
+    // Очистить localStorage от предыдущих выбранных ячеек
+    localStorage.removeItem("selectedCells");
 
-        window.selectedDateTime = selectedDateTime;
-        updateCountButton(selectedDateTime);
-      });
+    // Выделить текущую ячейку
+    cell.classList.add("selected");
+    cell.style.backgroundColor = "#dbeafe";
 
+    const selectedDateTime = new Date(date);
+    selectedDateTime.setHours(hour, 0, 0, 0);
+    window.selectedDateTime = selectedDateTime;
+
+    // Сохранить выбранную ячейку
+    saveSelectedCell(date, hour, cell.textContent || "");
+
+    // Обновить кнопку .count
+    updateCountButton(selectedDateTime);
+  });
       secondDio.appendChild(cell);
     });
 
@@ -1110,3 +1136,39 @@ function loadSelectedCells() {
     return [];
   }
 }
+
+//Функции для сохранения/загрузки eventDataMap в localStorage
+function saveEventsToLocalStorage() {
+  try {
+    localStorage.setItem('eventDataMap', JSON.stringify(eventDataMap));
+  } catch (error) {
+    console.error('Ошибка сохранения событий в localStorage:', error);
+  }
+}
+
+function loadEventsFromLocalStorage() {
+  try {
+    const data = localStorage.getItem('eventDataMap');
+    if (data) {
+      const parsed = JSON.parse(data);
+      Object.keys(parsed).forEach(key => {
+        eventDataMap[key] = parsed[key];
+      });
+
+      // Обновить отображение
+      Object.entries(eventDataMap).forEach(([key, events]) => {
+        const [date, hour] = key.split('_');
+        const dateObj = new Date(`${date}T${hour.padStart(2, '0')}:00:00`);
+        events.forEach(event => insertEventIntoCell(dateObj, event));
+      });
+    }
+  } catch (error) {
+    console.error('Ошибка загрузки событий из localStorage:', error);
+  }
+}
+document.addEventListener('DOMContentLoaded', () => {
+  const today = new Date();
+  generateTable(today);
+  restoreSelectedCellsOnLoad();  // текст ячеек
+  loadEventsFromLocalStorage();  // восстанавливаем события
+});
