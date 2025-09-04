@@ -950,8 +950,7 @@ if (!currentSelectedDate) {
    updateDateButton(currentSelectedDate); });
    
 
-
-// -- Unique elements for Delete --
+// -- Unique elements for Delete functionality --
 function openModal(modalElement) {
   modalElement.classList.remove('hidden');
 }
@@ -959,7 +958,8 @@ function openModal(modalElement) {
 function closeModal(modalElement) {
   modalElement.classList.add('hidden');
 }
-// Получаем элементы
+
+// DOM Elements
 const manageButton = document.getElementById("manageButton");
 const manageSearch = document.getElementById("manageSearch");
 const deleteModal = document.getElementById("deleteModal");
@@ -967,67 +967,58 @@ const confirmDeleteButton = document.getElementById("confirmDeleteButton");
 const declineDeleteButton = document.getElementById("declineDeleteButton");
 const deleteModifyOption = manageSearch.querySelector(".modify-option");
 
-// Обработчик клика на пункт Delete в меню Manage
+// Event handler for clicking "Delete" option in the Manage menu
 deleteModifyOption.addEventListener("click", () => {
+  // Check if a time slot is selected (global variable set on calendar cell click)
+  if (!window.selectedDateTime) {
+    alert("Please select a time slot first.");
+    return;
+  }
 
-// Ищем ячейку календаря, у которой дата и час соответствуют выбранным
-// Проверяем, выбран ли временной слот (дата и час)
-// Это глобальная переменная, устанавливаемая при клике на ячейку календаря
-if (!window.selectedDateTime) {
-  alert("Please select a time slot first."); // Если нет — показываем сообщение
-  return; // Прерываем выполнение
-}
+  const dateStr = window.selectedDateTime.toISOString().split("T")[0];
+  const hour = window.selectedDateTime.getHours();
 
-// Получаем строку даты в формате YYYY-MM-DD из выбранной даты и времени
-const dateStr = window.selectedDateTime.toISOString().split("T")[0];
+  // Find the calendar cell matching selected date and hour
+  const deleteSelectedCell = document.querySelector(
+    `.split-cell[data-date="${dateStr}"][data-hour="${hour}"]`
+  );
 
-// Получаем час (0–23) из выбранной даты и времени
-const hour = window.selectedDateTime.getHours();
-
-// Ищем ячейку календаря, у которой дата и час соответствуют выбранным
-const deleteSelectedCell = document.querySelector(
-  `.split-cell[data-date="${dateStr}"][data-hour="${hour}"]`
-);
-
-// Если такая ячейка не найдена — предупреждаем пользователя
-if (!deleteSelectedCell) {
-  alert("Please select a time slot first.");
-  return;
-}
+  if (!deleteSelectedCell) {
+    alert("Please select a valid time slot.");
+    return;
+  }
 
   openModal(deleteModal);
   manageSearch.classList.add("hidden");
 
-  // Подтверждение удаления через обработчик confirmDeleteButton.onclick
+  // Confirm deletion handler
+  confirmDeleteButton.onclick = () => {
+    // Clear cell content
+    deleteSelectedCell.textContent = "";
 
-confirmDeleteButton.onclick = () => {
-  deleteSelectedCell.textContent = "";
+    const key = `${dateStr}_${hour}`;
 
-  const date = deleteSelectedCell.dataset.date;
-  const hour = parseInt(deleteSelectedCell.dataset.hour);
+    // Remove events from eventDataMap
+    if (eventDataMap[key]) {
+      delete eventDataMap[key];
+    }
 
-  const key = `${date}_${hour}`;
+    // Remove from localStorage
+    removeSelectedCell(dateStr, hour);
 
-  // Удаляем из eventDataMap
-  if (eventDataMap[key]) {
-    delete eventDataMap[key];
-  }
+    closeModal(deleteModal);
+  };
 
-  // Удаляем из localStorage
-  removeSelectedCell(date, hour);
-
-  closeModal(deleteModal);
-};
-  // Отмена удаления
-  declineCancelButton.onclick = () => {
+  // Cancel deletion handler
+  declineDeleteButton.onclick = () => {
     closeModal(deleteModal);
   };
 });
-  // Обновление localStorage
+
 /**
- * Удаляет слот (по дате и часу) из localStorage
- * @param {string} dateString — формат YYYY‑MM‑DD
- * @param {number} hour — час
+ * Removes a selected time slot from localStorage
+ * @param {string} dateString - Date in YYYY-MM-DD format
+ * @param {number} hour - Hour (0-23)
  */
 function removeSelectedCell(dateString, hour) {
   try {
