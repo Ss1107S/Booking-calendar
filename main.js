@@ -666,23 +666,19 @@ const eventTags = initTagInput("tagsInput", "tagsContainer");
 const fewEventsTags = initTagInput("tagsInputFew", "tagsContainerFew");
 
 // Add tags to the payload on submit
-
 uniqueEventForm.addEventListener("submit", async (e) => {
   e.preventDefault();
 
   const title = e.target.title.value.trim();
   const description = e.target.description.value.trim();
 
-  if (!window.selectedDateTime) {
-    alert("Please select a time slot first.");
-    return;
-  }
-
   const payload = {
     title,
     description,
+   // datetime: window.selectedDateTime.toISOString(),
+    //tags: eventTags.getTags(),
     datetime: window.selectedDateTime.toISOString(),
-    tags: eventTags.getTags(),
+  ...(rawTags.length > 0 && { tags: rawTags }), // ← добавляем tags ТОЛЬКО если они есть
     // Other fields can be added: guests, location, time range, etc.
   };
 
@@ -702,11 +698,6 @@ uniqueEventForm.addEventListener("submit", async (e) => {
 
 uniqueFewEventsForm.addEventListener("submit", async (e) => {
   e.preventDefault();
-
-  if (!window.selectedDateTime) {
-    alert("Please select a time slot first.");
-    return;
-  }
 
   const titles = Array.from(e.target.querySelectorAll('input[name="title[]"]')).map(input => input.value.trim());
   const descriptions = Array.from(e.target.querySelectorAll('textarea[name="description[]"]')).map(textarea => textarea.value.trim());
