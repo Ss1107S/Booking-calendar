@@ -721,7 +721,7 @@ uniqueFewEventsForm.addEventListener("submit", async (e) => {
     }
   });
 
-  fewEventsTags.resetTags();
+  //fewEventsTags.resetTags();
   resetForm(uniqueFewEventsForm);
   closeModal(uniqueFewEventsModal);
 });
@@ -747,7 +747,7 @@ function addEventBlockAndSaveCurrent() {
   const tags = fewEventsTags.getTags(); // Get tags once here
 
   // Save the last filled event
-    const lastIndex = titles.length - 1;
+  const lastIndex = titles.length - 1;
   const title = titles[lastIndex];
   const description = descriptions[lastIndex];
 
