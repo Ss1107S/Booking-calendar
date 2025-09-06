@@ -375,6 +375,29 @@ document.getElementById('languageToggle').addEventListener('click', () => {
 });
 
 
+
+//Фиксированные цвета событий
+//хеш-функция и палитра
+const colorClasses = [
+  'event-color-1',
+  'event-color-2',
+  'event-color-3',
+  'event-color-4',
+  'event-color-5'
+];
+
+function hashString(str) {
+  let hash = 0;
+  for (let i = 0; i < str.length; i++) {
+    hash = (hash << 5) - hash + str.charCodeAt(i);
+    hash |= 0; // Преобразование в 32-битное целое
+  }
+  return Math.abs(hash);
+}
+
+
+
+
 // --button Add--
 // Unique variables for Add buttons and forms
 const uniqueAddButton = document.getElementById("addButton");
@@ -396,10 +419,18 @@ function openModal(modal) {
 }
 
 // Clear modal forms
-function resetForm(formElement) {
-  formElement.reset();
-}
+// 🔁 Универсальная функция для сброса всех input/textarea/select внутри <div>
+function resetForm(container) {
+  const inputs = container.querySelectorAll("input, textarea, select");
 
+  inputs.forEach(input => {
+    if (input.type === "checkbox" || input.type === "radio") {
+      input.checked = false; // Сброс флажков
+    } else {
+      input.value = "";      // Сброс обычных полей
+    }
+  });
+}
 // Handler to display dropdown menu on Add button click
 uniqueAddButton.addEventListener("click", () => {
   if (!window.selectedDateTime) {
@@ -431,16 +462,31 @@ uniqueAddList.querySelector(".fewEvents-option").addEventListener("click", () =>
 
 // --modal form Event--
 // Add Event
-uniqueEventForm.addEventListener("submit", async (e) => {
-  e.preventDefault();
+// Обработчик кнопки "Add" в модалке Event
+uniqueEventForm.querySelector('button[type="submit"]').addEventListener("click", () => {
+  // Получаем значения из полей ввода
+  const titleInput = uniqueEventForm.querySelector('input[name="title"]');
+  const descriptionTextarea = uniqueEventForm.querySelector('textarea[name="description"]');
 
-  const title = e.target.title.value.trim();
-  const description = e.target.description.value.trim();
-  const payload = {
+  const title = titleInput.value.trim(); // Удаляем пробелы
+  const description = descriptionTextarea.value.trim();
+
+  // Проверка: если заголовок пустой — не добавляем событие
+  if (!title) {
+    alert("Please enter a title.");
+    return;
+  }
+
+  // Получаем теги из поля тегов
+  const tags = eventTags.getTags();
+
+  // Вставляем событие в ячейку календаря
+  insertEventIntoCell(window.selectedDateTime, {
     title,
     description,
-    datetime: window.selectedDateTime.toISOString(),
-  };
+    tags
+  });
+
 
   /*try {
     await fetch("http://localhost:3000/events", {
@@ -459,44 +505,66 @@ uniqueEventForm.addEventListener("submit", async (e) => {
     console.error("Failed to send event:", err);
     
   }*/
-const tags = eventTags.getTags(); // get tags first
-insertEventIntoCell(window.selectedDateTime, { title, description, tags });
-eventTags.resetTags(); // then clear
-resetForm(uniqueEventForm); // then the form
-closeModal(uniqueEventModal);
-// Сохраняем изменения в localStorage после добавления всех событий
-saveEventsToLocalStorage();
-});
+ // Очищаем теги, поля ввода и закрываем модальное окно
+  eventTags.resetTags();
+  resetForm(uniqueEventForm);
+  closeModal(uniqueEventModal);
 
+  // Сохраняем все события в localStorage
+  saveEventsToLocalStorage();
+});
 
 // --modal form Few Events--
 // Adding Few Events
 // (with alphabetical sorting when adding new events)
 
-uniqueFewEventsForm.addEventListener("submit", async (e) => {
-  e.preventDefault();
+uniqueFewEventsForm.querySelector('button[type="submit"]').addEventListener("click", () => {
+  // Получаем все поля заголовков и описаний
+  const titleInputs = uniqueFewEventsForm.querySelectorAll('input[name="title[]"]');
+  const descriptionTextareas = uniqueFewEventsForm.querySelectorAll('textarea[name="description[]"]');
 
-  const titles = Array.from(e.target.querySelectorAll('input[name="title[]"]')).map(input => input.value.trim());
-  const descriptions = Array.from(e.target.querySelectorAll('textarea[name="description[]"]')).map(textarea => textarea.value.trim());
-  const tags = fewEventsTags.getTags(); // save ONLY once
+  const tags = fewEventsTags.getTags(); // Теги общие для всех событий
 
-titles.forEach((title, index) => {
-  if (title) {
-    insertEventIntoCell(window.selectedDateTime, {
-      title,
-      description: descriptions[index] || "",
-      tags,
-    }, true);
-  }
+  // Проходим по каждому блоку события
+  titleInputs.forEach((input, index) => {
+    const title = input.value.trim();
+    const description = descriptionTextareas[index].value.trim();
+
+    // Если заголовок не пустой — добавляем событие
+    if (title) {
+      insertEventIntoCell(window.selectedDateTime, {
+        title,
+        description,
+        tags
+      }, true); // Включена сортировка по алфавиту
+    }
+  });
+
+  // Сброс тегов, полей и закрытие формы
+  fewEventsTags.resetTags();
+  resetForm(uniqueFewEventsForm);
+  closeModal(uniqueFewEventsModal);
+
+  // Сохраняем изменения
+  saveEventsToLocalStorage();
 });
 
-fewEventsTags.resetTags();
-resetForm(uniqueFewEventsForm);
-closeModal(uniqueFewEventsModal);
-// Сохраняем изменения в localStorage после добавления всех событий
-//saveEventsToLocalStorage();
 
+// Обработчик кнопки "Cancel" в модалке Event
+uniqueEventForm.querySelector('button[type="button"]').addEventListener("click", () => {
+  eventTags.resetTags();            // Очищаем теги
+  resetForm(uniqueEventForm);       // Очищаем поля
+  closeModal(uniqueEventModal);     // Закрываем окно
 });
+
+
+// Обработчик кнопки "Cancel" в модалке Few Events
+uniqueFewEventsForm.querySelector('button[type="button"]:last-of-type').addEventListener("click", () => {
+  fewEventsTags.resetTags();           // Сброс тегов
+  resetForm(uniqueFewEventsForm);     // Сброс всех полей
+  closeModal(uniqueFewEventsModal);   // Закрытие окна
+});
+
   /*try {
     await fetch("http://localhost:3000/events", {
       method: "POST",
@@ -518,84 +586,96 @@ closeModal(uniqueFewEventsModal);
 // dateObj — object containing the event's date and time
 // event — event object { title: string, tags: string[] }
 // sort — if true, sort events by title
+/**
+ * Вставляет событие в соответствующую ячейку календаря
+ * @param {Date} dateObj — объект даты и времени (дата + час)
+ * @param {Object} event — объект события (title, description, tags, colorIndex)
+ * @param {boolean} sort — нужно ли отсортировать события по заголовку
+ */
 function insertEventIntoCell(dateObj, event, sort = false) {
-  const dateStr = dateObj.toISOString().split("T")[0];  // Get the date in YYYY-MM-DD format
-  const hour = dateObj.getHours();                      // Get the event hour (0–23)
-  const key = `${dateStr}_${hour}`;                     // Create a unique key for the cell (date + hour)
+  const dateStr = dateObj.toISOString().split("T")[0]; // Получаем дату в формате YYYY-MM-DD
+  const hour = dateObj.getHours();                     // Получаем час (0–23)
+  const key = `${dateStr}_${hour}`;                    // Уникальный ключ для ячейки
 
-  // If there's no event array for this cell yet, create an empty array
+  // Если для этой ячейки ещё нет массива событий — создаём
   if (!eventDataMap[key]) {
     eventDataMap[key] = [];
   }
 
-  // Add the new event (object with title and tags) to the array
+  // Добавляем новое событие в массив
   eventDataMap[key].push(event);
 
-  // If needed, sort the event array by title
+  // При необходимости сортируем массив по названию события
   if (sort) {
     eventDataMap[key].sort((a, b) => a.title.localeCompare(b.title));
   }
 
-  // Find the calendar cell DOM element by date and hour
+  // Находим соответствующую ячейку DOM по дате и часу
   const targetCell = document.querySelector(
     `.split-cell[data-date="${dateStr}"][data-hour="${hour}"]`
   );
 
-  // If the cell is not found, log a warning and exit
+  // Если ячейка не найдена — логируем предупреждение и прекращаем выполнение
   if (!targetCell) {
-    console.warn(`⚠️ Calendar cell not found for date: ${dateStr}, hour: ${hour}`);
+    console.warn(`⚠️ Ячейка не найдена: дата ${dateStr}, час ${hour}`);
     return;
   }
 
-  // Clear the cell's content before adding new events
+  // Очищаем содержимое ячейки перед вставкой новых данных
   targetCell.innerHTML = "";
 
-  // Create a <ul> list to display all events in the cell
+  // Создаём список событий <ul>
   const ul = document.createElement("ul");
-  
-// Iterate through each event in the array for this cell
-eventDataMap[key].forEach(({ title, description, tags }) => {
 
-  // Create an <li> element for the event
-  const li = document.createElement("li");
+  // Проходим по всем событиям, назначенным этой ячейке
+  eventDataMap[key].forEach(event => {
+    const { title, description, tags = [] } = event;
 
-  // Create a <strong> element for the event title and append it to the <li>
-  const titleElem = document.createElement("strong");
-  titleElem.textContent = title;
-  li.appendChild(titleElem);
+    // Создаём элемент списка <li> для каждого события
+    const li = document.createElement("li");
 
-  // If there is a description, create a <p> with the description text and append it to the <li>
-  if (description) {
-    const descElem = document.createElement("p");
-    descElem.textContent = description;
-    li.appendChild(descElem);
-  }
+    // Назначаем цвет в зависимости от заголовка события (или используем сохранённый colorIndex)
+    const colorIndex = event.colorIndex ?? (hashString(title) % colorClasses.length);
+    li.classList.add(colorClasses[colorIndex]);
 
-  // Create a container for the event tags 
-  const tagsContainer = document.createElement("div");
-  tagsContainer.classList.add("tags-container");
+    // Создаём заголовок <strong> и добавляем его в <li>
+    const titleElem = document.createElement("strong");
+    titleElem.textContent = title;
+    li.appendChild(titleElem);
 
-  // For each tag, create a <span> and add it to the tags container
-  tags.forEach(tag => {
-    const tagElem = document.createElement("span");
-    tagElem.classList.add("tag");
-    tagElem.textContent = tag;
-    tagsContainer.appendChild(tagElem);
-  });
+    // Если есть описание — создаём <p> и добавляем его в <li>
+    if (description) {
+      const descElem = document.createElement("p");
+      descElem.textContent = description;
+      li.appendChild(descElem);
+    }
 
-  // Append the tags container to the <li>
-  li.appendChild(tagsContainer);
-  
-    // Append the event <li> to the <ul> list
+    // Контейнер для тегов
+    const tagsContainer = document.createElement("div");
+    tagsContainer.classList.add("tags-container");
+
+    // Для каждого тега создаём <span> и добавляем в контейнер
+    tags.forEach(tag => {
+      const tagElem = document.createElement("span");
+      tagElem.classList.add("tag");
+      tagElem.textContent = tag;
+      tagsContainer.appendChild(tagElem);
+    });
+
+    // Добавляем контейнер с тегами в <li>
+    li.appendChild(tagsContainer);
+
+    // Добавляем <li> в список <ul>
     ul.appendChild(li);
   });
 
-  // Insert the event list into the calendar cell
+  // Вставляем список событий <ul> в ячейку календаря
   targetCell.appendChild(ul);
-
+}
+  
   // Сохраняем события в localStorage после обновления
   //saveEventsToLocalStorage();
-}
+//}
 // Close modal forms when clicking Cancel
 function closeModal(modal) {
   modal.classList.add("hidden");
@@ -769,7 +849,6 @@ function addEventBlockAndSaveCurrent() {
   // Add a new block
   addEventBlock();
 }
-
 
 // --button weeklyViewButton--
 // Correct logic for the weeklyViewButton:

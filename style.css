@@ -8,6 +8,12 @@ button{
     cursor: pointer;
     padding: 0px 8px;
 }
+/*Фиксированные цвета событий*/
+.event-color-1 { background-color: #4CAF50; }  /* зеленый */
+.event-color-2 { background-color: #2E7D32; }  /* темно-зеленый */
+.event-color-3 { background-color: #7E57C2; }  /* фиолетовый */
+.event-color-4 { background-color: #42A5F5; }  /* синий */
+.event-color-5 { background-color: #1565C0; }  /* темно-синий */
 
 header{
     padding: 10px 10px;
