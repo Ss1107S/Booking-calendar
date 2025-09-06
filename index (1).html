@@ -168,7 +168,7 @@
     <div id="eventModal" class="modal hidden">
         <div class="modal-content">
             <h2 class="modalHeader">Add a new Event</h2>
-            <form id="eventForm">
+            <div id="eventForm">
                 <input type="text" class="title" name="title" placeholder="Title" required />
                 <textarea name="description" class="description" placeholder="Describe your plans for the day"></textarea>
                 
@@ -197,7 +197,7 @@
                         Cancel
                     </button>
                 </div>
-            </form>
+            </div>
         </div>    
     </div>
 
@@ -205,7 +205,7 @@
     <div id="fewEventsModal" class="modal hidden">
         <div class="modal-content">
             <h2 class="modalHeader">Add Few Events</h2>
-            <form id="fewEventsForm">
+            <div id="fewEventsForm">
                 <input type="text" class="title" name="title[]" placeholder="Title" required />
                 <textarea name="description[]" class="details" placeholder="Details of your plans for the day"></textarea>
 
@@ -233,21 +233,21 @@
                         Cancel
                     </button>
                 </div>
-            </form>
+            </div>
         </div>
     </div>
 
     <div class="main">
         <div class="left_part">
             <!--Select date menu-->
-            <form class="">
+            <div class="">
                 <div class="relative">
                     <!-- This input will be hidden because we display the calendar inline -->
                     <input id="calendar" type="text" class="hidden" />
                     <!-- The container where we will insert the calendar -->
                         <div id="calendar-container" class="w-full picker-wrapper"></div>
                 </div>
-            </form>
+            </div>
             <!--Filter Menu-->
             <div>
                 <div class="filter">
