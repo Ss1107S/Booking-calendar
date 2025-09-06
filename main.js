@@ -1,4 +1,4 @@
-let currentSelectedDate = new Date();
+ let currentSelectedDate = new Date();
 // Variable to store the selected date in the main calendar
 let selectedMainDate = currentSelectedDate;
 let selectedCell = null;
@@ -494,7 +494,8 @@ fewEventsTags.resetTags();
 resetForm(uniqueFewEventsForm);
 closeModal(uniqueFewEventsModal);
 // Сохраняем изменения в localStorage после добавления всех событий
-saveEventsToLocalStorage();
+//saveEventsToLocalStorage();
+
 });
   /*try {
     await fetch("http://localhost:3000/events", {
@@ -593,7 +594,7 @@ eventDataMap[key].forEach(({ title, description, tags }) => {
   targetCell.appendChild(ul);
 
   // Сохраняем события в localStorage после обновления
-  saveEventsToLocalStorage();
+  //saveEventsToLocalStorage();
 }
 // Close modal forms when clicking Cancel
 function closeModal(modal) {
@@ -705,7 +706,7 @@ uniqueEventForm.addEventListener("submit", async (e) => {
   closeModal(uniqueEventModal);
   
   // Сохраняем события в localStorage после обновления
-  saveEventsToLocalStorage();
+  //saveEventsToLocalStorage();
 });
 
 uniqueFewEventsForm.addEventListener("submit", async (e) => {
@@ -729,7 +730,7 @@ uniqueFewEventsForm.addEventListener("submit", async (e) => {
   closeModal(uniqueFewEventsModal);
   
   // Сохраняем события в localStorage после обновления
-  saveEventsToLocalStorage();
+  //saveEventsToLocalStorage();
 });
 
 // Reset tags when closing the modal via Cancel
@@ -1002,6 +1003,9 @@ deleteModifyOption.addEventListener("click", () => {
     if (eventDataMap[key]) {
       delete eventDataMap[key];
     }
+    
+    // Save updated eventDataMap to localStorage
+    saveEventsToLocalStorage();
 
     // Remove from localStorage
     removeSelectedCell(dateStr, hour);
