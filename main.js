@@ -850,6 +850,27 @@ function addEventBlockAndSaveCurrent() {
   addEventBlock();
 }
 
+
+// --- Функция очистки всех событий и выделений с календаря ---
+// Удаляет все DOM-элементы с классом .event (сами события),
+// снимает выделения и стили с ячеек, которые были помечены как 'selected'
+function clearAllEventsFromDOM() {
+  // Удаляем все элементы с классом .event — это визуальные события в ячейках
+  document.querySelectorAll('.event').forEach(el => el.remove());
+
+  // Убираем выделения и фон с ячеек, которые были выделены пользователем
+  document.querySelectorAll('.selected').forEach(cell => {
+    cell.classList.remove('selected');   // снимаем класс выделения
+    cell.style.backgroundColor = '';     // очищаем цвет фона
+
+    // Если нужно очищать текст внутри ячеек, раскомментируй следующую строку:
+    // cell.textContent = '';
+  });
+}
+
+
+
+
 // --button weeklyViewButton--
 // Correct logic for the weeklyViewButton:
 // When selecting a corresponding item from the dropdown menu (First week, Second week, etc.),
@@ -985,6 +1006,17 @@ weeklyListItems.forEach((item, index) => {
     const selectedDate = currentSelectedDate || new Date();
     const weekStartDate = getStartOfWeekForMonth(index, selectedDate);
     generateWeeklyTable(weekStartDate);
+
+    
+    // Очистка всех событий и выделений в DOM
+    clearAllEventsFromDOM();
+
+    // Перегенерация таблицы с новым диапазоном дней
+    generateWeeklyTable(weekStartDate);
+
+    // Загрузка и отрисовка событий заново
+    loadEventsFromLocalStorage();
+
     
     // Update the .count button, passing the date of the first day of the week (Monday)
     updateCountButton(weekStartDate);
@@ -1151,67 +1183,45 @@ function removeSelectedCell(dateString, hour) {
 
 
 //функции для работы с localStorage
-
-/**
- * Сохраняет выбранную ячейку (дата + час) и её содержимое в localStorage.
- * Если ячейка уже существует, обновляет её содержимое.
- * Если нет — добавляет новую запись.
- * 
 /**
  * Сохраняет выбранную ячейку (дата + час) и её текстовое содержимое в localStorage
+ * Обновляет, если есть, или добавляет новую запись
  * @param {string} dateString — дата в формате YYYY-MM-DD
  * @param {number} hour — час диапазона
  * @param {string} text — текстовое содержимое ячейки
  */
 function saveSelectedCell(dateString, hour, text = "") {
   try {
-    // Загружаем существующие сохранённые ячейки
     const saved = JSON.parse(localStorage.getItem('selectedCells')) || [];
-
-    // Обновляем или добавляем новую ячейку
     const updated = saved.filter(item => !(item.date === dateString && item.hour === hour));
     updated.push({ date: dateString, hour, text });
-
-    // Сохраняем обновлённый список в localStorage
     localStorage.setItem('selectedCells', JSON.stringify(updated));
   } catch (error) {
     console.error('Ошибка при сохранении в localStorage:', error);
   }
 }
 
-/**
- * Восстанавливает сохранённые ячейки из localStorage
- */
 function restoreSelectedCellsOnLoad() {
   const selectedCells = loadSelectedCells();
-
   selectedCells.forEach(({ date, hour, text }) => {
     const cell = document.querySelector(`[data-date="${date}"][data-hour="${hour}"]`);
     if (cell) {
-      cell.textContent = text || ''; // Восстанавливаем текстовое содержимое ячейки
-      cell.classList.add('selected'); // Добавляем класс для подсветки
+      cell.textContent = text || '';
+      cell.classList.add('selected');
     }
   });
 }
-/**
- * Загружает сохранённые слоты из localStorage
- * @returns {Array<{date: string, hour: number}>}
- */
+
 function loadSelectedCells() {
   try {
     const saved = JSON.parse(localStorage.getItem('selectedCells'));
-    if (Array.isArray(saved)) {
-      return saved;
-    } else {
-      return [];
-    }
+    return Array.isArray(saved) ? saved : [];
   } catch (error) {
     console.error('Error loading from localStorage:', error);
     return [];
   }
 }
 
-//Функции для сохранения/загрузки eventDataMap в localStorage
 function saveEventsToLocalStorage() {
   try {
     localStorage.setItem('eventDataMap', JSON.stringify(eventDataMap));
@@ -1225,24 +1235,33 @@ function loadEventsFromLocalStorage() {
     const data = localStorage.getItem('eventDataMap');
     if (data) {
       const parsed = JSON.parse(data);
+
+      Object.keys(eventDataMap).forEach(key => delete eventDataMap[key]);
+
       Object.keys(parsed).forEach(key => {
-        eventDataMap[key] = parsed[key];
+        if (Array.isArray(parsed[key])) {
+          eventDataMap[key] = parsed[key];
+        }
       });
 
-      // Обновить отображение
-      Object.entries(eventDataMap).forEach(([key, events]) => {
+      // Очистка старых событий с DOM
+      clearAllEventsFromDOM();
+      
+      Object.keys(eventDataMap).forEach(key => {
         const [date, hour] = key.split('_');
-        const dateObj = new Date(`${date}T${hour.padStart(2, '0')}:00:00`);
-        events.forEach(event => insertEventIntoCell(dateObj, event));
+        const hourStr = String(hour).padStart(2, '0');
+        const dateObj = new Date(`${date}T${hourStr}:00:00`);
+        renderEventsForCell(dateObj);
       });
     }
   } catch (error) {
     console.error('Ошибка загрузки событий из localStorage:', error);
   }
 }
+
 document.addEventListener('DOMContentLoaded', () => {
   const today = new Date();
   generateTable(today);
-  restoreSelectedCellsOnLoad();  // текст ячеек
-  loadEventsFromLocalStorage();  // восстанавливаем события
+  restoreSelectedCellsOnLoad();
+  loadEventsFromLocalStorage();
 });
