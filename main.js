@@ -206,6 +206,8 @@ days.forEach((day) => {
   if (isSelected) {
     cell.style.backgroundColor = "#dbeafe"; // Highlight selected slot
     selectedCell = cell; // Remember current selected cell
+    cell.classList.add("selected");
+    window.selectedDateTime = new Date(`${dateString}T${String(hour).padStart(2, '0')}:00:00`);
   }
 
   // Click event handler for the cell
@@ -219,7 +221,7 @@ days.forEach((day) => {
       c.textContent = "";
     });
 
-    localStorage.removeItem("selectedCells"); // clear ALL from localStorage
+    saveSelectedCell(date, hour, cell.textContent || ""); // clear ALL from localStorage
 
     // -- mark clicked one
     cell.classList.add("selected");
@@ -375,6 +377,12 @@ document.getElementById('languageToggle').addEventListener('click', () => {
 });
 
 
+// --Утилиты и хелперы--
+
+function generateEventId() {
+  return 'event_' + Math.random().toString(36).substr(2, 9);
+}
+
 
 //Фиксированные цвета событий
 //хеш-функция и палитра
@@ -487,6 +495,7 @@ uniqueEventForm.querySelector('button[type="submit"]').addEventListener("click",
     tags
   });
 
+  saveEventsToLocalStorage();
 
   /*try {
     await fetch("http://localhost:3000/events", {
@@ -499,6 +508,7 @@ uniqueEventForm.querySelector('button[type="submit"]').addEventListener("click",
 
     insertEventIntoCell(window.selectedDateTime, title); // sort = false by default
 
+  saveEventsToLocalStorage();
     resetForm(uniqueEventForm);
     closeModal(uniqueEventModal);
   } catch (err) {
@@ -540,6 +550,7 @@ uniqueFewEventsForm.querySelector('button[type="submit"]').addEventListener("cli
     }
   });
 
+  saveEventsToLocalStorage();
   // Сброс тегов, полей и закрытие формы
   fewEventsTags.resetTags();
   resetForm(uniqueFewEventsForm);
@@ -576,6 +587,7 @@ uniqueFewEventsForm.querySelector('button[type="button"]:last-of-type').addEvent
 
     insertEventIntoCell(window.selectedDateTime, summary, true); // sorting is enabled
 
+  saveEventsToLocalStorage();
     resetForm(uniqueFewEventsForm);
     closeModal(uniqueFewEventsModal);
   } catch (err) {
@@ -604,6 +616,12 @@ function insertEventIntoCell(dateObj, event, sort = false) {
 
   // Добавляем новое событие в массив
   eventDataMap[key].push(event);
+
+
+  // Генерируем ID
+  if (!event.id) {
+    event.id = generateEventId(); // эта функция в утилитах и хелперах
+  }
 
   // При необходимости сортируем массив по названию события
   if (sort) {
@@ -648,6 +666,7 @@ function insertEventIntoCell(dateObj, event, sort = false) {
       const descElem = document.createElement("p");
       descElem.textContent = description;
       li.appendChild(descElem);
+      li.dataset.eventId = event.id;
     }
 
     // Контейнер для тегов
@@ -779,6 +798,7 @@ uniqueEventForm.addEventListener("submit", async (e) => {
   tags: eventTags.getTags(), 
 });
 
+  saveEventsToLocalStorage();
   // Reset tags after submission
   eventTags.resetTags();
 
@@ -805,6 +825,7 @@ uniqueFewEventsForm.addEventListener("submit", async (e) => {
     }
   });
 
+  saveEventsToLocalStorage();
   //fewEventsTags.resetTags();
   resetForm(uniqueFewEventsForm);
   closeModal(uniqueFewEventsModal);
@@ -846,6 +867,7 @@ function addEventBlockAndSaveCurrent() {
     }, true);
   }
 
+  saveEventsToLocalStorage();
   // Add a new block
   addEventBlock();
 }
@@ -975,7 +997,7 @@ function generateWeeklyTable(startDate) {
     });
 
     // Очистить localStorage от предыдущих выбранных ячеек
-    localStorage.removeItem("selectedCells");
+    saveSelectedCell(date, hour, cell.textContent || "");
 
     // Выделить текущую ячейку
     cell.classList.add("selected");
@@ -1265,3 +1287,16 @@ document.addEventListener('DOMContentLoaded', () => {
   restoreSelectedCellsOnLoad();
   loadEventsFromLocalStorage();
 });
+
+//Сохранение событий в localStorage
+
+function saveEventsToLocalStorage() {
+  localStorage.setItem("calendarEvents", JSON.stringify(eventDataMap));
+}
+
+function loadEventsFromLocalStorage() {
+  const savedEvents = localStorage.getItem("calendarEvents");
+  if (savedEvents) {
+    eventDataMap = JSON.parse(savedEvents);
+  }
+}
