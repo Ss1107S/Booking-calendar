@@ -4,6 +4,9 @@ let selectedMainDate = currentSelectedDate;
 let selectedCell = null;
 window.selectedDateTime = null; // Globally store the selected date and time
 
+// Event storage for display and sorting
+const eventDataMap = {}; // { "YYYY-MM-DD_HH": [ "Meeting", "Zoo" ] }
+
 // Language switching
 const translations = {
     en: {
@@ -74,7 +77,7 @@ const picker = new DatePicker({
 
     updateDateButton(currentSelectedDate);
     generateTable(currentSelectedDate);
-
+    loadEventsFromLocalStorage();
     updateCountButton(currentSelectedDate);
   }
 });
@@ -83,7 +86,7 @@ updateDateButton(currentSelectedDate); // update on load
 
 // Initial generation
 generateTable(currentSelectedDate);
-
+loadEventsFromLocalStorage();
 
 // -- button Count --
 function updateDateButton(date) {
@@ -293,6 +296,7 @@ function translateUI() {
         updateDateButton(currentSelectedDate);
       }
       generateTable(currentSelectedDate); // Update weekdays
+      loadEventsFromLocalStorage();
 }
 
 // -- theme --
@@ -417,9 +421,6 @@ const uniqueEventForm = document.getElementById("eventForm");
 const uniqueFewEventsForm = document.getElementById("fewEventsForm");
 
 const uniqueAddList = document.getElementById("add-list");
-
-// Event storage for display and sorting
-const eventDataMap = {}; // { "YYYY-MM-DD_HH": [ "Meeting", "Zoo" ] }
 
 // Show modal form
 function openModal(modal) {
@@ -1027,14 +1028,12 @@ weeklyListItems.forEach((item, index) => {
   item.addEventListener("click", () => {
     const selectedDate = currentSelectedDate || new Date();
     const weekStartDate = getStartOfWeekForMonth(index, selectedDate);
+    // Перегенерация таблицы с новым диапазоном дней
     generateWeeklyTable(weekStartDate);
 
     
     // Очистка всех событий и выделений в DOM
     clearAllEventsFromDOM();
-
-    // Перегенерация таблицы с новым диапазоном дней
-    generateWeeklyTable(weekStartDate);
 
     // Загрузка и отрисовка событий заново
     loadEventsFromLocalStorage();
@@ -1048,7 +1047,7 @@ weeklyListItems.forEach((item, index) => {
       selectedCell.style.backgroundColor = "";
       selectedCell = null;
     }
-
+    restoreSelectedCellsOnLoad(); // восстановим подсветку и содержимое ячеек
     // Update the global selected date and time
     window.selectedDateTime = new Date(weekStartDate);
     window.selectedDateTime.setHours(9, 0, 0, 0); // for example, the first hour of the working day
@@ -1072,6 +1071,7 @@ if (!currentSelectedDate) {
     generateTable(currentSelectedDate); 
     updateCountButton(currentSelectedDate); 
     updateDateButton(currentSelectedDate); 
+    loadEventsFromLocalStorage()
   }); 
   buttonRight.addEventListener("click", () => {
   if (!currentSelectedDate) { 
@@ -1081,7 +1081,9 @@ if (!currentSelectedDate) {
    window.selectedDateTime = new Date(currentSelectedDate); 
    generateTable(currentSelectedDate); 
    updateCountButton(currentSelectedDate); 
-   updateDateButton(currentSelectedDate); });
+   updateDateButton(currentSelectedDate); 
+   loadEventsFromLocalStorage()
+  });
    
 
 // -- Unique elements for Delete functionality --
@@ -1201,6 +1203,7 @@ function removeSelectedCell(dateString, hour) {
     const today = new Date();
     generateTable(today);            // сначала генерируем ячейки
     restoreSelectedCellsOnLoad();    // потом восстанавливаем содержимое
+    loadEventsFromLocalStorage()
   });
 
 
@@ -1243,7 +1246,7 @@ function loadSelectedCells() {
     return [];
   }
 }
-
+//Сохранение событий в localStorage
 function saveEventsToLocalStorage() {
   try {
     localStorage.setItem('eventDataMap', JSON.stringify(eventDataMap));
@@ -1252,51 +1255,53 @@ function saveEventsToLocalStorage() {
   }
 }
 
-function loadEventsFromLocalStorage() {
-  try {
-    const data = localStorage.getItem('eventDataMap');
-    if (data) {
-      const parsed = JSON.parse(data);
 
-      Object.keys(eventDataMap).forEach(key => delete eventDataMap[key]);
+function renderEventsForCell(cell, dateString, hour) {
+  const key = `${dateString}_${hour}`;
+  const events = eventDataMap[key] || [];
 
-      Object.keys(parsed).forEach(key => {
-        if (Array.isArray(parsed[key])) {
-          eventDataMap[key] = parsed[key];
-        }
-      });
+  cell.innerHTML = ""; // Очистить ячейку от старого содержимого
 
-      // Очистка старых событий с DOM
-      clearAllEventsFromDOM();
-      
-      Object.keys(eventDataMap).forEach(key => {
-        const [date, hour] = key.split('_');
-        const hourStr = String(hour).padStart(2, '0');
-        const dateObj = new Date(`${date}T${hourStr}:00:00`);
-        renderEventsForCell(dateObj);
-      });
-    }
-  } catch (error) {
-    console.error('Ошибка загрузки событий из localStorage:', error);
-  }
+  events.forEach(event => {
+    const eventDiv = document.createElement("div");
+    eventDiv.textContent = event; // или event.title, если объект
+    eventDiv.classList.add("event-entry"); // для стилизации
+    cell.appendChild(eventDiv);
+  });
 }
 
+function loadEventsFromLocalStorage() {
+  const saved = localStorage.getItem("calendarEvents");
+  if (saved) {
+    const parsed = JSON.parse(saved);
+
+    // Очистить текущие события
+    Object.keys(eventDataMap).forEach(key => delete eventDataMap[key]);
+
+    // Перенести загруженные в eventDataMap
+    Object.keys(parsed).forEach(key => {
+      eventDataMap[key] = parsed[key];
+    });
+
+    // Очистить DOM от старых событий
+    clearAllEventsFromDOM();
+
+    // Перерисовать из загруженного eventDataMap
+    Object.keys(eventDataMap).forEach(key => {
+      const [date, hour] = key.split("_");
+      // Найти соответствующую ячейку в календаре
+      const selector = `.split-cell[data-date="${date}"][data-hour="${parseInt(hour)}"]`;
+      const cell = document.querySelector(selector);
+
+      if (cell) {
+        renderEventsForCell(cell, date, hour);
+      }
+    });
+  }
+}
 document.addEventListener('DOMContentLoaded', () => {
   const today = new Date();
   generateTable(today);
   restoreSelectedCellsOnLoad();
   loadEventsFromLocalStorage();
 });
-
-//Сохранение событий в localStorage
-
-function saveEventsToLocalStorage() {
-  localStorage.setItem("calendarEvents", JSON.stringify(eventDataMap));
-}
-
-function loadEventsFromLocalStorage() {
-  const savedEvents = localStorage.getItem("calendarEvents");
-  if (savedEvents) {
-    eventDataMap = JSON.parse(savedEvents);
-  }
-}
