@@ -473,13 +473,20 @@ uniqueAddList.querySelector(".fewEvents-option").addEventListener("click", () =>
 // Add Event
 // Обработчик кнопки "Add" в модалке Event
 uniqueEventForm.querySelector('button[type="submit"]').addEventListener("click", () => {
+  console.log("Обработчик submit формы uniqueEventForm сработал");
+
+  if (!window.selectedDateTime) {
+  alert("Please select a time slot first.");
+  return;
+}
+
   // Получаем значения из полей ввода
   const titleInput = uniqueEventForm.querySelector('input[name="title"]');
   const descriptionTextarea = uniqueEventForm.querySelector('textarea[name="description"]');
 
   const title = titleInput.value.trim(); // Удаляем пробелы
   const description = descriptionTextarea.value.trim();
-
+  
   // Проверка: если заголовок пустой — не добавляем событие
   if (!title) {
     alert("Please enter a title.");
@@ -488,7 +495,7 @@ uniqueEventForm.querySelector('button[type="submit"]').addEventListener("click",
 
   // Получаем теги из поля тегов
   const tags = eventTags.getTags();
-
+console.log("window.selectedDateTime перед вставкой события:", window.selectedDateTime);
   // Вставляем событие в ячейку календаря
   insertEventIntoCell(window.selectedDateTime, {
     title,
@@ -530,10 +537,14 @@ uniqueEventForm.querySelector('button[type="submit"]').addEventListener("click",
 // (with alphabetical sorting when adding new events)
 
 uniqueFewEventsForm.querySelector('button[type="submit"]').addEventListener("click", () => {
-  // Получаем все поля заголовков и описаний
+  if (!window.selectedDateTime) {
+  alert("Please select a time slot first.");
+  return;
+}
+
+    // Получаем все поля заголовков и описаний
   const titleInputs = uniqueFewEventsForm.querySelectorAll('input[name="title[]"]');
   const descriptionTextareas = uniqueFewEventsForm.querySelectorAll('textarea[name="description[]"]');
-
   const tags = fewEventsTags.getTags(); // Теги общие для всех событий
 
   // Проходим по каждому блоку события
@@ -606,6 +617,12 @@ uniqueFewEventsForm.querySelector('button[type="button"]:last-of-type').addEvent
  * @param {boolean} sort — нужно ли отсортировать события по заголовку
  */
 function insertEventIntoCell(dateObj, event, sort = false) {
+  console.log("insertEventIntoCell вызвана");
+if (!(dateObj instanceof Date)) {
+  console.error("Ошибка: dateObj не объект Date:", dateObj);
+  return;
+}
+
   const dateStr = dateObj.toISOString().split("T")[0]; // Получаем дату в формате YYYY-MM-DD
   const hour = dateObj.getHours();                     // Получаем час (0–23)
   const key = `${dateStr}_${hour}`;                    // Уникальный ключ для ячейки
@@ -640,6 +657,9 @@ function insertEventIntoCell(dateObj, event, sort = false) {
     return;
   }
 
+  renderEventsForCell(targetCell, dateStr, hour);
+
+  console.log("События для ячейки после добавления:", eventDataMap[key]);
   // Очищаем содержимое ячейки перед вставкой новых данных
   targetCell.innerHTML = "";
 
@@ -860,7 +880,8 @@ function addEventBlockAndSaveCurrent() {
   const title = titles[lastIndex];
   const description = descriptions[lastIndex];
 
-  if (title) {
+    if (title) {
+    console.log("window.selectedDateTime перед вставкой события:", window.selectedDateTime);
     insertEventIntoCell(window.selectedDateTime, {
       title,
       description,
@@ -1136,8 +1157,8 @@ deleteModifyOption.addEventListener("click", () => {
 
     // Remove events from eventDataMap
     if (eventDataMap[key]) {
-      delete eventDataMap[key];
-    }
+  eventDataMap[key] = eventDataMap[key].filter(event => event.id !== eventId);
+}
     
     // Save updated eventDataMap to localStorage
     saveEventsToLocalStorage();
@@ -1263,8 +1284,11 @@ function renderEventsForCell(cell, dateString, hour) {
   cell.innerHTML = ""; // Очистить ячейку от старого содержимого
 
   events.forEach(event => {
+    console.log(JSON.stringify(event, null, 2)); // Добавьте это для отладки
     const eventDiv = document.createElement("div");
-    eventDiv.textContent = event; // или event.title, если объект
+
+    console.log(JSON.stringify(event, null, 2));
+    eventDiv.textContent = event.title; 
     eventDiv.classList.add("event-entry"); // для стилизации
     cell.appendChild(eventDiv);
   });
