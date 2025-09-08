@@ -1271,7 +1271,7 @@ function renderEventsForCell(cell, dateString, hour) {
 }
 
 function loadEventsFromLocalStorage() {
-  const saved = localStorage.getItem("calendarEvents");
+  const saved = localStorage.getItem("eventDataMap");
   if (saved) {
     const parsed = JSON.parse(saved);
 
