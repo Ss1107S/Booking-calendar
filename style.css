@@ -8,12 +8,19 @@ button{
     cursor: pointer;
     padding: 0px 8px;
 }
-/*Фиксированные цвета событий*/
-.event-color-1 { background-color: #4CAF50; }  /* зеленый */
-.event-color-2 { background-color: #2E7D32; }  /* темно-зеленый */
-.event-color-3 { background-color: #7E57C2; }  /* фиолетовый */
-.event-color-4 { background-color: #42A5F5; }  /* синий */
-.event-color-5 { background-color: #1565C0; }  /* темно-синий */
+.event-color-1 { background-color: #4CAF50; }  
+.event-color-2 { background-color: #2E7D32; } 
+.event-color-3 { background-color: #7E57C2; }  
+.event-color-4 { background-color: #42A5F5; } 
+.event-color-5 { background-color: #1565C0; }
+
+.the-event{
+    padding: .2rem;
+    cursor: pointer;
+}
+.event-selected {
+  box-shadow: 0 0 0 1.4px inset black;
+}
 
 header{
     padding: 10px 10px;
@@ -31,6 +38,9 @@ header .right button{
     border: 1px solid rgba(35, 166, 248, 1);
     padding: 5px 17px;
 }
+#addButton{
+    padding-right: 19px;
+}
 
 .list li{
     display: inline-block;
@@ -43,9 +53,12 @@ header .list {
     height: 50px;
 }
 
-.list .update,
+header .list .icon-btn {
+ 
+}
+.list .update{ padding: 3px 8px; }
 .list .dots{
-    padding: 3px 8px;
+    padding: 3px 9px; /* P.S. when you use icons with sizes that aren't the same, then you get issue such as misshapen circle (box), .dots has +1px more width on both sides so 9px will add +1px on both sides --*/
 }
 
 .list .update::before{
@@ -56,7 +69,7 @@ header .list {
     font-weight: 900;
 }
 
-.selected {
+.split-cell.selected {
   background-color: #dbeafe !important;
 }
 
@@ -71,7 +84,7 @@ header .list {
 
 header .right{
    margin-left: auto;
-   padding-right: 15px;
+   /* padding-right: 15px; */
 }
 
 #addButton {
@@ -124,8 +137,11 @@ header .right{
   margin-top: 5%;
 }
 
-.title, .description, .details, #tagsInput, #tagsInputFew{
+.title, .description, .details, #tagsInputFew{
   margin-top: 10%;
+  width: 100%;
+}
+#tagsInput{
   width: 100%;
 }
 
@@ -195,7 +211,14 @@ header .right{
 .flatpickr-calendar {
   box-shadow: none !important;
 }
-
+.filter-menu{
+}
+.filter-menu button[id]{
+    color: #fff;
+    background: oklch(48.8% 0.243 264.376);
+    font-weight: 500; font-size: 13px;
+    padding: 2.4px 6px;
+}
 .filter{
     display: flex;
     height: 50px;
@@ -227,7 +250,7 @@ header .right{
 .left_part .button_inside{
     border-radius: 20px;
     border: 1px solid rgba(35, 166, 248, 1);
-    padding: 4px 9px;
+    padding: 2px 7px;
 }
 
 svg{
@@ -235,6 +258,7 @@ svg{
 }
 
 .middle_part{
+    width: 100%;
     display: flex;
     flex-direction: column; 
     height: 100%;
@@ -246,7 +270,7 @@ svg{
     display: flex;
     align-items: center;
     width: 100%;
-    padding: 0 1%;
+    padding: 0 10px 0 1%; /* 10px to match your upper buttons box padding */
 }
 
 .header_of_table .left {
@@ -300,6 +324,7 @@ svg{
 }
 
 #weeklyViewButton{
+    color: #fff;
     cursor: pointer;
     border: 1px solid rgba(35, 166, 248, 1);
     border-radius: 5px;
@@ -314,10 +339,11 @@ svg{
     display: flex;
     flex-direction: column;
     font-size: x-small;
-    width: fit-content;
+    width: 100%;
 }
 .calendar_table_wrap {
     overflow-x: auto;
+    width: 100%;
 }
 
 .first_row {
@@ -329,6 +355,7 @@ svg{
 .first_row .first_dio {
     height: 46px;
     width: 46px;
+    flex-shrink: 0;
     border: 1px solid #ccc;
     padding: 4px;
     box-sizing: border-box;
@@ -339,14 +366,15 @@ svg{
 
 .first_row .second_dio {
     display: flex;
-    width: 1085px;
+    min-width: 1085px;
+    flex: 1 1 0;
     /*! avoid px for containers width, if using fixed width, then you must handle overflow */
-    /* flex-grow: 1; */
 }
 
 .first_row .second_dio > div {
     height: 46px;
-    width: 155px;
+    min-width: 155px;
+    flex: 1 1 0;
     border: 1px solid #ccc;
     padding: 4px;
     box-sizing: border-box;
@@ -362,6 +390,7 @@ svg{
 .time-slots .first_dio {
     height: 46px;
     width: 46px;
+    flex-shrink: 0;
     border: 1px solid #ccc;
     padding: 4px;
     box-sizing: border-box;
@@ -372,11 +401,13 @@ svg{
 
 .time-slots .second_dio {
     display: flex;
-    width: 1085px;
+    min-width: 1085px;
+    width: 100%;
 }
 
 .time-slots .second_dio > div {
-    width: 155px;
+    min-width: 155px;
+    flex: 1 1 0;
     border: 1px solid #ccc;
     padding: 4px;
     box-sizing: border-box;
@@ -390,13 +421,20 @@ svg{
     display: flex;
     flex-direction: column;
 }
-
+#deleteOneModal .field:has([data-field]:empty){
+    display: none;
+}
 .split-cell {
   min-height: 46px;
-  width: 155px;
+  min-width: 155px;
   border: 1px solid #ccc;
   box-sizing: border-box;
   position: relative;
+}
+.split-cell ul {
+    display: flex;
+    flex-flow: column;
+    gap: 4px;
 }
 
 .selected-day {
@@ -438,4 +476,15 @@ svg{
     font-family: "Font Awesome 6 Free";
     color: grey;
     font-weight: 900;
+}
+
+.modal .relative { position: relative !important; }
+
+.fld-select{
+    padding: 8px 12px;
+    border-radius: 0;
+    border: 1px solid var(--color-gray-500);
+}
+.tags-container:empty {
+    display: none;
 }
