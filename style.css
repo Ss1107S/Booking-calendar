@@ -8,6 +8,7 @@ button{
     cursor: pointer;
     padding: 0px 8px;
 }
+
 .event-color-1 { background-color: #4CAF50; }  
 .event-color-2 { background-color: #2E7D32; } 
 .event-color-3 { background-color: #7E57C2; }  
@@ -18,6 +19,7 @@ button{
     padding: .2rem;
     cursor: pointer;
 }
+
 .event-selected {
   box-shadow: 0 0 0 1.4px inset black;
 }
@@ -38,6 +40,7 @@ header .right button{
     border: 1px solid rgba(35, 166, 248, 1);
     padding: 5px 17px;
 }
+
 #addButton{
     padding-right: 19px;
 }
@@ -56,6 +59,7 @@ header .list {
 header .list .icon-btn {
  
 }
+
 .list .update{ padding: 3px 8px; }
 .list .dots{
     padding: 3px 9px; /* P.S. when you use icons with sizes that aren't the same, then you get issue such as misshapen circle (box), .dots has +1px more width on both sides so 9px will add +1px on both sides --*/
@@ -141,6 +145,7 @@ header .right{
   margin-top: 10%;
   width: 100%;
 }
+
 #tagsInput{
   width: 100%;
 }
@@ -195,6 +200,7 @@ header .right{
 #calendar-container .dp-year {
     width: 55px;
 }
+
 #calendar-container .dp-month{
     width: 73px;
 }
@@ -211,20 +217,24 @@ header .right{
 .flatpickr-calendar {
   box-shadow: none !important;
 }
+
 .filter-menu{
 }
+
 .filter-menu button[id]{
     color: #fff;
     background: oklch(48.8% 0.243 264.376);
     font-weight: 500; font-size: 13px;
     padding: 2.4px 6px;
 }
+
 .filter{
     display: flex;
     height: 50px;
     align-items: center;
     padding-left: 10px;
 }
+
 .filter_right{
     margin-left: auto;
 }
@@ -266,6 +276,7 @@ svg{
     min-width: 0;
     margin-left: 2%;
 }
+
 .header_of_table {
     display: flex;
     align-items: center;
@@ -341,6 +352,7 @@ svg{
     font-size: x-small;
     width: 100%;
 }
+
 .calendar_table_wrap {
     overflow-x: auto;
     width: 100%;
@@ -421,9 +433,11 @@ svg{
     display: flex;
     flex-direction: column;
 }
+
 #deleteOneModal .field:has([data-field]:empty){
     display: none;
 }
+
 .split-cell {
   min-height: 46px;
   min-width: 155px;
@@ -431,6 +445,7 @@ svg{
   box-sizing: border-box;
   position: relative;
 }
+
 .split-cell ul {
     display: flex;
     flex-flow: column;
@@ -485,6 +500,7 @@ svg{
     border-radius: 0;
     border: 1px solid var(--color-gray-500);
 }
+
 .tags-container:empty {
     display: none;
 }
