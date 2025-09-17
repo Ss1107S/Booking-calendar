@@ -3,11 +3,15 @@
 let selectedMainDate = currentSelectedDate;
 let selectedCell = null;
 window.selectedDateTime = null; // Globally store the selected date and time
+let selectedEventEl = null;
 
 // Event storage for display and sorting
 const eventDataMap = {}; // { "YYYY-MM-DD_HH": [ "Meeting", "Zoo" ] }
 
-// Language switching
+let inMemorySelectedCell = null; // { date: "YYYY-MM-DD", hour: 9, text: "" } or null
+
+const LS_EVENTS = 'bookingCalendar.events.v1'; // localStorage key for events
+
 const translations = {
     en: {
         title: "Booking Calendar",
@@ -47,6 +51,28 @@ const translations = {
     }
 };
 
+const colorClasses = [
+  'event-color-1',
+  'event-color-2',
+  'event-color-3',
+  'event-color-4',
+  'event-color-5'
+];
+const SAMPLE_GUESTS = [
+  { id: "u1", name: "Alice Martin" },
+  { id: "u2", name: "Boris Novak" },
+  { id: "u3", name: "Carla Rossi" },
+  { id: "u4", name: "Dino Kovač" },
+  { id: "u5", name: "Eva Horvat" }
+];
+
+const SAMPLE_LOCATIONS = [
+  { id: "l1", name: "Studio A" },
+  { id: "l2", name: "Studio B" },
+  { id: "l3", name: "Room 101" },
+  { id: "l4", name: "Room 202" }
+];
+
 // Display the date in the button with id="dateButton" > Selection Date < + Calendar functionality
 const months = [
   "January", "February", "March", "April", "May", "June",
@@ -71,6 +97,7 @@ const targetButtons = document.querySelectorAll('#manageButton, #addButton, #col
 const picker = new DatePicker({
   container: calendarContainer,
   value: currentSelectedDate,
+  baseDate: new Date(),
   autoClose: false,
   onSelect: (selectedDate) => {
     currentSelectedDate = selectedDate;
@@ -81,6 +108,7 @@ const picker = new DatePicker({
     updateCountButton(currentSelectedDate);
   }
 });
+picker.setValue(currentSelectedDate);
 
 updateDateButton(currentSelectedDate); // update on load
 
@@ -202,12 +230,9 @@ days.forEach((day) => {
   cell.dataset.hour = hour;
 
   // Restore highlight if this slot was previously selected
-  const savedSelections = loadSelectedCells();
-  const isSelected = savedSelections.some(sel =>
-    sel.date === dateString && sel.hour === hour
-  );
+  const isSelected = inMemorySelectedCell?.date === dateString && inMemorySelectedCell?.hour === hour
   if (isSelected) {
-    cell.style.backgroundColor = "#dbeafe"; // Highlight selected slot
+    //cell.style.backgroundColor = "#dbeafe"; // Highlight selected slot
     selectedCell = cell; // Remember current selected cell
     cell.classList.add("selected");
     window.selectedDateTime = new Date(`${dateString}T${String(hour).padStart(2, '0')}:00:00`);
@@ -221,20 +246,19 @@ days.forEach((day) => {
     document.querySelectorAll(".split-cell.selected").forEach(c => { // clear ALL from DOM
       c.classList.remove("selected");
       c.style.backgroundColor = "";
-      c.textContent = "";
+//      c.textContent = "";
     });
 
-    saveSelectedCell(date, hour, cell.textContent || ""); // clear ALL from localStorage
+    setInMemorySelectedCell(date, hour, cell.textContent || "");
 
     // -- mark clicked one
     cell.classList.add("selected");
-    cell.style.backgroundColor = "#dbeafe";
+//    cell.style.backgroundColor = "#dbeafe";
 
     const selectedDateTime = new Date(date);
     selectedDateTime.setHours(hour, 0, 0, 0);
     window.selectedDateTime = selectedDateTime;
 
-    saveSelectedCell(date, hour, cell.textContent || "");
     updateCountButton(selectedDateTime);
   });
 
@@ -309,6 +333,7 @@ function clearThemeClasses(button) {
     'bg-gradient-to-r', 'from-pink-500', 'via-yellow-500', 'to-green-500'
   );
 }
+let msGuests, msLocs, ms2Guests, ms2Locs;
 
 // -- events --
 // Apply translation immediately on load
@@ -372,6 +397,53 @@ document.addEventListener('DOMContentLoaded', ()=>{
     });
   });
 
+
+    // --- Multiselects (Event modal) ---
+    msGuests = createFlowbiteMultiselect({
+      buttonId: "ms-guests-btn",
+      menuId: "ms-guests-menu",
+      listId: "ms-guests-list",
+      searchId: "ms-guests-search",
+      chipsId: "ms-guests-chips",
+      hiddenId: "ms-guests-hidden",
+      items: SAMPLE_GUESTS,
+      buttonLabel: "Select guests"
+    });
+
+    msLocs = createFlowbiteMultiselect({
+      buttonId: "ms-locs-btn",
+      menuId: "ms-locs-menu",
+      listId: "ms-locs-list",
+      searchId: "ms-locs-search",
+      chipsId: "ms-locs-chips",
+      hiddenId: "ms-locs-hidden",
+      items: SAMPLE_LOCATIONS,
+      buttonLabel: "Select locations"
+    });
+
+    ms2Guests = createFlowbiteMultiselect({
+      buttonId: "ms2-guests-btn",
+      menuId: "ms2-guests-menu",
+      listId: "ms2-guests-list",
+      searchId: "ms2-guests-search",
+      chipsId: "ms2-guests-chips",
+      hiddenId: "ms2-guests-hidden",
+      items: SAMPLE_GUESTS,
+      buttonLabel: "Select guests"
+    });
+
+    ms2Locs = createFlowbiteMultiselect({
+      buttonId: "ms2-locs-btn",
+      menuId: "ms2-locs-menu",
+      listId: "ms2-locs-list",
+      searchId: "ms2-locs-search",
+      chipsId: "ms2-locs-chips",
+      hiddenId: "ms2-locs-hidden",
+      items: SAMPLE_LOCATIONS,
+      buttonLabel: "Select locations"
+    });
+
+
 });
 
 document.getElementById('languageToggle').addEventListener('click', () => {
@@ -387,16 +459,6 @@ function generateEventId() {
   return 'event_' + Math.random().toString(36).substr(2, 9);
 }
 
-
-//Фиксированные цвета событий
-//хеш-функция и палитра
-const colorClasses = [
-  'event-color-1',
-  'event-color-2',
-  'event-color-3',
-  'event-color-4',
-  'event-color-5'
-];
 
 function hashString(str) {
   let hash = 0;
@@ -428,7 +490,6 @@ function openModal(modal) {
 }
 
 // Clear modal forms
-// 🔁 Универсальная функция для сброса всех input/textarea/select внутри <div>
 function resetForm(container) {
   const inputs = container.querySelectorAll("input, textarea, select");
 
@@ -471,36 +532,35 @@ uniqueAddList.querySelector(".fewEvents-option").addEventListener("click", () =>
 
 // --modal form Event--
 // Add Event
-// Обработчик кнопки "Add" в модалке Event
 uniqueEventForm.querySelector('button[type="submit"]').addEventListener("click", () => {
-  console.log("Обработчик submit формы uniqueEventForm сработал");
 
   if (!window.selectedDateTime) {
   alert("Please select a time slot first.");
   return;
 }
 
-  // Получаем значения из полей ввода
   const titleInput = uniqueEventForm.querySelector('input[name="title"]');
   const descriptionTextarea = uniqueEventForm.querySelector('textarea[name="description"]');
 
-  const title = titleInput.value.trim(); // Удаляем пробелы
+  const title = titleInput.value.trim(); 
   const description = descriptionTextarea.value.trim();
   
-  // Проверка: если заголовок пустой — не добавляем событие
   if (!title) {
     alert("Please enter a title.");
     return;
   }
 
-  // Получаем теги из поля тегов
   const tags = eventTags.getTags();
-console.log("window.selectedDateTime перед вставкой события:", window.selectedDateTime);
-  // Вставляем событие в ячейку календаря
+
+  const guests = JSON.parse(document.getElementById("ms-guests-hidden").value || "[]");
+  const locations = JSON.parse(document.getElementById("ms-locs-hidden").value || "[]");
+
   insertEventIntoCell(window.selectedDateTime, {
     title,
     description,
-    tags
+    tags,
+    guests,
+    locations
   });
 
   saveEventsToLocalStorage();
@@ -523,12 +583,13 @@ console.log("window.selectedDateTime перед вставкой события:
     console.error("Failed to send event:", err);
     
   }*/
- // Очищаем теги, поля ввода и закрываем модальное окно
   eventTags.resetTags();
+  if (msGuests) msGuests.clear();
+  if (msLocs)   msLocs.clear();
+
   resetForm(uniqueEventForm);
   closeModal(uniqueEventModal);
 
-  // Сохраняем все события в localStorage
   saveEventsToLocalStorage();
 });
 
@@ -542,51 +603,32 @@ uniqueFewEventsForm.querySelector('button[type="submit"]').addEventListener("cli
   return;
 }
 
-    // Получаем все поля заголовков и описаний
   const titleInputs = uniqueFewEventsForm.querySelectorAll('input[name="title[]"]');
   const descriptionTextareas = uniqueFewEventsForm.querySelectorAll('textarea[name="description[]"]');
-  const tags = fewEventsTags.getTags(); // Теги общие для всех событий
+  const tags = fewEventsTags.getTags(); 
 
-  // Проходим по каждому блоку события
   titleInputs.forEach((input, index) => {
     const title = input.value.trim();
     const description = descriptionTextareas[index].value.trim();
 
-    // Если заголовок не пустой — добавляем событие
     if (title) {
       insertEventIntoCell(window.selectedDateTime, {
         title,
         description,
         tags
-      }, true); // Включена сортировка по алфавиту
+      }, true);
     }
   });
 
   saveEventsToLocalStorage();
-  // Сброс тегов, полей и закрытие формы
   fewEventsTags.resetTags();
   resetForm(uniqueFewEventsForm);
   closeModal(uniqueFewEventsModal);
 
-  // Сохраняем изменения
   saveEventsToLocalStorage();
 });
 
 
-// Обработчик кнопки "Cancel" в модалке Event
-uniqueEventForm.querySelector('button[type="button"]').addEventListener("click", () => {
-  eventTags.resetTags();            // Очищаем теги
-  resetForm(uniqueEventForm);       // Очищаем поля
-  closeModal(uniqueEventModal);     // Закрываем окно
-});
-
-
-// Обработчик кнопки "Cancel" в модалке Few Events
-uniqueFewEventsForm.querySelector('button[type="button"]:last-of-type').addEventListener("click", () => {
-  fewEventsTags.resetTags();           // Сброс тегов
-  resetForm(uniqueFewEventsForm);     // Сброс всех полей
-  closeModal(uniqueFewEventsModal);   // Закрытие окна
-});
 
   /*try {
     await fetch("http://localhost:3000/events", {
@@ -610,91 +652,77 @@ uniqueFewEventsForm.querySelector('button[type="button"]:last-of-type').addEvent
 // dateObj — object containing the event's date and time
 // event — event object { title: string, tags: string[] }
 // sort — if true, sort events by title
-/**
- * Вставляет событие в соответствующую ячейку календаря
- * @param {Date} dateObj — объект даты и времени (дата + час)
- * @param {Object} event — объект события (title, description, tags, colorIndex)
- * @param {boolean} sort — нужно ли отсортировать события по заголовку
- */
 function insertEventIntoCell(dateObj, event, sort = false) {
   console.log("insertEventIntoCell вызвана");
-if (!(dateObj instanceof Date)) {
-  console.error("Ошибка: dateObj не объект Date:", dateObj);
-  return;
-}
+  if (!(dateObj instanceof Date)) return console.error("event's date is not a date:", {dateObj});
+  
 
-  const dateStr = dateObj.toISOString().split("T")[0]; // Получаем дату в формате YYYY-MM-DD
-  const hour = dateObj.getHours();                     // Получаем час (0–23)
-  const key = `${dateStr}_${hour}`;                    // Уникальный ключ для ячейки
+  const dateStr = dateObj.toISOString().split("T")[0]; 
+  const hour = dateObj.getHours();                   
+  const key = `${dateStr}_${hour}`;                
 
-  // Если для этой ячейки ещё нет массива событий — создаём
-  if (!eventDataMap[key]) {
-    eventDataMap[key] = [];
-  }
-
-  // Добавляем новое событие в массив
+  if (!eventDataMap[key]) eventDataMap[key] = [];
   eventDataMap[key].push(event);
 
 
-  // Генерируем ID
-  if (!event.id) {
-    event.id = generateEventId(); // эта функция в утилитах и хелперах
-  }
+  if (!event.id) event.id = generateEventId(); 
+  
 
-  // При необходимости сортируем массив по названию события
-  if (sort) {
-    eventDataMap[key].sort((a, b) => a.title.localeCompare(b.title));
-  }
+  if (sort) eventDataMap[key].sort((a, b) => a.title.localeCompare(b.title));
+  
 
-  // Находим соответствующую ячейку DOM по дате и часу
   const targetCell = document.querySelector(
     `.split-cell[data-date="${dateStr}"][data-hour="${hour}"]`
   );
 
-  // Если ячейка не найдена — логируем предупреждение и прекращаем выполнение
-  if (!targetCell) {
-    console.warn(`⚠️ Ячейка не найдена: дата ${dateStr}, час ${hour}`);
-    return;
+  if (!targetCell) { throw "?"
+    //console.warn("Select a cell first, in the week view.") - alert or console.warn() is redundant because this should not be possible, unless data got corrupted, and you already throw a warning.
   }
 
   renderEventsForCell(targetCell, dateStr, hour);
 
-  console.log("События для ячейки после добавления:", eventDataMap[key]);
-  // Очищаем содержимое ячейки перед вставкой новых данных
+  console.log("event data:", eventDataMap[key]);
   targetCell.innerHTML = "";
 
-  // Создаём список событий <ul>
   const ul = document.createElement("ul");
 
-  // Проходим по всем событиям, назначенным этой ячейке
   eventDataMap[key].forEach(event => {
     const { title, description, tags = [] } = event;
 
-    // Создаём элемент списка <li> для каждого события
     const li = document.createElement("li");
+    li.dataset.eventId = event.id;
 
-    // Назначаем цвет в зависимости от заголовка события (или используем сохранённый colorIndex)
     const colorIndex = event.colorIndex ?? (hashString(title) % colorClasses.length);
     li.classList.add(colorClasses[colorIndex]);
+    li.classList.add("the-event");
 
-    // Создаём заголовок <strong> и добавляем его в <li>
+    li.addEventListener('click', (e) => {
+      if (selectedEventEl === li) {
+        e.stopPropagation(); // prevent cell selection
+        // toggle off if clicking the same selected event
+        li.classList.remove('event-selected');
+        selectedEventEl = null;
+        return;
+      }
+      if (selectedEventEl) selectedEventEl.classList.remove('event-selected');
+      li.classList.add('event-selected');
+      selectedEventEl = li;
+    });
+
     const titleElem = document.createElement("strong");
     titleElem.textContent = title;
     li.appendChild(titleElem);
 
-    // Если есть описание — создаём <p> и добавляем его в <li>
     if (description) {
       const descElem = document.createElement("p");
       descElem.textContent = description;
       li.appendChild(descElem);
-      li.dataset.eventId = event.id;
+      // li.dataset.eventId = event.id;
     }
 
-    // Контейнер для тегов
     const tagsContainer = document.createElement("div");
     tagsContainer.classList.add("tags-container");
 
-    // Для каждого тега создаём <span> и добавляем в контейнер
     tags.forEach(tag => {
       const tagElem = document.createElement("span");
       tagElem.classList.add("tag");
@@ -702,18 +730,28 @@ if (!(dateObj instanceof Date)) {
       tagsContainer.appendChild(tagElem);
     });
 
-    // Добавляем контейнер с тегами в <li>
-    li.appendChild(tagsContainer);
+    if(tags.length) li.appendChild(tagsContainer);
 
-    // Добавляем <li> в список <ul>
+    if (event.guests && event.guests.length) {
+      const g = document.createElement("div");
+      g.className = "text-[11px]";
+      g.textContent = `Guests: ${event.guests.map(k=>SAMPLE_GUESTS.find(v=>v.id == k).name).join(", ")}`;
+      li.appendChild(g);
+    }
+    if (event.locations && event.locations.length) {
+      const l = document.createElement("div");
+      l.className = "text-[11px]";
+      l.textContent = `Locations: ${event.locations.map(k=>SAMPLE_LOCATIONS.find(v=>v.id == k).name).join(", ")}`;
+      li.appendChild(l);
+    }
+
+
     ul.appendChild(li);
   });
 
-  // Вставляем список событий <ul> в ячейку календаря
   targetCell.appendChild(ul);
 }
   
-  // Сохраняем события в localStorage после обновления
   //saveEventsToLocalStorage();
 //}
 // Close modal forms when clicking Cancel
@@ -721,15 +759,11 @@ function closeModal(modal) {
   modal.classList.add("hidden");
 }
 
-uniqueEventForm.querySelector('button[type="button"]').addEventListener("click", () => {
-  resetForm(uniqueEventForm);
-  closeModal(uniqueEventModal);
-});
+// uniqueEventForm.querySelector('button[type="button"]').addEventListener("click", () => {
+//   resetForm(uniqueEventForm);
+//   closeModal(uniqueEventModal);
+// });
 
-uniqueFewEventsForm.querySelector('button[type="button"]').addEventListener("click", () => {
-  resetForm(uniqueFewEventsForm);
-  closeModal(uniqueFewEventsModal);
-});
 
 
 // --- Tags for modal windows ---
@@ -808,7 +842,7 @@ uniqueEventForm.addEventListener("submit", async (e) => {
    // datetime: window.selectedDateTime.toISOString(),
     //tags: eventTags.getTags(),
     datetime: window.selectedDateTime.toISOString(),
-  ...(rawTags.length > 0 && { tags: rawTags }), // ← добавляем tags ТОЛЬКО если они есть
+  ...(rawTags.length > 0 && { tags: rawTags }),
     // Other fields can be added: guests, location, time range, etc.
   };
 
@@ -822,11 +856,12 @@ uniqueEventForm.addEventListener("submit", async (e) => {
   saveEventsToLocalStorage();
   // Reset tags after submission
   eventTags.resetTags();
+  if (msGuests) msGuests.clear();
+  if (msLocs)   msLocs.clear();
 
   resetForm(uniqueEventForm);
   closeModal(uniqueEventModal);
   
-  // Сохраняем события в localStorage после обновления
   //saveEventsToLocalStorage();
 });
 
@@ -853,19 +888,6 @@ uniqueFewEventsForm.addEventListener("submit", async (e) => {
   
   // Сохраняем события в localStorage после обновления
   //saveEventsToLocalStorage();
-});
-
-// Reset tags when closing the modal via Cancel
-uniqueEventForm.querySelector('button[type="button"]').addEventListener("click", () => {
-  eventTags.resetTags();
-  resetForm(uniqueEventForm);
-  closeModal(uniqueEventModal);
-});
-
-uniqueFewEventsForm.querySelector('button[type="button"]').addEventListener("click", () => {
-  fewEventsTags.resetTags();
-  resetForm(uniqueFewEventsForm);
-  closeModal(uniqueFewEventsModal);
 });
 
 // Save immediately when clicking "Add another event" (to save each event upon addition)
@@ -895,31 +917,30 @@ function addEventBlockAndSaveCurrent() {
 }
 
 
-// --- Функция очистки всех событий и выделений с календаря ---
-// Удаляет все DOM-элементы с классом .event (сами события),
-// снимает выделения и стили с ячеек, которые были помечены как 'selected'
+// function clearAllEventsFromDOM() {
+//   // remove rendered event nodes
+//   document.querySelectorAll('.event').forEach(el => el.remove());
+
+//   // only reset selection styles inside the week grid
+//   document.querySelectorAll('.split-cell.selected').forEach(cell => {
+//     cell.classList.remove('selected');
+//     cell.style.backgroundColor = '';
+//     // cell.textContent = ''; // keep whatever behavior you want here
+//   });
+
+//   document.querySelectorAll('.event-selected').forEach(el => el.classList.remove('event-selected'));
+//   selectedEventEl = null;
+// }
 function clearAllEventsFromDOM() {
-  // Удаляем все элементы с классом .event — это визуальные события в ячейках
-  document.querySelectorAll('.event').forEach(el => el.remove());
+  document.querySelectorAll('.split-cell ul').forEach(ul => ul.remove());
 
-  // Убираем выделения и фон с ячеек, которые были выделены пользователем
-  document.querySelectorAll('.selected').forEach(cell => {
-    cell.classList.remove('selected');   // снимаем класс выделения
-    cell.style.backgroundColor = '';     // очищаем цвет фона
-
-    // Если нужно очищать текст внутри ячеек, раскомментируй следующую строку:
-    // cell.textContent = '';
-  });
+  // don't touch .split-cell.selected here
+  document.querySelectorAll('.event-selected').forEach(el => el.classList.remove('event-selected'));
+  selectedEventEl = null;
 }
 
 
 
-
-// --button weeklyViewButton--
-// Correct logic for the weeklyViewButton:
-// When selecting a corresponding item from the dropdown menu (First week, Second week, etc.),
-// a specific week should be displayed, starting from Monday and ending on Sunday.
-let isWeeklyViewMode = false;
 
 // Get the date of the Monday of the required week of the month
 function getStartOfWeekForMonth(weekIndex, referenceDate) {
@@ -940,7 +961,6 @@ function getStartOfWeekForMonth(weekIndex, referenceDate) {
 
 // Function to generate a full week (Mon-Sun)
 function generateWeeklyTable(startDate) {
-  isWeeklyViewMode = true;
   dayHeadersContainer.innerHTML = "";
   timeSlotsContainer.innerHTML = "";
 
@@ -1011,28 +1031,21 @@ function generateWeeklyTable(startDate) {
     const date = cell.dataset.date;
     const hour = parseInt(cell.dataset.hour);
 
-    // Удалить все предыдущие выделения из DOM
     document.querySelectorAll(".split-cell.selected").forEach(c => {
       c.classList.remove("selected");
       c.style.backgroundColor = "";
       c.textContent = "";
     });
 
-    // Очистить localStorage от предыдущих выбранных ячеек
-    saveSelectedCell(date, hour, cell.textContent || "");
+    setInMemorySelectedCell(date, hour, cell.textContent || "");
 
-    // Выделить текущую ячейку
     cell.classList.add("selected");
-    cell.style.backgroundColor = "#dbeafe";
+//    cell.style.backgroundColor = "#dbeafe";
 
     const selectedDateTime = new Date(date);
     selectedDateTime.setHours(hour, 0, 0, 0);
     window.selectedDateTime = selectedDateTime;
 
-    // Сохранить выбранную ячейку
-    saveSelectedCell(date, hour, cell.textContent || "");
-
-    // Обновить кнопку .count
     updateCountButton(selectedDateTime);
   });
       secondDio.appendChild(cell);
@@ -1043,20 +1056,14 @@ function generateWeeklyTable(startDate) {
   }
 }
 
-// Week menu click handler
 const weeklyListItems = document.querySelectorAll("#weeklyView-list .theme-option");
 weeklyListItems.forEach((item, index) => {
   item.addEventListener("click", () => {
     const selectedDate = currentSelectedDate || new Date();
     const weekStartDate = getStartOfWeekForMonth(index, selectedDate);
-    // Перегенерация таблицы с новым диапазоном дней
     generateWeeklyTable(weekStartDate);
 
-    
-    // Очистка всех событий и выделений в DOM
     clearAllEventsFromDOM();
-
-    // Загрузка и отрисовка событий заново
     loadEventsFromLocalStorage();
 
     
@@ -1068,7 +1075,7 @@ weeklyListItems.forEach((item, index) => {
       selectedCell.style.backgroundColor = "";
       selectedCell = null;
     }
-    restoreSelectedCellsOnLoad(); // восстановим подсветку и содержимое ячеек
+    restoreSelectedCellOnLoad();
     // Update the global selected date and time
     window.selectedDateTime = new Date(weekStartDate);
     window.selectedDateTime.setHours(9, 0, 0, 0); // for example, the first hour of the working day
@@ -1081,40 +1088,34 @@ const buttonLeft = document.querySelector(".button_left");
 const buttonRight = document.querySelector(".button_right");
 
 buttonLeft.addEventListener("click", () => { 
-  // If currentSelectedDate is undefined, use today's date
-if (!currentSelectedDate) {
-   currentSelectedDate = new Date(); 
-  } 
+  if (!currentSelectedDate) currentSelectedDate = new Date();
   currentSelectedDate.setDate(currentSelectedDate.getDate() - 1);
-   // Synchronize the global date
-   window.selectedDateTime = new Date(currentSelectedDate); 
-   // Update the UI
-    generateTable(currentSelectedDate); 
-    updateCountButton(currentSelectedDate); 
-    updateDateButton(currentSelectedDate); 
-    loadEventsFromLocalStorage()
-  }); 
-  buttonRight.addEventListener("click", () => {
-  if (!currentSelectedDate) { 
-    currentSelectedDate = new Date(); 
-  }
-   currentSelectedDate.setDate(currentSelectedDate.getDate() + 1); 
-   window.selectedDateTime = new Date(currentSelectedDate); 
-   generateTable(currentSelectedDate); 
-   updateCountButton(currentSelectedDate); 
-   updateDateButton(currentSelectedDate); 
-   loadEventsFromLocalStorage()
-  });
-   
 
-// -- Unique elements for Delete functionality --
-function openModal(modalElement) {
-  modalElement.classList.remove('hidden');
-}
+  window.selectedDateTime = new Date(currentSelectedDate);
+  generateTable(currentSelectedDate);
+  updateCountButton(currentSelectedDate);
+  updateDateButton(currentSelectedDate);
+  loadEventsFromLocalStorage();
 
-function closeModal(modalElement) {
-  modalElement.classList.add('hidden');
-}
+  // sync the datepicker UI
+  picker.setValue(currentSelectedDate);
+});
+
+buttonRight.addEventListener("click", () => {
+  if (!currentSelectedDate) currentSelectedDate = new Date();
+  currentSelectedDate.setDate(currentSelectedDate.getDate() + 1);
+
+  window.selectedDateTime = new Date(currentSelectedDate);
+  generateTable(currentSelectedDate);
+  updateCountButton(currentSelectedDate);
+  updateDateButton(currentSelectedDate);
+  loadEventsFromLocalStorage();
+
+  // sync the datepicker UI
+  picker.setValue(currentSelectedDate);
+});
+
+
 
 // DOM Elements
 const manageButton = document.getElementById("manageButton");
@@ -1124,13 +1125,44 @@ const confirmDeleteButton = document.getElementById("confirmDeleteButton");
 const declineDeleteButton = document.getElementById("declineDeleteButton");
 const deleteModifyOption = manageSearch.querySelector(".modify-option");
 
+const deleteOneModal = document.getElementById("deleteOneModal");
+const confirmDeleteOneButton = document.getElementById("confirmDeleteOneButton");
+const declineDeleteOneButton = document.getElementById("declineDeleteOneButton");
+const deleteOnePreview = document.getElementById("deleteOnePreview");
+
+
 // Event handler for clicking "Delete" option in the Manage menu
 deleteModifyOption.addEventListener("click", () => {
   // Check if a time slot is selected (global variable set on calendar cell click)
   if (!window.selectedDateTime) {
-    alert("Please select a time slot first.");
-    return;
+    return alert("Please select a time slot first.");
   }
+
+  // -- selected (single) event --
+  const ctx = getSelectedEventContext(); 
+  if (ctx) { 
+    fillDeleteOnePreview(ctx);
+    openModal(deleteOneModal);
+    manageSearch.classList.add("hidden");
+
+    confirmDeleteOneButton.onclick = () => {
+      eventDataMap[ctx.key] = ctx.arr.filter(e => e.id !== ctx.eventId);
+      renderEventsForCell(ctx.cell, ctx.dateStr, ctx.hour);
+      if (selectedEventEl) {
+        selectedEventEl.classList.remove("event-selected");
+        selectedEventEl = null;
+      }
+      saveEventsToLocalStorage();
+      closeModal(deleteOneModal);
+    };
+
+    declineDeleteOneButton.onclick = () => {
+      closeModal(deleteOneModal);
+    };
+    return; 
+  }
+
+  // -- all events in the cell --
 
   const dateStr = window.selectedDateTime.toISOString().split("T")[0];
   const hour = window.selectedDateTime.getHours();
@@ -1144,7 +1176,12 @@ deleteModifyOption.addEventListener("click", () => {
     alert("Please select a valid time slot.");
     return;
   }
+  const key = `${dateStr}_${hour}`;
 
+  if(!eventDataMap[key]) return alert("No events in the selected time slot."); 
+  else {
+      deleteModal.querySelector(".qty").textContent = eventDataMap[key].length;
+  }
   openModal(deleteModal);
   manageSearch.classList.add("hidden");
 
@@ -1153,18 +1190,18 @@ deleteModifyOption.addEventListener("click", () => {
     // Clear cell content
     deleteSelectedCell.textContent = "";
 
-    const key = `${dateStr}_${hour}`;
 
     // Remove events from eventDataMap
     if (eventDataMap[key]) {
-  eventDataMap[key] = eventDataMap[key].filter(event => event.id !== eventId);
-}
+      delete eventDataMap[key];
+      //eventDataMap[key] = eventDataMap[key].filter(event => event.id !== eventId);
+    }
     
     // Save updated eventDataMap to localStorage
     saveEventsToLocalStorage();
 
     // Remove from localStorage
-    removeSelectedCell(dateStr, hour);
+    // removeSelectedCell(dateStr, hour);
 
     closeModal(deleteModal);
   };
@@ -1175,157 +1212,266 @@ deleteModifyOption.addEventListener("click", () => {
   };
 });
 
-/**
- * Removes a selected time slot from localStorage
- * @param {string} dateString - Date in YYYY-MM-DD format
- * @param {number} hour - Hour (0-23)
- */
+
+function getSelectedEventContext() {
+  if (!selectedEventEl) return null;
+  const li = selectedEventEl;
+  const cell = li.closest(".split-cell");
+  if (!cell) return null;
+
+  const dateStr = cell.dataset.date;
+  const hour = parseInt(cell.dataset.hour, 10);
+  const key = `${dateStr}_${hour}`;
+  const eventId = li.dataset.eventId;
+  const arr = (eventDataMap[key] || []);
+  const ev = arr.find(e => e.id === eventId);
+
+    console.log({dateStr, hour, key, eventId, arr})
+
+  if (!ev) return null;
+  return { li, cell, key, dateStr, hour, eventId, arr, ev };
+}
+
+function fillDeleteOnePreview({ ev, dateStr, hour }) {
+  const get = (sel) => deleteOnePreview.querySelector(sel);
+
+  get('[data-field="title"]').textContent = ev.title || "";
+  get('[data-field="description"]').textContent = ev.description || "";
+  get('[data-field="date"]').textContent = dateStr;
+  get('[data-field="time"]').textContent = `${String(hour).padStart(2,"0")}:00`;
+
+  const tagList = (ev.tags && ev.tags.length) ? ev.tags.join(", ") : "";
+  get('[data-field="tags"]').textContent = tagList;
+
+  const guestNames = (ev.guests && ev.guests.length)
+    ? ev.guests.map(id => (SAMPLE_GUESTS.find(x=>x.id===id)||{}).name || id).join(", ")
+    : "";
+  get('[data-field="guests"]').textContent = guestNames;
+
+  const locNames = (ev.locations && ev.locations.length)
+    ? ev.locations.map(id => (SAMPLE_LOCATIONS.find(x=>x.id===id)||{}).name || id).join(", ")
+    : "";
+  get('[data-field="locations"]').textContent = locNames;
+}
+
+
 function removeSelectedCell(dateString, hour) {
-  try {
-    const saved = JSON.parse(localStorage.getItem('selectedCells')) || [];
-    const updated = saved.filter(item => !(item.date === dateString && item.hour === hour));
-    localStorage.setItem('selectedCells', JSON.stringify(updated));
-  } catch (error) {
-    console.error('Error removing from localStorage:', error);
-  }
 }
 
 
 
 
 // Button Update
-// Немедленно вызываемая функция для настройки кнопки обновления
 (function setupUpdateButton() {
     const updateButton = document.getElementById('updatePageBtn');
     if (!updateButton) return;
 
-    // Обработчик клика по кнопке
     updateButton.addEventListener('click', () => {
-      // Восстанавливаем содержимое ячеек из localStorage
-      restoreSelectedCellsOnLoad();
+      restoreSelectedCellOnLoad();
     });
   })();
 
-  // Функция восстановления данных из localStorage
-  function restoreSelectedCellsOnLoad() {
-    const selectedCells = loadSelectedCells();
 
-    selectedCells.forEach(({ date, hour, text }) => {
-      const cell = document.querySelector(`[data-date="${date}"][data-hour="${hour}"]`);
-      if (cell) {
-        cell.textContent = text || ''; // Восстанавливаем текстовое содержимое ячейки
-        cell.classList.add('selected'); // Добавляем класс для подсветки
-      }
-    });
-  }
+function setInMemorySelectedCell(dateString, hour, text = "") {
+  inMemorySelectedCell = { date: dateString, hour, text };
+}
 
-  // Вызов после генерации таблицы
-  document.addEventListener('DOMContentLoaded', () => {
-    const today = new Date();
-    generateTable(today);            // сначала генерируем ячейки
-    restoreSelectedCellsOnLoad();    // потом восстанавливаем содержимое
-    loadEventsFromLocalStorage()
-  });
+function getInMemorySelectedCell() {
+  return inMemorySelectedCell;
+}
 
+function clearInMemorySelectedCell() {
+  inMemorySelectedCell = null;
+}
 
-//функции для работы с localStorage
-/**
- * Сохраняет выбранную ячейку (дата + час) и её текстовое содержимое в localStorage
- * Обновляет, если есть, или добавляет новую запись
- * @param {string} dateString — дата в формате YYYY-MM-DD
- * @param {number} hour — час диапазона
- * @param {string} text — текстовое содержимое ячейки
- */
-function saveSelectedCell(dateString, hour, text = "") {
-  try {
-    const saved = JSON.parse(localStorage.getItem('selectedCells')) || [];
-    const updated = saved.filter(item => !(item.date === dateString && item.hour === hour));
-    updated.push({ date: dateString, hour, text });
-    localStorage.setItem('selectedCells', JSON.stringify(updated));
-  } catch (error) {
-    console.error('Ошибка при сохранении в localStorage:', error);
+// Re-apply the single selection (if it is on the currently rendered grid)
+function restoreSelectedCellOnLoad() {
+  const sel = getInMemorySelectedCell();
+  if (!sel) return;
+  const cell = document.querySelector(`.split-cell[data-date="${sel.date}"][data-hour="${sel.hour}"]`);
+  if (cell) {
+    cell.classList.add('selected');
+    // If you previously stored cell text, you can restore it:
+    if (sel.text) cell.textContent = sel.text;
   }
 }
 
-function restoreSelectedCellsOnLoad() {
-  const selectedCells = loadSelectedCells();
-  selectedCells.forEach(({ date, hour, text }) => {
-    const cell = document.querySelector(`[data-date="${date}"][data-hour="${hour}"]`);
-    if (cell) {
-      cell.textContent = text || '';
-      cell.classList.add('selected');
-    }
-  });
-}
 
-function loadSelectedCells() {
-  try {
-    const saved = JSON.parse(localStorage.getItem('selectedCells'));
-    return Array.isArray(saved) ? saved : [];
-  } catch (error) {
-    console.error('Error loading from localStorage:', error);
-    return [];
-  }
-}
-//Сохранение событий в localStorage
+
 function saveEventsToLocalStorage() {
-  try {
-    localStorage.setItem('eventDataMap', JSON.stringify(eventDataMap));
-  } catch (error) {
-    console.error('Ошибка сохранения событий в localStorage:', error);
-  }
+  try { localStorage.setItem(LS_EVENTS, JSON.stringify(eventDataMap)); }
+  catch (e) { console.error('saveEventsToLocalStorage failed:', e); }
 }
 
 
 function renderEventsForCell(cell, dateString, hour) {
   const key = `${dateString}_${hour}`;
   const events = eventDataMap[key] || [];
+  cell.innerHTML = "";
+  const ul = document.createElement("ul");
 
-  cell.innerHTML = ""; // Очистить ячейку от старого содержимого
+  events.forEach(ev => {
+    if (!ev.id) throw "event had no id";
 
-  events.forEach(event => {
-    console.log(JSON.stringify(event, null, 2)); // Добавьте это для отладки
-    const eventDiv = document.createElement("div");
+    const li = document.createElement("li");
+    li.dataset.eventId = ev.id;
 
-    console.log(JSON.stringify(event, null, 2));
-    eventDiv.textContent = event.title; 
-    eventDiv.classList.add("event-entry"); // для стилизации
-    cell.appendChild(eventDiv);
+    const colorIndex = ev.colorIndex ?? (hashString(ev.title) % colorClasses.length);
+    li.classList.add(colorClasses[colorIndex], "the-event");
+
+    li.addEventListener("click", (e) => { // equal to initial
+      if (selectedEventEl === li) {
+        e.stopPropagation();
+        li.classList.remove('event-selected');
+        selectedEventEl = null;
+        return;
+      }
+      if (selectedEventEl) selectedEventEl.classList.remove('event-selected');
+      li.classList.add('event-selected');
+      selectedEventEl = li;
+    });
+
+    const titleElem = document.createElement("strong");
+    titleElem.textContent = ev.title || "";
+    li.appendChild(titleElem);
+
+    if (ev.description) {
+      const descElem = document.createElement("p");
+      descElem.textContent = ev.description;
+      li.appendChild(descElem);
+    }
+
+    if (ev.tags && ev.tags.length) {
+      const tagsContainer = document.createElement("div");
+      tagsContainer.classList.add("tags-container");
+      ev.tags.forEach(t => {
+        const tagElem = document.createElement("span");
+        tagElem.classList.add("tag");
+        tagElem.textContent = t;
+        tagsContainer.appendChild(tagElem);
+      });
+      li.appendChild(tagsContainer);
+    }
+
+    if (ev.guests && ev.guests.length) {
+      const g = document.createElement("div");
+      g.className = "text-[11px]";
+      g.textContent = `Guests: ${ev.guests.map(k => (SAMPLE_GUESTS.find(v => v.id == k) || {}).name || k).join(", ")}`;
+      li.appendChild(g);
+    }
+
+    if (ev.locations && ev.locations.length) {
+      const l = document.createElement("div");
+      l.className = "text-[11px]";
+      l.textContent = `Locations: ${ev.locations.map(k => (SAMPLE_LOCATIONS.find(v => v.id == k) || {}).name || k).join(", ")}`;
+      li.appendChild(l);
+    }
+
+    ul.appendChild(li);
   });
+
+  cell.appendChild(ul);
 }
 
 function loadEventsFromLocalStorage() {
-  const saved = localStorage.getItem("eventDataMap");
-  if (saved) {
-    const parsed = JSON.parse(saved);
-
-    // Очистить текущие события
-    Object.keys(eventDataMap).forEach(key => delete eventDataMap[key]);
-
-    // Перенести загруженные в eventDataMap
-    Object.keys(parsed).forEach(key => {
-      eventDataMap[key] = parsed[key];
-    });
-
-    // Очистить DOM от старых событий
-    clearAllEventsFromDOM();
-
-    // Перерисовать из загруженного eventDataMap
-    Object.keys(eventDataMap).forEach(key => {
-      const [date, hour] = key.split("_");
-      // Найти соответствующую ячейку в календаре
-      const selector = `.split-cell[data-date="${date}"][data-hour="${parseInt(hour)}"]`;
-      const cell = document.querySelector(selector);
-
-      if (cell) {
-        renderEventsForCell(cell, date, hour);
+  try {
+    const raw = localStorage.getItem(LS_EVENTS);
+    if (raw) {
+      const data = JSON.parse(raw);
+      if (data && typeof data === 'object') {
+        Object.keys(eventDataMap).forEach(k => delete eventDataMap[k]);
+        Object.assign(eventDataMap, data);
       }
-    });
+    }
+  } catch (e) {
+    console.error('loadEventsFromLocalStorage failed:', e);
   }
+
+  clearAllEventsFromDOM();
+  Object.keys(eventDataMap).forEach(key => {
+    const [date, hourStr] = key.split('_');
+    const hour = parseInt(hourStr, 10) || 0;
+    const cell = document.querySelector(`.split-cell[data-date="${date}"][data-hour="${hour}"]`);
+    if (cell) renderEventsForCell(cell, date, hour);
+  });
 }
+
 document.addEventListener('DOMContentLoaded', () => {
   const today = new Date();
   generateTable(today);
-  restoreSelectedCellsOnLoad();
+  restoreSelectedCellOnLoad();
   loadEventsFromLocalStorage();
 });
+
+
+
+
+// ---
+
+function createFlowbiteMultiselect({
+  buttonId, menuId, listId, searchId, chipsId, hiddenId, items, buttonLabel
+}) {
+  const btn = document.getElementById(buttonId);
+  const menu = document.getElementById(menuId);
+  const list = document.getElementById(listId);
+  const search = document.getElementById(searchId);
+  const chips = document.getElementById(chipsId);
+  const hidden = document.getElementById(hiddenId);
+
+  const selected = new Map(); // id -> item
+
+  function renderList(filter = "") {
+    list.innerHTML = "";
+    const f = filter.trim().toLowerCase();
+    items
+      .filter(it => it.name.toLowerCase().includes(f))
+      .forEach(it => {
+        const li = document.createElement("li");
+        li.className = "flex items-center gap-2 text-sm";
+        li.innerHTML = `
+          <input type="checkbox" class="w-4 h-4" data-id="${it.id}">
+          <label class="cursor-pointer">${it.name}</label>`;
+        const cb = li.querySelector("input");
+        cb.checked = selected.has(it.id);
+        cb.addEventListener("change", () => {
+          if (cb.checked) { selected.set(it.id, it); }
+          else { selected.delete(it.id); }
+          sync();
+        });
+        list.appendChild(li);
+      });
+  }
+
+  function renderChips() {
+    chips.innerHTML = "";
+    [...selected.values()].forEach(it => {
+      const chip = document.createElement("span");
+      chip.className = "tag";
+      chip.textContent = it.name;
+      const x = document.createElement("span");
+      x.className = "remove-tag";
+      x.textContent = "×";
+      x.onclick = () => { selected.delete(it.id); sync(); };
+      chip.appendChild(x);
+      chips.appendChild(chip);
+    });
+  }
+
+  function sync() {
+    // hidden stores JSON array of ids
+    hidden.value = JSON.stringify([...selected.keys()]);
+    btn.childNodes[0].nodeValue = `${buttonLabel} (${selected.size}) `;
+    renderChips();
+    // Keep list checkboxes in sync (when chip removes an item)
+    renderList(search.value);
+  }
+
+  search.addEventListener("input", () => renderList(search.value));
+  renderList();
+  sync();
+
+  return {
+    getSelectedIds: () => JSON.parse(hidden.value || "[]"),
+    clear: () => { selected.clear(); sync(); }
+  };
+}
