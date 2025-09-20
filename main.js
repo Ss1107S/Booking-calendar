@@ -58,6 +58,15 @@ const colorClasses = [
   'event-color-4',
   'event-color-5'
 ];
+
+//Table Reservation, Private Event, Staff Meeting, Kitchen Maintenance, Supplier Delivery
+const SAMPLE_ACTIVITES = [
+  { id: "a1", name: "Meeting" },
+  { id: "a2", name: "Workshop" },
+  { id: "a3", name: "Conference" },
+  { id: "a4", name: "Training" },
+  { id: "a5", name: "Networking" }
+];
 const SAMPLE_GUESTS = [
   { id: "u1", name: "Alice Martin" },
   { id: "u2", name: "Boris Novak" },
@@ -399,6 +408,19 @@ document.addEventListener('DOMContentLoaded', ()=>{
 
 
     // --- Multiselects (Event modal) ---
+
+    msActiv = createFlowbiteMultiselect({
+      buttonId: "ms-activ-btn",
+      menuId: "ms-activ-menu",
+      listId: "ms-activ-list",
+      searchId: "ms-activ-search",
+      chipsId: "ms-activ-chips",
+      hiddenId: "ms-activ-hidden",
+      items: SAMPLE_ACTIVITES,
+      buttonLabel: "Select activites"
+    });
+//отсюда далее добавь ms2Activ = createFlowbiteMultiselect
+
     msGuests = createFlowbiteMultiselect({
       buttonId: "ms-guests-btn",
       menuId: "ms-guests-menu",
