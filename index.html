@@ -5,15 +5,51 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="style.css">
-    <!-- For the Calendar-->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <!--Calendar-->
+    <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-    
+     -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+
+    <script src="datepicker.js"></script>
+
     <title>Booking calendar</title>
 
+
+     <style>
+        /*====== datepicker =========*/
+
+        .datepicker-root { @apply bg-white shadow text-xs z-50; }
+        .datepicker-root .highlight { @apply bg-yellow-200; }
+
+        .datepicker-root .is-base{
+            background-color: #155dfc;
+            color: #fff;
+        }
+        .datepicker-root .is-base:hover {
+            border: 2.25px solid #66AEE7 !important;
+        }
+        .datepicker-root .selected{ 
+            --tw-ring-color: #155dfc;
+            border: 2px solid #155dfc;
+            box-shadow: 0 0 0 1.5px #ffffff inset;
+            transition: border-color .001s;
+        }
+
+        .datepicker-root [data-date]:not(.selected):hover{ 
+            border: 2px solid #d0d0d0;
+        }
+        .datepicker-root [data-date].selected:hover{ 
+            border: 2px solid #0868B4;
+        }
+        .picker-wrapper{
+            position: relative;
+            left: -1.5px;
+            top: calc(100% + 1.5px);
+        }
+    </style>
     </head>
     <body>
 
@@ -33,142 +69,286 @@
         <div class="right">
             <ul class="list">
                 <li>
-                    <button class="update"></button>
-                    <button class="dots"></button>
+                    <button class="update icon-btn" id="updatePageBtn" title="Update"></button>
+                    <button class="dots icon-btn"></button>
                 </li>
                 <li class="right">
-                    <li>
-                        <!-- Manage button -->
-                        <button id="manageButton" data-key="manage" data-dropdown-toggle="manageSearch" data-dropdown-placement="bottom" style="cursor: pointer;" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">
-                            Manage
-                            <svg class="w-2.5 h-2.5 ms-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                    <ul>
+                        <li>
+                            <!-- Manage button -->
+                            <button id="manageButton" data-key="manage" data-dropdown-toggle="manageSearch" data-dropdown-placement="bottom-end" style="cursor: pointer;" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">Manage<svg class="w-2.5 h-2.5 ms-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
                             <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
                             </svg>
-                        </button>
+                            </button>
 
-                        <!-- Manage menu -->
-                        <div id="manageSearch" class="z-10 hidden bg-white rounded-lg shadow-sm w-40 dark:bg-gray-700" style="cursor: pointer;">
-                            <div class="p-1">
-                            <label for="input-group-search" class="sr-only">Search</label>
-                            <div class="relative">
-                                <div class="inset-y-0 rtl:inset-r-0 start-0 flex items-center ps-3 pointer-events-none">
-                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
-                                </svg>
-                                </div>
-                            </div>
-                        </div>
-                        <ul id="manage-list" class="text-sm text-gray-700 dark:text-gray-200 space-y-1 mb-3">
-                            <li class="modify-option py-2 px-3 w-full text-left bg-blue-100 hover:bg-blue-200 rounded">
-                                Modify</li>
-                            <li class="cancel-option py-2 px-3 w-full text-left bg-yellow-100 hover:bg-yellow-200 rounded">
-                                Cancel</li>
-                        </ul>
-                    </li>
-                    <li>
-                        <!-- Add button -->
-                        <button id="addButton" data-key="add"style="cursor: pointer" data-dropdown-toggle="addSearch" data-dropdown-placement="bottom" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-                            Add
-                            <svg class="w-2.5 h-2.5 ms-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
-                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
-                            </svg>
-                        </button>
-                        
-                        <!-- Add menu -->
-                        <div id="addSearch" class="z-10 hidden bg-white rounded-lg shadow-sm w-40 dark:bg-gray-700" style="cursor: pointer;">
-                            <div class="p-1">
-                                <ul id="add-list" class="text-sm text-gray-700 dark:text-gray-200 space-y-1 mb-3">
-                                    <li class="event-option py-2 px-3 w-full text-left bg-blue-100 hover:bg-blue-200 rounded cursor-pointer">
-                                        Event
+                            <!-- Manage menu -->
+                            <div id="manageSearch" class="hidden z-10 bg-white rounded-lg shadow-sm w-40 dark:bg-gray-700" style="cursor: pointer; position: absolute;">
+                                <ul id="manage-list" class="text-sm text-gray-700 dark:text-gray-200 space-y-1 pl-0 pr-2 pt-2 pb-2">
+                                    <li class="view-option py-2 px-3 w-full text-left bg-gray-100 hover:bg-gray-200 rounded cursor-pointer">
+                                    Modify
                                     </li>
-                                    <li class="fewEvents-option py-2 px-3 w-full text-left bg-yellow-100 hover:bg-yellow-200 rounded cursor-pointer">
-                                        Few Events
+                                    <li class="modify-option py-2 px-3 w-full text-left bg-yellow-100 hover:bg-yellow-200 rounded cursor-pointer">
+                                    Delete
                                     </li>
                                 </ul>
                             </div>
-                        </div>
+                        </li>
+                        <li>
+                            <!-- Add button -->
+                            <button id="addButton" data-key="add"style="cursor: pointer;" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                                Add
                     
-
-                        <!-- Modal for Event -->
-                        <div id="eventModal" class="modal hidden">
-                        <div class="modal-content">
-                            <h2>Add a new Event</h2>
-                            <form id="eventForm">
-                                <input type="text" class="title" name="title" placeholder="Title" required />
-                                <textarea name="description" class="description" placeholder="Describe your plans for the day."></textarea>
-                                <div class="modalButton">
-                                    <button type="submit" class="hover:bg-blue-800">Add</button>
-                                    <button type="button" class="hover:bg-blue-800" onclick="closeModal(document.getElementById('fewEventsModal'))">Cancel</button>
-                                </div>
-                            </form>
-                        </div>
-                        </div>
-
-                        <!-- Modal for Few Events -->
-                        <div id="fewEventsModal" class="modal hidden">
-                        <div class="modal-content">
-                            <h2>Add Few Events</h2>
-                            <form id="fewEventsForm">
-                                <input type="text" class="summary" name="summary" placeholder="Summary" required />
-                                <textarea name="details" class="details" placeholder="Details of your plans for the day."></textarea>
-                                <div class="modalButton">
-                                    <button type="submit" class="hover:bg-blue-800">Add</button>
-                                    <button type="button" class="hover:bg-blue-800" onclick="closeModal(document.getElementById('fewEventsModal'))">Cancel</button>
-                                </div>
-                            </form>
-                        </div>
-                        </div>
-                    </li>
-                    <li>
-                        <!-- Color theme button -->
-                        <button id="colorThemeButton" data-key="colorTheme" data-dropdown-toggle="colorThemeSearch" data-dropdown-placement="bottom" style="cursor: pointer;" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">
-                            Color Theme
-                            <svg class="w-2.5 h-2.5 ms-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                            </button>
+                            
+                            <!-- Add menu -->
+                            <div id="addSearch" class="hidden z-10 bg-white rounded-lg shadow-sm w-40 dark:bg-gray-700" style="cursor: pointer; position:absolute;">
+                                <ul id="add-list" class="text-sm text-gray-700 dark:text-gray-200 space-y-1 pl-0 pr-2 pt-2 pb-2">
+                                <li class="event-option py-2 px-3 w-full text-left bg-gray-100 hover:bg-gray-200 rounded cursor-pointer">
+                                    Event
+                                </li>
+                                <li class="fewEvents-option py-2 px-3 w-full text-left bg-yellow-100 hover:bg-yellow-200 rounded cursor-pointer">
+                                    Few Events
+                                </li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li>
+                            <!-- Color theme button -->
+                            <button id="colorThemeButton" data-key="colorTheme" data-dropdown-toggle="colorThemeSearch" data-dropdown-placement="bottom-end" style="cursor: pointer;" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">Color Theme<svg class="w-2.5 h-2.5 ms-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
                             <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
                             </svg>
-                        </button>
+                            </button>
 
-                        <!-- Color theme menu -->
-                        <div id="colorThemeSearch" class="z-10 hidden bg-white rounded-lg shadow-sm w-40 dark:bg-gray-700" style="cursor: pointer;">
-                            <div class="p-1 ">
-                            <label for="input-group-search" class="sr-only">Search</label>
-                            <div class="relative">
-                                <div class="inset-y-0 rtl:inset-r-0 start-0 flex items-center ps-3 pointer-events-none">
-                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
-                                </svg>
+                            <!-- Color theme menu -->
+                            <div id="colorThemeSearch" class="z-10 hidden bg-white rounded-lg shadow-sm w-40 dark:bg-gray-700" style="cursor: pointer;">
+                                <div class="p-0">
+                                <label for="input-group-search" class="sr-only">Search</label>
+                                <div class="relative">
+                                    <div class="absolute inset-y-0 rtl:inset-r-0 start-0 flex items-center ps-3 pointer-events-none">
+                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
+                                    </svg>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <ul id="theme-options" class="text-sm text-gray-700 dark:text-gray-200 space-y-1 mb-3">
-                            <li class="theme-option py-2 px-3 w-full text-left bg-blue-100 hover:bg-blue-200 rounded" data-theme="blue">
-                                Blue</li>
-                            <li class="theme-option py-2 px-3 w-full text-left bg-yellow-100 hover:bg-yellow-200 rounded" data-theme="yellow">
-                                Yellow</li>
-                            <li class="theme-option py-2 px-3 w-full text-left bg-green-100 hover:bg-green-200 rounded" data-theme="green">
-                                Green</li>
-                            <li class="theme-option py-2 px-3 w-full text-left bg-red-100 hover:bg-red-200 rounded" data-theme="red">
-                                Red</li>
-                            <li class="theme-option py-2 px-3 w-full text-left bg-gradient-to-r from-pink-100 via-yellow-100 to-green-100 hover:brightness-110 rounded" data-theme="multicolor">
-                                Multicolor</li>
-                        </ul>
-                    </li>
+                            <ul id="theme-options" class="text-sm text-gray-700 dark:text-gray-200 space-y-1 pl-0 pr-2 pt-2 pb-2">
+                                <li class="theme-option py-2 px-3 w-full text-left bg-gray-100 hover:bg-gray-200 rounded" data-theme="blue">
+                                    Blue</li>
+                                <li class="theme-option py-2 px-3 w-full text-left bg-yellow-100 hover:bg-yellow-200 rounded" data-theme="yellow">
+                                    Yellow</li>
+                                <li class="theme-option py-2 px-3 w-full text-left bg-green-100 hover:bg-green-200 rounded" data-theme="green">
+                                    Green</li>
+                                <li class="theme-option py-2 px-3 w-full text-left bg-red-100 hover:bg-red-200 rounded" data-theme="red">
+                                    Red</li>
+                                <li class="theme-option py-2 px-3 w-full text-left bg-gradient-to-r from-pink-100 via-yellow-100 to-green-100 hover:brightness-110 rounded" data-theme="multicolor">
+                                    Multicolor</li>
+                            </ul>
+                        </li>
+                    </ul>
                 </li>
             </ul>
         </div>
     </header>
 
+    <!-- Modals for Delete -->
+    <div id="deleteModal" class="modal hidden">
+    <div class="modal-content">
+        <h2 class="modalHeader">Delete all events.</h2>
+        <p>Are you sure you want to delete <span class="qty"></span> event(s) from the selected time slot?</p>
+        
+        <div class="modalButton">
+        <button id="confirmDeleteButton" class="hover:bg-red-600">Yes, delete</button>
+        <button id="declineDeleteButton" class="hover:bg-gray-600">No</button>
+        </div>
+    </div>
+    </div>
+    <div id="deleteOneModal" class="modal hidden">
+    <div class="modal-content">
+        <h2 class="modalHeader">Delete this event?</h2>
+
+        <div id="deleteOnePreview" class="space-y-1">
+        <div class="field"><strong>Title:</strong> <span data-field="title"></span></div>
+        <div class="field"><strong>Description:</strong> <span data-field="description"></span></div>
+        <div class="field"><strong>Date:</strong> <span data-field="date"></span></div>
+        <div class="field"><strong>Time:</strong> <span data-field="time"></span></div>
+        <div class="field"><strong>Guests:</strong> <span data-field="guests"></span></div>
+        <div class="field"><strong>Locations:</strong> <span data-field="locations"></span></div>
+        <div class="field"><strong>Tags:</strong> <span data-field="tags"></span></div>
+        </div>
+
+        <div class="modalButton">
+        <button id="confirmDeleteOneButton" class="hover:bg-red-600">Delete</button>
+        <button id="declineDeleteOneButton" class="hover:bg-gray-600">Cancel</button>
+        </div>
+    </div>
+    </div>
+
+
+    <!-- Modal for Event Adding -->
+    <div id="eventModal" class="modal hidden">
+        <div class="modal-content">
+            <h2 class="modalHeader">Add a new Event</h2>
+            <div id="eventForm">
+                <input type="text" class="title" name="title" placeholder="Title" required />
+                <textarea name="description" class="description" placeholder="Describe your plans for the day"></textarea>
+
+                <!-- Activites (Flowbite multiselect) -->
+
+                
+                <!-- Guests (Flowbite multiselect) -->
+                <div class="mb-2 relative">
+                    <label class="block mb-1">Guests:</label>
+                    <button id="ms-guests-btn"
+                            type="button"
+                            data-dropdown-toggle="ms-guests-menu"
+                            data-dropdown-offset-distance="2"
+                            class="fld-select w-full justify-between inline-flex items-center rounded border px-3 py-2 text-sm">
+                        Select guests (0)
+                        <svg class="w-4 h-4 ms-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
+                        </svg>
+                    </button>
+                    <div id="ms-guests-menu"
+                        class="z-50 hidden bg-white shadow w-full absolute left-0 right-auto">
+                        <div class="p-2">
+                        <input id="ms-guests-search" type="text" placeholder="Search guests"
+                                class="w-full border rounded px-2 !mt-2 py-1 text-sm">
+                        </div>
+                        <ul id="ms-guests-list" class="max-h-48 overflow-y-auto p-2 space-y-1"></ul>
+                    </div>
+                    <div id="ms-guests-chips" class="tags-container mt-2"></div>
+                    <input id="ms-guests-hidden" type="hidden" />
+                </div>
+
+                <!-- Locations (Flowbite multiselect) -->
+                <div class="mb-2 relative">
+                    <label class="block mb-1">Locations:</label>
+                    <button id="ms-locs-btn"
+                            type="button"
+                            data-dropdown-toggle="ms-locs-menu"
+                            data-dropdown-offset-distance="2"
+                            class="fld-select w-full justify-between inline-flex items-center rounded border px-3 py-2 text-sm">
+                        Select locations (0)
+                        <svg class="w-4 h-4 ms-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
+                        </svg>
+                    </button>
+                    <div id="ms-locs-menu"
+                        class="z-50 hidden bg-white shadow w-full absolute left-0 right-auto">
+                        <div class="p-2">
+                        <input id="ms-locs-search" type="text" placeholder="Search locations"
+                                class="w-full border rounded px-2 py-1 text-sm">
+                        </div>
+                        <ul id="ms-locs-list" class="max-h-48 overflow-y-auto p-2 space-y-1"></ul>
+                    </div>
+                    <div id="ms-locs-chips" class="tags-container mt-2"></div>
+                    <input id="ms-locs-hidden" type="hidden" />
+                </div>
+
+                <!-- Tags (services, other events) -->
+                <label for="tagsInput">Tags:</label>
+                <div id="tagsContainer" class="tags-container"></div>
+                <input type="text" id="tagsInput" placeholder="Enter tag and press Enter" />
+                
+                <div class="modalButton">
+                    <button type="submit" class="hover:bg-blue-800">Add</button>
+                    <button type="button" class="hover:bg-blue-800" onclick="closeModal(document.getElementById('eventModal'))">
+                        Cancel
+                    </button>
+                </div>
+            </div>
+        </div>    
+    </div>
+
+    <!-- Modal for Few Events -->
+    <div id="fewEventsModal" class="modal hidden">
+        <div class="modal-content">
+            <h2 class="modalHeader">Add Few Events</h2>
+            <div id="fewEventsForm">
+                <input type="text" class="title" name="title[]" placeholder="Title" required />
+                <textarea name="description[]" class="details" placeholder="Details of your plans for the day"></textarea>
+
+                <!-- Activites (Flowbite multiselect) -->
+
+
+                
+                <!-- Guests (Flowbite multiselect) -->
+                <div class="mb-2 relative">
+                <label class="block mb-1">Guests:</label>
+                <button id="ms2-guests-btn"
+                        type="button"
+                        data-dropdown-toggle="ms2-guests-menu"
+                        class="fld-select w-full justify-between inline-flex items-center rounded border px-3 py-2 text-sm">
+                    Select guests (0)
+                    <svg class="w-4 h-4 ms-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
+                    </svg>
+                </button>
+                <div id="ms2-guests-menu"
+                    class="z-50 hidden bg-white rounded-lg shadow w-64 absolute left-0 right-auto">
+                    <div class="p-2">
+                    <input id="ms2-guests-search" type="text" placeholder="Search guests"
+                            class="w-full border rounded px-2 py-1 text-sm">
+                    </div>
+                    <ul id="ms2-guests-list" class="max-h-48 overflow-y-auto p-2 space-y-1"></ul>
+                </div>
+                <div id="ms2-guests-chips" class="tags-container mt-2"></div>
+                <input id="ms2-guests-hidden" type="hidden" />
+                </div>
+
+                <!-- Locations (Flowbite multiselect) -->
+                <div class="mb-2 relative">
+                <label class="block mb-1">Locations:</label>
+                <button id="ms2-locs-btn"
+                        type="button"
+                        data-dropdown-toggle="ms2-locs-menu"
+                        class="fld-select w-full justify-between inline-flex items-center rounded border px-3 py-2 text-sm">
+                    Select locations (0)
+                    <svg class="w-4 h-4 ms-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
+                    </svg>
+                </button>
+                <div id="ms2-locs-menu"
+                    class="z-50 hidden bg-white rounded-lg shadow w-64 absolute left-0 right-auto">
+                    <div class="p-2">
+                    <input id="ms2-locs-search" type="text" placeholder="Search locations"
+                            class="w-full border rounded px-2 py-1 text-sm">
+                    </div>
+                    <ul id="ms2-locs-list" class="max-h-48 overflow-y-auto p-2 space-y-1"></ul>
+                </div>
+                <div id="ms2-locs-chips" class="tags-container mt-2"></div>
+                <input id="ms2-locs-hidden" type="hidden" />
+                </div>
+
+
+                <!-- Tags (services, other events) -->
+                <label for="tagsInputFew">Tags:</label>
+                <div id="tagsContainerFew" class="tags-container"></div>
+                <input type="text" id="tagsInputFew" placeholder="Enter tag and press Enter" />
+
+                <div class="modalButton">
+                    <button type="button" onclick="addEventBlockAndSaveCurrent()"class="hover:bg-blue-800">Add another event</button>
+                    <button type="submit"class="hover:bg-blue-800">Add all</button>
+                    <button type="button" class="hover:bg-blue-800" onclick="closeModal(document.getElementById('fewEventsModal'))">
+                        Cancel
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="main">
         <div class="left_part">
             <!--Select date menu-->
-            <form class="max-w-[8rem]">
+            <div class="">
                 <div class="relative">
                     <!-- This input will be hidden because we display the calendar inline -->
                     <input id="calendar" type="text" class="hidden" />
                     <!-- The container where we will insert the calendar -->
-                        <div id="calendar-container" class="w-full"></div>
+                        <div id="calendar-container" class="w-full picker-wrapper"></div>
                 </div>
-            </form>
+            </div>
             <!--Filter Menu-->
-            <div>
+            <div class="filter-menu">
                 <div class="filter">
                     <div class="filter_left">
                         <p class="filter-text" data-key="filterBy">Filter by:</p>
@@ -178,22 +358,22 @@
                     </div>
                 </div>
                 <div class="first_section">
-                    <!-- Services button -->
+                    <!-- Activites button -->
                       <div style="display: flex; align-items: center; gap: 10px;">
-                        <button id="servicesButton" data-key="services" data-dropdown-toggle="servicesSearch" data-dropdown-placement="bottom" style="cursor: pointer;" class="hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">
-                            Services
+                        <button id="activitesButton" data-key="activites" data-dropdown-toggle="activitesSearch" data-dropdown-placement="bottom" style="cursor: pointer;" class="hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">
+                            Activites
                         </button>
                         <div class="first_section_right" style="display: flex; align-items: center; gap: 10px;">
                             <span class="button_inside">
-                                <i class="fa-solid fa-plus" style="font-weight: 900; color:  rgba(35, 166, 248, 1);"></i>
+                                <i class="fa-solid fa-plus" style="font-weight: 900; color:rgba(35, 166, 248, 1);"></i>
                             </span>
                             <svg class="w-2.5 h-2.5 ms-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
                                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
                             </svg>
                         </div>
                         
-                        <!-- Services menu -->
-                        <div id="servicesSearch" class="z-10 hidden bg-white rounded-lg shadow-sm w-60 dark:bg-gray-700" style="cursor: pointer;">
+                        <!-- Activites menu -->
+                        <div id="activitesSearch" class="z-10 hidden bg-white rounded-lg shadow-sm w-60 dark:bg-gray-700" style="cursor: pointer;">
                             <div class="p-3">
                                 <label for="input-group-search" class="sr-only">Search</label>
                                 <div class="relative">
@@ -202,29 +382,29 @@
                                     </div>
                                 </div>
                             </div>
-                            <ul id="services-list" class="h-48 px-3 pb-3 overflow-y-auto text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownSearchButton">
+                            <ul id="activites-list" class="h-48 px-3 pb-3 overflow-y-auto text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownSearchButton">
                             </ul>
                         </div>
                     </div>
                 </div>
                 <div class="second_section">
-                    <!-- Staff button -->
+                    <!-- Guests button -->
                     <div style="display: flex; align-items: center; gap: 10px;">
-                        <button id="staffButton" data-key="staff" data-dropdown-toggle="staffSearch" data-dropdown-placement="bottom" style="cursor: pointer;" class="hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">
-                            Staff
-                            <i class="fa-solid fa-droplet" style="font-weight: 900; color: black; margin-left: 10px;"></i>
+                        <button id="guestsButton" data-key="guests" data-dropdown-toggle="guestsSearch" data-dropdown-placement="bottom" style="cursor: pointer;" class="hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">
+                            Guests
+                            <i class="fa-solid fa-droplet" style="font-weight: 900; margin-left: 10px; "></i>
                         </button>   
                         <div class="first_section_right" style="display: flex; align-items: center; gap: 10px;">
                             <span class="button_inside">
-                                <i class="fa-solid fa-plus" style="font-weight: 900; color: rgba(35, 166, 248, 1);"></i>
+                                <i class="fa-solid fa-plus" style="font-weight: 900; color:rgba(35, 166, 248, 1);"></i>
                             </span>
                             <svg class="w-2.5 h-2.5 ms-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
                                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4" />
                             </svg>
                         </div>
 
-                        <!-- Staff menu -->
-                        <div id="staffSearch" class="z-10 hidden bg-white rounded-lg shadow-sm w-60 dark:bg-gray-700" style="cursor: pointer;">
+                        <!-- Guests menu -->
+                        <div id="guestsSearch" class="z-10 hidden bg-white rounded-lg shadow-sm w-60 dark:bg-gray-700" style="cursor: pointer;">
                             <div class="p-3">
                             <label for="input-group-search" class="sr-only">Search</label>
                                 <div class="relative">
@@ -233,7 +413,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <ul id="staff-list" class="h-48 px-3 pb-3 overflow-y-auto text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownSearchButton">
+                            <ul id="gusests-list" class="h-48 px-3 pb-3 overflow-y-auto text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownSearchButton">
                             </ul>
                         </div>
                     </div>
@@ -333,7 +513,7 @@
                     <button class="language" id="languageToggle"></button>
                     <div class="weeklyButton">
                         <!-- Weekly view button -->
-                        <button id="weeklyViewButton" data-key="weeklyView" data-dropdown-toggle="weeklyViewSearch" data-dropdown-placement="bottom" class="hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">
+                        <button id="weeklyViewButton" data-key="weeklyView" data-dropdown-toggle="weeklyViewSearch" data-dropdown-placement="bottom-end" class="focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center bg-blue-600 hover:bg-blue-700" type="button">
                             Weekly view
                             <svg class="w-2.5 h-2.5 ms-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6"> <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
                             </svg>
@@ -368,31 +548,40 @@
                 </div>
             </div>
 
-            <!--Calendar Table-->
-           <div class="calendar_table">
-                <div class="first_row">
-                    <div class="first_dio">
-                    <div class="time"></div>
-                    </div>
-                    <div class="second_dio" id="dayHeaders">
-                    <!-- The days will be inserted dynamically -->
+
+
+            <div class="flex gap-2">
+                <div class="calendar_table_wrap">
+                    <!--Calendar Table-->
+                <div class="calendar_table">
+                        <div class="first_row">
+                            <div class="first_dio">
+                            <div class="time"></div>
+                            </div>
+                            <div class="second_dio" id="dayHeaders">
+                            <!-- The days will be inserted dynamically -->
+                            </div>
+                        </div>
+                        <div id="timeSlots" class="time-slots">
+                            <!-- The slots will be generated by the javascript -->
+                        </div>
                     </div>
                 </div>
-                <div id="timeSlots" class="time-slots">
-                    <!-- The slots will be generated by the javascript -->
+
+                <div class="right_part">
+                    <button class="list"></button>
+                    <button class="diagramm"></button>
                 </div>
             </div>
+
+
         </div>
     
         
-        <div class="right_part">
-            <button class="list"></button>
-            <button class="diagramm"></button>
-        </div>
 
     <script src="https://cdn.jsdelivr.net/npm/simple-datatables@9.0.3"></script>
     <script src="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.js"></script>
-    <script src="main.js"></script>
+    <script defer src="main.js"></script>
 
 </body>
 </html>
