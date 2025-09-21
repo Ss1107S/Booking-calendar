@@ -419,7 +419,6 @@ document.addEventListener('DOMContentLoaded', ()=>{
       items: SAMPLE_ACTIVITES,
       buttonLabel: "Select activites"
     });
-//отсюда далее добавь ms2Activ = createFlowbiteMultiselect
 
     msGuests = createFlowbiteMultiselect({
       buttonId: "ms-guests-btn",
@@ -441,6 +440,17 @@ document.addEventListener('DOMContentLoaded', ()=>{
       hiddenId: "ms-locs-hidden",
       items: SAMPLE_LOCATIONS,
       buttonLabel: "Select locations"
+    });
+
+    ms2Activ = createFlowbiteMultiselect({
+      buttonId: "ms2-activ-btn",
+      menuId: "ms2-activ-menu",
+      listId: "ms2-activ-list",
+      searchId: "ms2-activ-search",
+      chipsId: "ms2-activ-chips",
+      hiddenId: "ms2-activ-hidden",
+      items: SAMPLE_ACTIVITES,
+      buttonLabel: "Select activites"
     });
 
     ms2Guests = createFlowbiteMultiselect({
@@ -574,13 +584,16 @@ uniqueEventForm.querySelector('button[type="submit"]').addEventListener("click",
 
   const tags = eventTags.getTags();
 
+  const activites = JSON.parse(document.getElementById("ms-activ-hidden").value || "[]");
   const guests = JSON.parse(document.getElementById("ms-guests-hidden").value || "[]");
   const locations = JSON.parse(document.getElementById("ms-locs-hidden").value || "[]");
+
 
   insertEventIntoCell(window.selectedDateTime, {
     title,
     description,
     tags,
+    activites,
     guests,
     locations
   });
@@ -606,6 +619,7 @@ uniqueEventForm.querySelector('button[type="submit"]').addEventListener("click",
     
   }*/
   eventTags.resetTags();
+  if (msActiv) msActiv.clear();
   if (msGuests) msGuests.clear();
   if (msLocs)   msLocs.clear();
 
@@ -754,6 +768,12 @@ function insertEventIntoCell(dateObj, event, sort = false) {
 
     if(tags.length) li.appendChild(tagsContainer);
 
+     if (event.activ && event.activ.length) {
+      const a = document.createElement("div");
+      a.className = "text-[11px]";
+      a.textContent = `Activites: ${event.activites.map(k=>SAMPLE_ACTIVITES.find(v=>v.id == k).name).join(", ")}`;
+      li.appendChild(a);
+    }
     if (event.guests && event.guests.length) {
       const g = document.createElement("div");
       g.className = "text-[11px]";
@@ -878,6 +898,7 @@ uniqueEventForm.addEventListener("submit", async (e) => {
   saveEventsToLocalStorage();
   // Reset tags after submission
   eventTags.resetTags();
+  if (msActiv) msActiv.clear();
   if (msGuests) msGuests.clear();
   if (msLocs)   msLocs.clear();
 
@@ -1265,6 +1286,11 @@ function fillDeleteOnePreview({ ev, dateStr, hour }) {
   const tagList = (ev.tags && ev.tags.length) ? ev.tags.join(", ") : "";
   get('[data-field="tags"]').textContent = tagList;
 
+const activNames = (ev.activ && ev.activ.length)
+    ? ev.activites.map(id => (SAMPLE_ACTIVITES.find(x=>x.id===id)||{}).name || id).join(", ")
+    : "";
+  get('[data-field="activites"]').textContent = activNames;
+
   const guestNames = (ev.guests && ev.guests.length)
     ? ev.guests.map(id => (SAMPLE_GUESTS.find(x=>x.id===id)||{}).name || id).join(", ")
     : "";
@@ -1373,6 +1399,13 @@ function renderEventsForCell(cell, dateString, hour) {
         tagsContainer.appendChild(tagElem);
       });
       li.appendChild(tagsContainer);
+    }
+    
+    if (ev.activites && ev.activites.length) {
+      const a = document.createElement("div");
+      a.className = "text-[11px]";
+      a.textContent = `Activites: ${ev.activites.map(k => (SAMPLE_ACTIVITES.find(v => v.id == k) || {}).name || k).join(", ")}`;
+      li.appendChild(a);
     }
 
     if (ev.guests && ev.guests.length) {
