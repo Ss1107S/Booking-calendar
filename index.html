@@ -192,7 +192,29 @@
                 <textarea name="description" class="description" placeholder="Describe your plans for the day"></textarea>
 
                 <!-- Activites (Flowbite multiselect) -->
-
+                <div class="mb-2 relative">
+                    <label class="block mb-1">Activites:</label>
+                    <button id="ms-activites-btn"
+                            type="button"
+                            data-dropdown-toggle="ms-activites-menu"
+                            data-dropdown-offset-distance="2"
+                            class="fld-select w-full justify-between inline-flex items-center rounded border px-3 py-2 text-sm">
+                        Select activites (0)
+                        <svg class="w-4 h-4 ms-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
+                        </svg>
+                    </button>
+                    <div id="ms-activites-menu"
+                        class="z-50 hidden bg-white shadow w-full absolute left-0 right-auto">
+                        <div class="p-2">
+                        <input id="ms-activites-search" type="text" placeholder="Search activites"
+                                class="w-full border rounded px-2 !mt-2 py-1 text-sm">
+                        </div>
+                        <ul id="ms-activites-list" class="max-h-48 overflow-y-auto p-2 space-y-1"></ul>
+                    </div>
+                    <div id="ms-activites-chips" class="tags-container mt-2"></div>
+                    <input id="ms-activites-hidden" type="hidden" />
+                </div>
                 
                 <!-- Guests (Flowbite multiselect) -->
                 <div class="mb-2 relative">
@@ -268,8 +290,28 @@
                 <textarea name="description[]" class="details" placeholder="Details of your plans for the day"></textarea>
 
                 <!-- Activites (Flowbite multiselect) -->
-
-
+                <div class="mb-2 relative">
+                <label class="block mb-1">Activites:</label>
+                <button id="ms2-activites-btn"
+                        type="button"
+                        data-dropdown-toggle="ms2-activites-menu"
+                        class="fld-select w-full justify-between inline-flex items-center rounded border px-3 py-2 text-sm">
+                    Select activites (0)
+                    <svg class="w-4 h-4 ms-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
+                    </svg>
+                </button>
+                <div id="ms2-activites-menu"
+                    class="z-50 hidden bg-white rounded-lg shadow w-64 absolute left-0 right-auto">
+                    <div class="p-2">
+                    <input id="ms2-activites-search" type="text" placeholder="Search activites"
+                            class="w-full border rounded px-2 py-1 text-sm">
+                    </div>
+                    <ul id="ms2-activites-list" class="max-h-48 overflow-y-auto p-2 space-y-1"></ul>
+                </div>
+                <div id="ms2-activites-chips" class="tags-container mt-2"></div>
+                <input id="ms2-activites-hidden" type="hidden" />
+                </div>
                 
                 <!-- Guests (Flowbite multiselect) -->
                 <div class="mb-2 relative">
@@ -318,7 +360,6 @@
                 <div id="ms2-locs-chips" class="tags-container mt-2"></div>
                 <input id="ms2-locs-hidden" type="hidden" />
                 </div>
-
 
                 <!-- Tags (services, other events) -->
                 <label for="tagsInputFew">Tags:</label>
