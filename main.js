@@ -342,7 +342,7 @@ function clearThemeClasses(button) {
     'bg-gradient-to-r', 'from-pink-500', 'via-yellow-500', 'to-green-500'
   );
 }
-let msGuests, msLocs, ms2Guests, ms2Locs;
+let msActivs, msGuests, msLocs, ms2Activs, ms2Guests, ms2Locs;
 
 // -- events --
 // Apply translation immediately on load
@@ -409,13 +409,13 @@ document.addEventListener('DOMContentLoaded', ()=>{
 
     // --- Multiselects (Event modal) ---
 
-    msActiv = createFlowbiteMultiselect({
-      buttonId: "ms-activ-btn",
-      menuId: "ms-activ-menu",
-      listId: "ms-activ-list",
-      searchId: "ms-activ-search",
-      chipsId: "ms-activ-chips",
-      hiddenId: "ms-activ-hidden",
+    msActivs = createFlowbiteMultiselect({
+      buttonId: "ms-activites-btn",
+      menuId: "ms-activites-menu",
+      listId: "ms-activites-list",
+      searchId: "ms-activites-search",
+      chipsId: "ms-activites-chips",
+      hiddenId: "ms-activites-hidden",
       items: SAMPLE_ACTIVITES,
       buttonLabel: "Select activites"
     });
@@ -442,13 +442,13 @@ document.addEventListener('DOMContentLoaded', ()=>{
       buttonLabel: "Select locations"
     });
 
-    ms2Activ = createFlowbiteMultiselect({
-      buttonId: "ms2-activ-btn",
-      menuId: "ms2-activ-menu",
-      listId: "ms2-activ-list",
-      searchId: "ms2-activ-search",
-      chipsId: "ms2-activ-chips",
-      hiddenId: "ms2-activ-hidden",
+    ms2Activs = createFlowbiteMultiselect({
+      buttonId: "ms2-activites-btn",
+      menuId: "ms2-activites-menu",
+      listId: "ms2-activites-list",
+      searchId: "ms2-activites-search",
+      chipsId: "ms2-activites-chips",
+      hiddenId: "ms2-activites-hidden",
       items: SAMPLE_ACTIVITES,
       buttonLabel: "Select activites"
     });
@@ -619,7 +619,7 @@ uniqueEventForm.querySelector('button[type="submit"]').addEventListener("click",
     
   }*/
   eventTags.resetTags();
-  if (msActiv) msActiv.clear();
+  if (msActivs) msActivs.clear();
   if (msGuests) msGuests.clear();
   if (msLocs)   msLocs.clear();
 
@@ -898,7 +898,7 @@ uniqueEventForm.addEventListener("submit", async (e) => {
   saveEventsToLocalStorage();
   // Reset tags after submission
   eventTags.resetTags();
-  if (msActiv) msActiv.clear();
+  if (msActivs) msActivs.clear();
   if (msGuests) msGuests.clear();
   if (msLocs)   msLocs.clear();
 
