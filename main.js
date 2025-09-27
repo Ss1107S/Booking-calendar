@@ -26,7 +26,7 @@ const translations = {
         allSelected: "All selected",
         activites: "Activites",
         guests: "Guests",
-        location: "Location",
+        locations: "Locations",
         sessionAvailability: "Session availability",
         otherEvents: "Other events",
         countDay: "CountDay"
@@ -44,7 +44,7 @@ const translations = {
         allSelected: "Svi odabrani",
         activites: "Aktivnosti",
         guests: "Gosti",
-        location: "Lokacija",
+        locations: "Lokacije",
         sessionAvailability: "Dostupnost termina",
         otherEvents: "Ostali događaji",
         countDay: "Broj dana"
