@@ -768,7 +768,7 @@ function insertEventIntoCell(dateObj, event, sort = false) {
 
     if(tags.length) li.appendChild(tagsContainer);
 
-    if (event.activ && event.activ.length) {
+    if (event.activites && event.activites.length) {
       const a = document.createElement("div");
       a.className = "text-[11px]";
       a.textContent = `Activites: ${event.activites.map(k=>SAMPLE_ACTIVITES.find(v=>v.id == k).name).join(", ")}`;
@@ -1286,7 +1286,7 @@ function fillDeleteOnePreview({ ev, dateStr, hour }) {
   const tagList = (ev.tags && ev.tags.length) ? ev.tags.join(", ") : "";
   get('[data-field="tags"]').textContent = tagList;
 
-const activNames = (ev.activ && ev.activites.length)
+const activNames = (ev.activites && ev.activites.length)
     ? ev.activites.map(id => (SAMPLE_ACTIVITES.find(x=>x.id===id)||{}).name || id).join(", ")
     : "";
   get('[data-field="activites"]').textContent = activNames;
