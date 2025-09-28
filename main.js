@@ -584,7 +584,7 @@ uniqueEventForm.querySelector('button[type="submit"]').addEventListener("click",
 
   const tags = eventTags.getTags();
 
-  const activites = JSON.parse(document.getElementById("ms-activ-hidden").value || "[]");
+  const activites = JSON.parse(document.getElementById("ms-activites-hidden").value || "[]");
   const guests = JSON.parse(document.getElementById("ms-guests-hidden").value || "[]");
   const locations = JSON.parse(document.getElementById("ms-locs-hidden").value || "[]");
 
@@ -641,7 +641,12 @@ uniqueFewEventsForm.querySelector('button[type="submit"]').addEventListener("cli
 
   const titleInputs = uniqueFewEventsForm.querySelectorAll('input[name="title[]"]');
   const descriptionTextareas = uniqueFewEventsForm.querySelectorAll('textarea[name="description[]"]');
-  const tags = fewEventsTags.getTags(); 
+  const tags = fewEventsTags.getTags();
+  
+  const activites = JSON.parse(document.getElementById("ms2-activites-hidden").value || "[]");
+  const guests = JSON.parse(document.getElementById("ms2-guests-hidden").value || "[]");
+  const locations = JSON.parse(document.getElementById("ms2-locs-hidden").value || "[]");
+
 
   titleInputs.forEach((input, index) => {
     const title = input.value.trim();
@@ -651,7 +656,10 @@ uniqueFewEventsForm.querySelector('button[type="submit"]').addEventListener("cli
       insertEventIntoCell(window.selectedDateTime, {
         title,
         description,
-        tags
+        tags,
+        activites,
+        guests,
+        locations
       }, true);
     }
   });
