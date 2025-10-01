@@ -703,15 +703,13 @@ function insertEventIntoCell(dateObj, event, sort = false) {
 
   const dateStr = dateObj.toISOString().split("T")[0]; 
   const hour = dateObj.getHours();                   
-  const key = `${dateStr}_${hour}`;                
-
+  const key = `${dateStr}_${hour}`;   
+  
   if (!eventDataMap[key]) eventDataMap[key] = [];
   eventDataMap[key].push(event);
 
-
   if (!event.id) event.id = generateEventId(); 
   
-
   if (sort) eventDataMap[key].sort((a, b) => a.title.localeCompare(b.title));
   
 
@@ -1182,12 +1180,22 @@ const declineDeleteOneButton = document.getElementById("declineDeleteOneButton")
 const deleteOnePreview = document.getElementById("deleteOnePreview");
 
 
+document.addEventListener("DOMContentLoaded", () => {
+  const manageSearch = document.getElementById("manageSearch");
+  const deleteModifyOption = manageSearch.querySelector(".modify-option");
+
+   
+
+
 // Event handler for clicking "Delete" option in the Manage menu
 deleteModifyOption.addEventListener("click", () => {
   // Check if a time slot is selected (global variable set on calendar cell click)
   if (!window.selectedDateTime) {
     return alert("Please select a time slot first.");
   }
+ // Здесь вся твоя логика удаления
+    console.log("Удаление запускается");
+
 
   // -- selected (single) event --
   const ctx = getSelectedEventContext(); 
@@ -1197,7 +1205,14 @@ deleteModifyOption.addEventListener("click", () => {
     manageSearch.classList.add("hidden");
 
     confirmDeleteOneButton.onclick = () => {
+      console.log("Удаляем событие с id:", ctx.eventId);
+  console.log("Исходный массив событий:", ctx.arr);
+
+
       eventDataMap[ctx.key] = ctx.arr.filter(e => e.id !== ctx.eventId);
+
+  console.log("Массив после удаления:", eventDataMap[ctx.key]);
+
       renderEventsForCell(ctx.cell, ctx.dateStr, ctx.hour);
       if (selectedEventEl) {
         selectedEventEl.classList.remove("event-selected");
@@ -1262,6 +1277,8 @@ deleteModifyOption.addEventListener("click", () => {
     closeModal(deleteModal);
   };
 });
+    // ...
+  });
 
 
 function getSelectedEventContext() {
