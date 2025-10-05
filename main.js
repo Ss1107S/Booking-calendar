@@ -747,6 +747,7 @@ function insertEventIntoCell(dateObj, event, sort = false) {
         e.stopPropagation(); // prevent cell selection
         // toggle off if clicking the same selected event
         li.classList.remove('event-selected');
+        console.log("Сбрасываю selectedEventEl из ...", /* информация о контексте */);
         selectedEventEl = null;
         return;
       }
@@ -993,6 +994,7 @@ function clearAllEventsFromDOM() {
 
   // don't touch .split-cell.selected here
   document.querySelectorAll('.event-selected').forEach(el => el.classList.remove('event-selected'));
+  console.log("Сбрасываю selectedEventEl из ...", /* информация о контексте */);
   selectedEventEl = null;
 }
 
@@ -1240,6 +1242,7 @@ console.log("Массив после удаления:", eventDataMap[ctx.key]);
       renderEventsForCell(ctx.cell, ctx.dateStr, ctx.hour);
       if (selectedEventEl) {
         selectedEventEl.classList.remove("event-selected");
+        console.log("Сбрасываю selectedEventEl из ...", /* информация о контексте */);
         selectedEventEl = null;
       }
       saveEventsToLocalStorage();
@@ -1413,6 +1416,7 @@ function restoreSelectedCellOnLoad() {
     // Можно снять выделение у предыдущих событий
     if (selectedEventEl) {
       selectedEventEl.classList.remove('event-selected');
+      console.log("Сбрасываю selectedEventEl из ...", /* информация о контексте */);
       selectedEventEl = null;
     }
   }
@@ -1445,6 +1449,7 @@ function renderEventsForCell(cell, dateString, hour) {
       if (selectedEventEl === li) {
         e.stopPropagation();
         li.classList.remove('event-selected');
+        console.log("Сбрасываю selectedEventEl из ...", /* информация о контексте */);
         selectedEventEl = null;
         return;
       }
@@ -1500,6 +1505,18 @@ function renderEventsForCell(cell, dateString, hour) {
   });
 
   cell.appendChild(ul);
+  eventDataMap[key].forEach(event => {
+  const { title, description, tags = [] } = event;
+
+  const li = document.createElement("li");
+  li.dataset.eventId = event.id;
+  li.classList.add("the-event", `event-color-${event.color || 1}`);
+  li.textContent = title; // или твоя логика отображения
+  ul.appendChild(li);
+});
+
+cell.appendChild(ul);
+
 }
 
 function loadEventsFromLocalStorage() {
