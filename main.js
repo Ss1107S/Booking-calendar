@@ -706,10 +706,14 @@ function insertEventIntoCell(dateObj, event, sort = false) {
   const key = `${dateStr}_${hour}`;   
   
   if (!eventDataMap[key]) eventDataMap[key] = [];
-  eventDataMap[key].push(event);
+ 
 
   if (!event.id) event.id = generateEventId(); 
   
+
+ eventDataMap[key].push(event);
+
+
   if (sort) eventDataMap[key].sort((a, b) => a.title.localeCompare(b.title));
   
 
@@ -795,6 +799,10 @@ function insertEventIntoCell(dateObj, event, sort = false) {
 
 
     ul.appendChild(li);
+
+    // Автоматически выделить только что добавленный элемент
+selectedEventEl = li;
+li.classList.add('event-selected');
   });
 
   targetCell.appendChild(ul);
@@ -1198,7 +1206,13 @@ deleteModifyOption.addEventListener("click", () => {
 
 
   // -- selected (single) event --
+  console.log("Кнопка Delete нажата. selectedDateTime:", window.selectedDateTime);
+console.log("Перед getSelectedEventContext selectedEventEl:", selectedEventEl);
+
   const ctx = getSelectedEventContext(); 
+
+  console.log("Контекст выделенного события (ctx):", ctx);
+
   if (ctx) { 
     fillDeleteOnePreview(ctx);
     openModal(deleteOneModal);
@@ -1209,9 +1223,19 @@ deleteModifyOption.addEventListener("click", () => {
   console.log("Исходный массив событий:", ctx.arr);
 
 
-      eventDataMap[ctx.key] = ctx.arr.filter(e => e.id !== ctx.eventId);
 
-  console.log("Массив после удаления:", eventDataMap[ctx.key]);
+const arr = eventDataMap[ctx.key];
+if (!arr) return;
+
+const indexToRemove = arr.findIndex(e => e.id === ctx.eventId);
+if (indexToRemove !== -1) {
+  arr.splice(indexToRemove, 1);
+  console.log("Удалено по индексу:", indexToRemove);
+} else {
+  console.warn("Не найдено событие по ID:", ctx.eventId);
+}
+
+console.log("Массив после удаления:", eventDataMap[ctx.key]);
 
       renderEventsForCell(ctx.cell, ctx.dateStr, ctx.hour);
       if (selectedEventEl) {
@@ -1282,11 +1306,20 @@ deleteModifyOption.addEventListener("click", () => {
 
 
 function getSelectedEventContext() {
-  if (!selectedEventEl) return null;
+    console.log("getSelectedEventContext вызывается");
+
+  if (!selectedEventEl) {
+        console.warn("selectedEventEl не установлен");
+
+    return null;
+    }
   const li = selectedEventEl;
   const cell = li.closest(".split-cell");
-  if (!cell) return null;
+  if (!cell) {
+        console.warn("Не удалось найти ячейку для выбранного li");
 
+    return null;
+}
   const dateStr = cell.dataset.date;
   const hour = parseInt(cell.dataset.hour, 10);
   const key = `${dateStr}_${hour}`;
@@ -1296,7 +1329,11 @@ function getSelectedEventContext() {
 
     console.log({dateStr, hour, key, eventId, arr})
 
-  if (!ev) return null;
+  if (!ev) {
+        console.warn("Событие с eventId не найдено в массиве");
+
+    return null;
+    }
   return { li, cell, key, dateStr, hour, eventId, arr, ev };
 }
 
@@ -1330,7 +1367,9 @@ const activNames = (ev.activites && ev.activites.length)
 
 function removeSelectedCell(dateString, hour) {
 }
-
+console.log("Текущее состояние eventDataMap:", eventDataMap);
+console.log("Текущий selectedEventEl:", selectedEventEl);
+console.log("Содержимое ячейки после рендера:", ctx.cell.innerHTML);
 
 
 
@@ -1363,22 +1402,17 @@ function restoreSelectedCellOnLoad() {
   if (!sel) return;
   const cell = document.querySelector(`.split-cell[data-date="${sel.date}"][data-hour="${sel.hour}"]`);
   if (cell) {
+    // Устанавливаем выделение ячейки
     cell.classList.add('selected');
-    // If you previously stored cell text, you can restore it:
-    if (sel.text) cell.textContent = sel.text;
 
-
-    
-    // Восстановить window.selectedDateTime
+    // Восстанавливаем window.selectedDateTime
     window.selectedDateTime = new Date(`${sel.date}T${String(sel.hour).padStart(2, '0')}:00:00`);
 
-    // Восстановить selectedEventEl, если есть события в ячейке
-    const firstEvent = cell.querySelector('li.the-event');
-    if (firstEvent) {
-      if (selectedEventEl) selectedEventEl.classList.remove('event-selected');
-      firstEvent.classList.add('event-selected');
-      selectedEventEl = firstEvent;
-    } else {
+    // НЕ выбираем событие автоматически
+    // selectedEventEl = null;
+    // Можно снять выделение у предыдущих событий
+    if (selectedEventEl) {
+      selectedEventEl.classList.remove('event-selected');
       selectedEventEl = null;
     }
   }
