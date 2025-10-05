@@ -1366,6 +1366,21 @@ function restoreSelectedCellOnLoad() {
     cell.classList.add('selected');
     // If you previously stored cell text, you can restore it:
     if (sel.text) cell.textContent = sel.text;
+
+
+    
+    // Восстановить window.selectedDateTime
+    window.selectedDateTime = new Date(`${sel.date}T${String(sel.hour).padStart(2, '0')}:00:00`);
+
+    // Восстановить selectedEventEl, если есть события в ячейке
+    const firstEvent = cell.querySelector('li.the-event');
+    if (firstEvent) {
+      if (selectedEventEl) selectedEventEl.classList.remove('event-selected');
+      firstEvent.classList.add('event-selected');
+      selectedEventEl = firstEvent;
+    } else {
+      selectedEventEl = null;
+    }
   }
 }
 
