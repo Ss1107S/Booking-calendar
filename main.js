@@ -697,7 +697,6 @@ uniqueFewEventsForm.querySelector('button[type="submit"]').addEventListener("cli
 // event — event object { title: string, tags: string[] }
 // sort — if true, sort events by title
 function insertEventIntoCell(dateObj, event, sort = false) {
-  console.log("insertEventIntoCell вызвана");
   if (!(dateObj instanceof Date)) return console.error("event's date is not a date:", {dateObj});
   
 
@@ -727,7 +726,6 @@ function insertEventIntoCell(dateObj, event, sort = false) {
 
   renderEventsForCell(targetCell, dateStr, hour);
 
-  console.log("event data:", eventDataMap[key]);
   targetCell.innerHTML = "";
 
   const ul = document.createElement("ul");
@@ -747,7 +745,6 @@ function insertEventIntoCell(dateObj, event, sort = false) {
         e.stopPropagation(); // prevent cell selection
         // toggle off if clicking the same selected event
         li.classList.remove('event-selected');
-        console.log("Сбрасываю selectedEventEl из ...", /* информация о контексте */);
         selectedEventEl = null;
         return;
       }
@@ -961,7 +958,6 @@ function addEventBlockAndSaveCurrent() {
   const description = descriptions[lastIndex];
 
     if (title) {
-    console.log("window.selectedDateTime перед вставкой события:", window.selectedDateTime);
     insertEventIntoCell(window.selectedDateTime, {
       title,
       description,
@@ -994,7 +990,6 @@ function clearAllEventsFromDOM() {
 
   // don't touch .split-cell.selected here
   document.querySelectorAll('.event-selected').forEach(el => el.classList.remove('event-selected'));
-  console.log("Сбрасываю selectedEventEl из ...", /* информация о контексте */);
   selectedEventEl = null;
 }
 
@@ -1204,16 +1199,12 @@ deleteModifyOption.addEventListener("click", () => {
     return alert("Please select a time slot first.");
   }
  // Здесь вся твоя логика удаления
-    console.log("Удаление запускается");
 
 
   // -- selected (single) event --
-  console.log("Кнопка Delete нажата. selectedDateTime:", window.selectedDateTime);
-console.log("Перед getSelectedEventContext selectedEventEl:", selectedEventEl);
 
   const ctx = getSelectedEventContext(); 
 
-  console.log("Контекст выделенного события (ctx):", ctx);
 
   if (ctx) { 
     fillDeleteOnePreview(ctx);
@@ -1221,9 +1212,7 @@ console.log("Перед getSelectedEventContext selectedEventEl:", selectedEvent
     manageSearch.classList.add("hidden");
 
     confirmDeleteOneButton.onclick = () => {
-      console.log("Удаляем событие с id:", ctx.eventId);
-  console.log("Исходный массив событий:", ctx.arr);
-
+      
 
 
 const arr = eventDataMap[ctx.key];
@@ -1232,17 +1221,13 @@ if (!arr) return;
 const indexToRemove = arr.findIndex(e => e.id === ctx.eventId);
 if (indexToRemove !== -1) {
   arr.splice(indexToRemove, 1);
-  console.log("Удалено по индексу:", indexToRemove);
 } else {
-  console.warn("Не найдено событие по ID:", ctx.eventId);
 }
 
-console.log("Массив после удаления:", eventDataMap[ctx.key]);
 
       renderEventsForCell(ctx.cell, ctx.dateStr, ctx.hour);
       if (selectedEventEl) {
         selectedEventEl.classList.remove("event-selected");
-        console.log("Сбрасываю selectedEventEl из ...", /* информация о контексте */);
         selectedEventEl = null;
       }
       saveEventsToLocalStorage();
@@ -1309,17 +1294,14 @@ console.log("Массив после удаления:", eventDataMap[ctx.key]);
 
 
 function getSelectedEventContext() {
-    console.log("getSelectedEventContext вызывается");
 
   if (!selectedEventEl) {
-        console.warn("selectedEventEl не установлен");
 
     return null;
     }
   const li = selectedEventEl;
   const cell = li.closest(".split-cell");
   if (!cell) {
-        console.warn("Не удалось найти ячейку для выбранного li");
 
     return null;
 }
@@ -1330,7 +1312,6 @@ function getSelectedEventContext() {
   const arr = (eventDataMap[key] || []);
   const ev = arr.find(e => e.id === eventId);
 
-    console.log({dateStr, hour, key, eventId, arr})
 
   if (!ev) {
         console.warn("Событие с eventId не найдено в массиве");
@@ -1370,9 +1351,6 @@ const activNames = (ev.activites && ev.activites.length)
 
 function removeSelectedCell(dateString, hour) {
 }
-console.log("Текущее состояние eventDataMap:", eventDataMap);
-console.log("Текущий selectedEventEl:", selectedEventEl);
-console.log("Содержимое ячейки после рендера:", ctx.cell.innerHTML);
 
 
 
@@ -1416,7 +1394,6 @@ function restoreSelectedCellOnLoad() {
     // Можно снять выделение у предыдущих событий
     if (selectedEventEl) {
       selectedEventEl.classList.remove('event-selected');
-      console.log("Сбрасываю selectedEventEl из ...", /* информация о контексте */);
       selectedEventEl = null;
     }
   }
@@ -1449,7 +1426,6 @@ function renderEventsForCell(cell, dateString, hour) {
       if (selectedEventEl === li) {
         e.stopPropagation();
         li.classList.remove('event-selected');
-        console.log("Сбрасываю selectedEventEl из ...", /* информация о контексте */);
         selectedEventEl = null;
         return;
       }
