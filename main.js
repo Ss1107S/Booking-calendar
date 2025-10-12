@@ -1383,15 +1383,15 @@ function restoreSelectedCellOnLoad() {
   if (!sel) return;
   const cell = document.querySelector(`.split-cell[data-date="${sel.date}"][data-hour="${sel.hour}"]`);
   if (cell) {
-    // Устанавливаем выделение ячейки
+    // Set cell selection
     cell.classList.add('selected');
 
-    // Восстанавливаем window.selectedDateTime
+    // Restore window.selectedDateTime
     window.selectedDateTime = new Date(`${sel.date}T${String(sel.hour).padStart(2, '0')}:00:00`);
 
-    // НЕ выбираем событие автоматически
+    // Do NOT select event automatically
     // selectedEventEl = null;
-    // Можно снять выделение у предыдущих событий
+    // You can clear selection from previous events
     if (selectedEventEl) {
       selectedEventEl.classList.remove('event-selected');
       selectedEventEl = null;
