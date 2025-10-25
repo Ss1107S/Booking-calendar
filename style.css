@@ -222,8 +222,7 @@ header .right{
 }
 
 .filter-menu button[id]{
-    color: #fff;
-    background: oklch(48.8% 0.243 264.376);
+    color: rgb(76, 76, 76);
     font-weight: 500; font-size: 13px;
     padding: 2.4px 6px;
 }
