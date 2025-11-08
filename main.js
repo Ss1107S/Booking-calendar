@@ -265,12 +265,16 @@ days.forEach((day) => {
     // -- mark clicked one
     cell.classList.add("selected");
 //    cell.style.backgroundColor = "#dbeafe";
+    console.log("✅ Добавлен класс .selected");
 
     const selectedDateTime = new Date(date);
     selectedDateTime.setHours(hour, 0, 0, 0);
     window.selectedDateTime = selectedDateTime;
 
+    console.log("⏳ До updateCountButton:", cell.classList.contains("selected"));
     updateCountButton(selectedDateTime);
+    console.log("⏱ После updateCountButton:", cell.classList.contains("selected"));
+
   });
 
 
