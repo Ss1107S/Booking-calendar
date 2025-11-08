@@ -249,6 +249,8 @@ days.forEach((day) => {
 
   // Click event handler for the cell
   cell.addEventListener("click", () => {
+    console.log("🟦 Клик по ячейке:", cell.dataset.date, cell.dataset.hour);
+
     const date = cell.dataset.date;
     const hour = parseInt(cell.dataset.hour);
 
@@ -1082,6 +1084,8 @@ function generateWeeklyTable(startDate) {
 
       // Cell selection handler
     cell.addEventListener("click", () => {
+    console.log("🟦 Клик по ячейке:", cell.dataset.date, cell.dataset.hour);
+
     const date = cell.dataset.date;
     const hour = parseInt(cell.dataset.hour);
 
