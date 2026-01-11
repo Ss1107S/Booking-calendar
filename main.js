@@ -1,4 +1,4 @@
- let currentSelectedDate = new Date();
+let currentSelectedDate = new Date();
 // Variable to store the selected date in the main calendar
 let selectedMainDate = currentSelectedDate;
 let selectedCell = null;
@@ -256,7 +256,7 @@ days.forEach((day) => {
 
     document.querySelectorAll(".split-cell.selected").forEach(c => { // clear ALL from DOM
       c.classList.remove("selected");
-      c.style.backgroundColor = "";
+//      c.style.backgroundColor = "";
 //      c.textContent = "";
     });
 
@@ -744,7 +744,6 @@ function insertEventIntoCell(dateObj, event, sort = false) {
 
     const colorIndex = event.colorIndex ?? (hashString(title) % colorClasses.length);
     li.classList.add(colorClasses[colorIndex]);
-    li.classList.add("the-event");
 
     li.addEventListener('click', (e) => {
       if (selectedEventEl === li) {
@@ -1095,8 +1094,8 @@ function generateWeeklyTable(startDate) {
 
     document.querySelectorAll(".split-cell.selected").forEach(c => {
       c.classList.remove("selected");
-      c.style.backgroundColor = "";
-      c.textContent = "";
+    //  c.style.backgroundColor = "";
+    //  c.textContent = "";
     });
 
     setInMemorySelectedCell(date, hour, cell.textContent || "");
@@ -1206,8 +1205,6 @@ deleteModifyOption.addEventListener("click", () => {
   if (!window.selectedDateTime) {
     return alert("Please select a time slot first.");
   }
- // Здесь вся твоя логика удаления
-
 
   // -- selected (single) event --
 
@@ -1220,9 +1217,7 @@ deleteModifyOption.addEventListener("click", () => {
     manageSearch.classList.add("hidden");
 
     confirmDeleteOneButton.onclick = () => {
-      
-
-
+  
 const arr = eventDataMap[ctx.key];
 if (!arr) return;
 
@@ -1428,7 +1423,7 @@ function renderEventsForCell(cell, dateString, hour) {
     li.dataset.eventId = ev.id;
 
     const colorIndex = ev.colorIndex ?? (hashString(ev.title) % colorClasses.length);
-    li.classList.add(colorClasses[colorIndex], "the-event");
+    li.classList.add(colorClasses[colorIndex]);
 
     li.addEventListener("click", (e) => { // equal to initial
       if (selectedEventEl === li) {
@@ -1494,7 +1489,7 @@ function renderEventsForCell(cell, dateString, hour) {
 
   const li = document.createElement("li");
   li.dataset.eventId = event.id;
-  li.classList.add("the-event", `event-color-${event.color || 1}`);
+  li.classList.add(`event-color-${event.color || 1}`);
   li.textContent = title; // или твоя логика отображения
   ul.appendChild(li);
 });
