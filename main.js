@@ -491,7 +491,7 @@ document.getElementById('languageToggle').addEventListener('click', () => {
 });
 
 
-// --Утилиты и хелперы--
+// -- Utilities and Helpers --
 
 function generateEventId() {
   return 'event_' + Math.random().toString(36).substr(2, 9);
@@ -502,7 +502,7 @@ function hashString(str) {
   let hash = 0;
   for (let i = 0; i < str.length; i++) {
     hash = (hash << 5) - hash + str.charCodeAt(i);
-    hash |= 0; // Преобразование в 32-битное целое
+    hash |= 0; // Convert to a 32-bit integer
   }
   return Math.abs(hash);
 }
@@ -533,9 +533,9 @@ function resetForm(container) {
 
   inputs.forEach(input => {
     if (input.type === "checkbox" || input.type === "radio") {
-      input.checked = false; // Сброс флажков
+      input.checked = false; // Reset checkboxes
     } else {
-      input.value = "";      // Сброс обычных полей
+      input.value = "";      // Reset regular fields
     }
   });
 }
@@ -543,7 +543,7 @@ function resetForm(container) {
 uniqueAddButton.addEventListener("click", () => {
   if (!window.selectedDateTime) {
     alert("Please select a time slot first.");
-    return; // Не показываем меню, если нет выбора
+    return; 
   }
   uniqueAddSearch.classList.toggle("hidden");
 });
@@ -803,7 +803,7 @@ function insertEventIntoCell(dateObj, event, sort = false) {
 
     ul.appendChild(li);
 
-    // Автоматически выделить только что добавленный элемент
+    // Automatically select the newly added item
 selectedEventEl = li;
 li.classList.add('event-selected');
   });
@@ -946,7 +946,7 @@ uniqueFewEventsForm.addEventListener("submit", async (e) => {
   resetForm(uniqueFewEventsForm);
   closeModal(uniqueFewEventsModal);
   
-  // Сохраняем события в localStorage после обновления
+  // Save events to localStorage after update
   //saveEventsToLocalStorage();
 });
 
@@ -984,7 +984,7 @@ function addEventBlockAndSaveCurrent() {
 //   document.querySelectorAll('.split-cell.selected').forEach(cell => {
 //     cell.classList.remove('selected');
 //     cell.style.backgroundColor = '';
-//     // cell.textContent = ''; // keep whatever behavior you want here
+//     // cell.textContent = ''; 
 //   });
 
 //   document.querySelectorAll('.event-selected').forEach(el => el.classList.remove('event-selected'));
@@ -1425,20 +1425,9 @@ function renderEventsForCell(cell, dateString, hour) {
     const colorIndex = ev.colorIndex ?? (hashString(ev.title) % colorClasses.length);
     li.classList.add(colorClasses[colorIndex]);
 
-    li.addEventListener("click", (e) => { // equal to initial
-      if (selectedEventEl === li) {
-        e.stopPropagation();
-        li.classList.remove('event-selected');
-        selectedEventEl = null;
-        return;
-      }
-      if (selectedEventEl) selectedEventEl.classList.remove('event-selected');
-      li.classList.add('event-selected');
-      selectedEventEl = li;
-    });
-
+    // --- Content ---
     const titleElem = document.createElement("strong");
-    titleElem.textContent = ev.title || "";
+    titleElem.textContent = ev.title || "(No title)";
     li.appendChild(titleElem);
 
     if (ev.description) {
@@ -1458,7 +1447,7 @@ function renderEventsForCell(cell, dateString, hour) {
       });
       li.appendChild(tagsContainer);
     }
-    
+
     if (ev.activites && ev.activites.length) {
       const a = document.createElement("div");
       a.className = "text-[11px]";
@@ -1480,22 +1469,23 @@ function renderEventsForCell(cell, dateString, hour) {
       li.appendChild(l);
     }
 
+    // --- Selection handling ---
+    li.addEventListener("click", (e) => {
+      if (selectedEventEl === li) {
+        e.stopPropagation();
+        li.classList.remove('event-selected');
+        selectedEventEl = null;
+        return;
+      }
+      if (selectedEventEl) selectedEventEl.classList.remove('event-selected');
+      li.classList.add('event-selected');
+      selectedEventEl = li;
+    });
+
     ul.appendChild(li);
   });
 
   cell.appendChild(ul);
-  eventDataMap[key].forEach(event => {
-  const { title, description, tags = [] } = event;
-
-  const li = document.createElement("li");
-  li.dataset.eventId = event.id;
-  li.classList.add(`event-color-${event.color || 1}`);
-  li.textContent = title; // или твоя логика отображения
-  ul.appendChild(li);
-});
-
-cell.appendChild(ul);
-
 }
 
 function loadEventsFromLocalStorage() {
@@ -1531,7 +1521,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
-// ---
+// Initializes a Flowbite-based multiselect component
 
 function createFlowbiteMultiselect({
   buttonId, menuId, listId, searchId, chipsId, hiddenId, items, buttonLabel
