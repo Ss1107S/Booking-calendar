@@ -726,9 +726,17 @@ function insertEventIntoCell(dateObj, event, sort = false) {
     `.split-cell[data-date="${dateStr}"][data-hour="${hour}"]`
   );
 
-  if (!targetCell) { throw "?"
+  if (!targetCell) {
+  console.warn(
+    "insertEventIntoCell: target cell not found",
+    { dateStr, hour, key }
+  );
+  return; // Just go out
+}
+
+  //if (!targetCell) { throw "?"
     //console.warn("Select a cell first, in the week view.") - alert or console.warn() is redundant because this should not be possible, unless data got corrupted, and you already throw a warning.
-  }
+  //}
 
   renderEventsForCell(targetCell, dateStr, hour);
 
@@ -1417,10 +1425,14 @@ function renderEventsForCell(cell, dateString, hour) {
   const ul = document.createElement("ul");
 
   events.forEach(ev => {
-    if (!ev.id) throw "event had no id";
+    if (!ev.id) {
+      console.warn("renderEventsForCell: event without id", ev);
+      return; //  skip THIS event, not the entire application
+    }
 
-    const li = document.createElement("li");
-    li.dataset.eventId = ev.id;
+  const li = document.createElement("li");
+  li.dataset.eventId = ev.id;
+    //if (!ev.id) throw "event had no id";
 
     const colorIndex = ev.colorIndex ?? (hashString(ev.title) % colorClasses.length);
     li.classList.add(colorClasses[colorIndex]);
