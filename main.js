@@ -1360,25 +1360,25 @@ function removeSelectedCell(dateString, hour) {
 // Button Update
 (function setupUpdateButton() {
     const updateButton = document.getElementById('updatePageBtn');
-    if (!updateButton) return;
+  if (!updateButton) return;
 
-    updateButton.addEventListener('click', () => {
-      restoreSelectedCellOnLoad();
-    });
-  })();
+  updateButton.addEventListener('click', () => {
+    if (!currentSelectedDate) currentSelectedDate = new Date();
 
+    // 1. перерисовать сетку
+    generateTable(currentSelectedDate);
 
-function setInMemorySelectedCell(dateString, hour, text = "") {
-  inMemorySelectedCell = { date: dateString, hour, text };
-}
+    // 2. загрузить события
+    loadEventsFromLocalStorage();
 
-function getInMemorySelectedCell() {
-  return inMemorySelectedCell;
-}
+    // 3. восстановить выделение
+    restoreSelectedCellOnLoad();
 
-function clearInMemorySelectedCell() {
-  inMemorySelectedCell = null;
-}
+    // 4. обновить UI-кнопки
+    updateDateButton(currentSelectedDate);
+    updateCountButton(currentSelectedDate);
+  });
+})();
 
 // Re-apply the single selection (if it is on the currently rendered grid)
 function restoreSelectedCellOnLoad() {
