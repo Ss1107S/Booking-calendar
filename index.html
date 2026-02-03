@@ -398,24 +398,84 @@
                         <button data-key="allSelected">All selected</button>
                     </div>
                 </div>
-                <div class="first_section">
-                    <!-- Activites button -->
-                      <div style="display: flex; align-items: center; gap: 10px;">
-                        <span id="activitesButton" data-key="activites" class="focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center" type="button">
-                            Activites
-                        </span>
-                        <button class="first_section_right" style="display: flex; align-items: center; gap: 10px;" data-dropdown-toggle="activitesSearch" data-dropdown-placement="bottom">                             
+                <div style="display: flex; flex-direction: column; gap: 10px;">
+                    <div class="first_section">
+                        <!-- Activites button -->
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <span id="activitesButton" data-key="activites" class="focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center" type="button">
+                                Activites
+                            </span>
+                            <button class="first_section_right" style="display: flex; align-items: center; gap: 10px;" data-dropdown-toggle="activitesSearch" data-dropdown-placement="bottom">                             
+                                    <span class="button_inside">
+                                        <i class="fa-solid fa-plus cursor-pointer" style="font-weight: 900; color:rgba(35, 166, 248, 1);"></i>
+                                    </span>
+                                    <svg class="w-2.5 h-2.5 ms-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
+                                    </svg>
+                                
+                            </button>
+                            
+                            <!-- Activites menu -->
+                            <div id="activitesSearch" class="z-10 hidden bg-white rounded-lg shadow-sm w-60 dark:bg-gray-700" style="cursor: pointer;">
+                                <div class="p-3">
+                                    <label for="input-group-search" class="sr-only">Search</label>
+                                    <div class="relative">
+                                        <div class="absolute inset-y-0 rtl:inset-r-0 start-0 flex items-center ps-3 pointer-events-none">
+                                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
+                                        </div>
+                                    </div>
+                                </div>
+                                <ul id="activites-list" class="h-48 px-3 pb-3 overflow-y-auto text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownSearchButton">
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="second_section">
+                        <!-- Guests button -->
+                        <div style="display: flex; align-items: center; gap: 3px;">
+                            <span id="guestsButton" data-key="guests" class="focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center" type="button">
+                                Guests
+                                <i class="fa-solid fa-droplet" style="font-weight: 900; margin-left: 10px; "></i>
+                            </span>
+                            <button class="first_section_right" style="display: flex; align-items: center; gap: 10px;" data-dropdown-toggle="guestsSearch" data-dropdown-placement="bottom" >
                                 <span class="button_inside">
-                                    <i class="fa-solid fa-plus cursor-pointer" style="font-weight: 900; color:rgba(35, 166, 248, 1);"></i>
+                                    <i class="fa-solid fa-plus" style="font-weight: 900; color:rgba(35, 166, 248, 1);"></i>
                                 </span>
+                                <svg class="w-2.5 h-2.5 ms-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4" />
+                                </svg>
+                            </button>
+
+                            <!-- Guests menu -->
+                            <div id="guestsSearch" class="z-10 hidden bg-white rounded-lg shadow-sm w-60 dark:bg-gray-700" style="cursor: pointer;">
+                                <div class="p-3">
+                                <label for="input-group-search" class="sr-only">Search</label>
+                                    <div class="relative">
+                                        <div class="absolute inset-y-0 rtl:inset-r-0 start-0 flex items-center ps-3 pointer-events-none">
+                                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
+                                        </div>
+                                    </div>
+                                </div>
+                                <ul id="guests-list" class="h-48 px-3 pb-3 overflow-y-auto text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownSearchButton">
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="third_section">
+                        <!-- Locations button -->
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <span id="locationsButton" data-key="locations" class="focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center" type="button">
+                                Locations
+                            </span>    
+                            <button class="first_section_right" style="display: flex; align-items: center; gap: 10px;" data-dropdown-toggle="locationsSearch" data-dropdown-placement="bottom">
                                 <svg class="w-2.5 h-2.5 ms-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
                                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
                                 </svg>
-                            
-                        </button>
-                        
-                        <!-- Activites menu -->
-                        <div id="activitesSearch" class="z-10 hidden bg-white rounded-lg shadow-sm w-60 dark:bg-gray-700" style="cursor: pointer;">
+                            </button>
+                        </div>
+                    
+                        <!-- Locations menu -->
+                        <div id="locationsSearch" class="z-10 hidden bg-white rounded-lg shadow-sm w-60 dark:bg-gray-700" style="cursor: pointer;">
                             <div class="p-3">
                                 <label for="input-group-search" class="sr-only">Search</label>
                                 <div class="relative">
@@ -424,119 +484,61 @@
                                     </div>
                                 </div>
                             </div>
-                            <ul id="activites-list" class="h-48 px-3 pb-3 overflow-y-auto text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownSearchButton">
+                            <ul id="locations-list" class="h-48 px-3 pb-3 overflow-y-auto text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownSearchButton">
                             </ul>
                         </div>
                     </div>
-                </div>
-                <div class="second_section">
-                    <!-- Guests button -->
-                    <div style="display: flex; align-items: center; gap: 10px;">
-                        <span id="guestsButton" data-key="guests" style="cursor: pointer;" class="focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center" type="button">
-                            Guests
-                            <i class="fa-solid fa-droplet" style="font-weight: 900; margin-left: 10px; "></i>
-                        </span>
-                        <button class="first_section_right" style="display: flex; align-items: center; gap: 10px;" data-dropdown-toggle="guestsSearch" data-dropdown-placement="bottom" >
-                            <span class="button_inside">
-                                <i class="fa-solid fa-plus" style="font-weight: 900; color:rgba(35, 166, 248, 1);"></i>
-                            </span>
-                            <svg class="w-2.5 h-2.5 ms-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
-                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4" />
-                            </svg>
-                        </button>
-
-                        <!-- Guests menu -->
-                        <div id="guestsSearch" class="z-10 hidden bg-white rounded-lg shadow-sm w-60 dark:bg-gray-700" style="cursor: pointer;">
+                    <div class="fourth_section">
+                        <!-- Session Availability button -->
+                        <div style="display: flex; align-items: center; gap: 35px;">
+                            <span id="sessionAvailabilityButton" data-key="sessionAvailability" class="focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-left inline-flex items-center " type="button">
+                                Session availability
+                            </span>   
+                            <button class="first_section_right" style="display: flex; align-items: center; gap: 10px;" data-dropdown-toggle="sessionAvailabilitySearch" data-dropdown-placement="bottom" >
+                                <svg class="w-2.5 h-2.5 ms-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
+                                </svg>
+                            </button>                  
+                        </div>
+                        <!-- Session Availability menu -->
+                        <div id="sessionAvailabilitySearch" class="z-10 hidden bg-white rounded-lg shadow-sm w-60 dark:bg-gray-700" style="cursor: pointer;">
                             <div class="p-3">
-                            <label for="input-group-search" class="sr-only">Search</label>
+                                <label for="input-group-search" class="sr-only">Search</label>
                                 <div class="relative">
                                     <div class="absolute inset-y-0 rtl:inset-r-0 start-0 flex items-center ps-3 pointer-events-none">
                                         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
                                     </div>
                                 </div>
                             </div>
-                            <ul id="guests-list" class="h-48 px-3 pb-3 overflow-y-auto text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownSearchButton">
+                            <ul id="sessionAvailability-list" class="h-48 px-3 pb-3 overflow-y-auto text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownSearchButton">
                             </ul>
                         </div>
                     </div>
-                </div>
-                <div class="third_section">
-                    <!-- Locations button -->
-                    <div style="display: flex; align-items: center; gap: 10px;">
-                        <span id="locationsButton" data-key="locations"  style="cursor: pointer;" class="focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center" type="button">
-                            Locations
-                        </span>    
-                        <button class="first_section_right" style="display: flex; align-items: center; gap: 10px;" data-dropdown-toggle="locationsSearch" data-dropdown-placement="bottom">
-                            <svg class="w-2.5 h-2.5 ms-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
-                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
-                            </svg>
-                        </button>
-                    </div>
-                   
-                    <!-- Locations menu -->
-                    <div id="locationsSearch" class="z-10 hidden bg-white rounded-lg shadow-sm w-60 dark:bg-gray-700" style="cursor: pointer;">
-                        <div class="p-3">
-                            <label for="input-group-search" class="sr-only">Search</label>
-                            <div class="relative">
-                                <div class="absolute inset-y-0 rtl:inset-r-0 start-0 flex items-center ps-3 pointer-events-none">
-                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
+                    <div class="fifth_section">
+                        <!-- Other Events button -->
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <span id="otherEventsButton" data-key="otherEvents" class="focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center" type="button">
+                                Other events
+                            </span>   
+                            <button class="first_section_right" style="display: flex; align-items: center; gap: 10px;" data-dropdown-toggle="otherEventsSearch" data-dropdown-placement="bottom" >
+                                <svg class="w-2.5 h-2.5 ms-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
+                                </svg>
+                            </button>
+                        </div>
+                        <!-- Other Events menu -->
+                        <div id="otherEventsSearch" class="z-10 hidden bg-white rounded-lg shadow-sm w-60 dark:bg-gray-700" style="cursor: pointer;">
+                            <div class="p-3">
+                                <label for="input-group-search" class="sr-only">Search</label>
+                                <div class="relative">
+                                    <div class="absolute inset-y-0 rtl:inset-r-0 start-0 flex items-center ps-3 pointer-events-none">
+                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
+                                    </div>
                                 </div>
                             </div>
+                            <ul id="otherEvents-list" class="h-48 px-3 pb-3 overflow-y-auto text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownSearchButton">
+                            </ul>
                         </div>
-                        <ul id="locations-list" class="h-48 px-3 pb-3 overflow-y-auto text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownSearchButton">
-                        </ul>
-                    </div>
-                </div>
-                <div class="fourth_section">
-                    <!-- Session Availability button -->
-                     <div style="display: flex; align-items: center; gap: 10px;">
-                        <span id="sessionAvailabilityButton" data-key="sessionAvailability" style="cursor: pointer;" class="focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center" type="button">
-                            Session availability
-                        </span>   
-                        <button class="first_section_right" style="display: flex; align-items: center; gap: 10px;" data-dropdown-toggle="sessionAvailabilitySearch" data-dropdown-placement="bottom" >
-                            <svg class="w-2.5 h-2.5 ms-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
-                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
-                            </svg>
-                        </button>                  
-                    </div>
-                    <!-- Session Availability menu -->
-                    <div id="sessionAvailabilitySearch" class="z-10 hidden bg-white rounded-lg shadow-sm w-60 dark:bg-gray-700" style="cursor: pointer;">
-                        <div class="p-3">
-                            <label for="input-group-search" class="sr-only">Search</label>
-                            <div class="relative">
-                                <div class="absolute inset-y-0 rtl:inset-r-0 start-0 flex items-center ps-3 pointer-events-none">
-                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
-                                </div>
-                            </div>
-                        </div>
-                        <ul id="sessionAvailability-list" class="h-48 px-3 pb-3 overflow-y-auto text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownSearchButton">
-                        </ul>
-                    </div>
-                </div>
-                <div class="fifth_section">
-                    <!-- Other Events button -->
-                     <div style="display: flex; align-items: center; gap: 10px;">
-                        <span id="otherEventsButton" data-key="otherEvents" style="cursor: pointer;" class="focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center" type="button">
-                            Other events
-                        </span>   
-                       <button class="first_section_right" style="display: flex; align-items: center; gap: 10px;" data-dropdown-toggle="otherEventsSearch" data-dropdown-placement="bottom" >
-                            <svg class="w-2.5 h-2.5 ms-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
-                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
-                            </svg>
-                       </button>
-                    </div>
-                    <!-- Other Events menu -->
-                    <div id="otherEventsSearch" class="z-10 hidden bg-white rounded-lg shadow-sm w-60 dark:bg-gray-700" style="cursor: pointer;">
-                        <div class="p-3">
-                            <label for="input-group-search" class="sr-only">Search</label>
-                            <div class="relative">
-                                <div class="absolute inset-y-0 rtl:inset-r-0 start-0 flex items-center ps-3 pointer-events-none">
-                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
-                                </div>
-                            </div>
-                        </div>
-                        <ul id="otherEvents-list" class="h-48 px-3 pb-3 overflow-y-auto text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownSearchButton">
-                        </ul>
                     </div>
                 </div>
             </div>
